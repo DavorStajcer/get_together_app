@@ -1,9 +1,12 @@
+//@dart=2.6
+
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get_together_app/core/error/exceptions.dart';
 import 'package:get_together_app/core/error/failure.dart';
 import 'package:get_together_app/core/error/success.dart';
 import 'package:get_together_app/core/network.dart/network_info.dart';
@@ -33,22 +36,22 @@ void main() {
   FirebaseAuthMock firebaseAuthMock;
   FirebaseFirestoreMock firebaseFirestoreMock;
   FirebaseStorageMock firebaseStorageMock;
-  UserMock userMock;
+
   UserCredentialsMock userCredentialsMock;
   NetworkInfoMock networkInfoMock;
   UserAuthRepositoryImpl userRepositoryImpl;
   String tUserEmal;
   String tUserPassword;
   String tUserUsername;
+  String tPath;
+  File tImge;
   LogInParameters tLogInParam;
   SignUpParameters tSignUpParam;
 
   setUp(() {
-    // localDatasourceMock = LocalDatasourceMock();
     firebaseAuthMock = FirebaseAuthMock();
     firebaseStorageMock = FirebaseStorageMock();
     firebaseFirestoreMock = FirebaseFirestoreMock();
-    userMock = UserMock();
     userCredentialsMock = UserCredentialsMock();
     networkInfoMock = NetworkInfoMock();
     userRepositoryImpl = UserAuthRepositoryImpl(
@@ -60,9 +63,14 @@ void main() {
     tUserEmal = "testEmail";
     tUserPassword = "testPassword";
     tUserUsername = "testUsername";
+    tPath = "testPath";
+    tImge = File(tPath);
     tLogInParam = LogInParameters(email: tUserEmal, password: tUserPassword);
     tSignUpParam = SignUpParameters(
-        email: tUserEmal, password: tUserPassword, username: tUserUsername);
+        email: tUserEmal,
+        password: tUserPassword,
+        username: tUserUsername,
+        image: tImge);
   });
 
   group("no errors", () {
@@ -70,29 +78,12 @@ void main() {
       when(networkInfoMock.isConnected)
           .thenAnswer((realInvocation) async => true);
     });
-    /* group("checkIsAuthenticated", () {
-      test("return true when user is logged in", () async {
-        when(firebaseAuthMock.currentUser)
-            .thenAnswer((realInvocation) => userMock);
-
-        final response = await userRepositoryImpl.checkIsAuthenticated();
-        expect(response, Right(true));
-        verify(firebaseAuthMock.currentUser);
-      });
-      test("return false when user is not logged in", () async {
-        when(firebaseAuthMock.currentUser).thenAnswer((realInvocation) => null);
-
-        final response = await userRepositoryImpl.checkIsAuthenticated();
-        expect(response, Right(false));
-        verify(firebaseAuthMock.currentUser);
-      });
-    }); */
 
     group("logIn", () {
       setUp(() {
         when(firebaseAuthMock.signInWithEmailAndPassword(
                 email: tUserEmal, password: tUserPassword))
-            .thenAnswer((realInvocation) async => userCredentialsMock);
+            .thenAnswer(((realInvocation) async => userCredentialsMock));
       });
 
       test("should return sucsess", () async {
@@ -106,7 +97,7 @@ void main() {
       test("should return sucsess when successfull", () async {
         when(firebaseAuthMock.createUserWithEmailAndPassword(
                 email: tUserEmal, password: tUserPassword))
-            .thenAnswer((realInvocation) async => userCredentialsMock);
+            .thenAnswer(((realInvocation) async => userCredentialsMock));
         final response = await userRepositoryImpl.signUp(tSignUpParam);
         expect(response, Right(Success()));
         verify(firebaseAuthMock.createUserWithEmailAndPassword(
@@ -116,16 +107,6 @@ void main() {
   });
 
   group("errors", () {
-    /*   test("should return NetworkFaiulre when no conncetion", () async {
-      when(networkInfoMock.isConnected)
-          .thenAnswer((realInvocation) async => false);
-
-      final response = await userRepositoryImpl.checkIsAuthenticated();
-      expect(response, Left(NetworkFailure()));
-      verify(networkInfoMock.isConnected);
-      verifyZeroInteractions(firebaseAuthMock);
-    }); */
-
     group("logIn", () {
       test("should return AuthenticationFailure when failed to logIn",
           () async {
@@ -133,23 +114,13 @@ void main() {
             .thenAnswer((realInvocation) async => true);
         when(firebaseAuthMock.signInWithEmailAndPassword(
                 email: tUserEmal, password: tUserPassword))
-            .thenThrow(AuthenticationException(""));
+            .thenThrow(FirebaseAuthException(code: "exception"));
 
         final response = await userRepositoryImpl.logIn(tLogInParam);
-        expect(response, Left(AuthenticationFailure("")));
+        expect(response, Left(AuthenticationFailure("exception")));
         verify(firebaseAuthMock.signInWithEmailAndPassword(
             email: tUserEmal, password: tUserPassword));
       });
-/* 
-      test("should return NetworkFaiulre when no conncetion", () async {
-        when(networkInfoMock.isConnected)
-            .thenAnswer((realInvocation) async => false);
-
-        final response = await userRepositoryImpl.checkIsAuthenticated();
-        expect(response, Left(NetworkFailure()));
-        verify(networkInfoMock.isConnected);
-        verifyZeroInteractions(firebaseAuthMock);
-      }); */
     });
 
     group("signUp", () {
@@ -159,10 +130,10 @@ void main() {
             .thenAnswer((realInvocation) async => true);
         when(firebaseAuthMock.createUserWithEmailAndPassword(
                 email: tUserEmal, password: tUserPassword))
-            .thenThrow(AuthenticationException(""));
+            .thenThrow(FirebaseAuthException(code: "exception"));
 
         final response = await userRepositoryImpl.signUp(tSignUpParam);
-        expect(response, Left(AuthenticationFailure("")));
+        expect(response, Left(AuthenticationFailure("exception")));
         verify(firebaseAuthMock.createUserWithEmailAndPassword(
             email: tUserEmal, password: tUserPassword));
       });
@@ -172,7 +143,8 @@ void main() {
             .thenAnswer((realInvocation) async => false);
 
         final response = await userRepositoryImpl.signUp(tSignUpParam);
-        expect(response, Left(NetworkFailure()));
+        expect(response,
+            Left(NetworkFailure("Network error. Check your connection.")));
         verify(networkInfoMock.isConnected);
         verifyZeroInteractions(firebaseAuthMock);
       });

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:get_together_app/features/authentication/presentation/bloc/form_bloc/form_bloc.dart';
-import 'package:get_together_app/features/authentication/presentation/bloc/form_bloc/from_state.dart';
+import '../bloc/form_bloc/form_bloc.dart';
+import '../bloc/form_bloc/from_state.dart';
 
-import 'package:get_together_app/features/authentication/presentation/widgets/email_field.dart';
-import 'package:get_together_app/features/authentication/presentation/widgets/pick_image.dart';
-import 'package:get_together_app/features/authentication/presentation/widgets/confirm_password_field.dart';
-import 'package:get_together_app/features/authentication/presentation/widgets/password_field.dart';
-import 'package:get_together_app/features/authentication/presentation/widgets/username_field.dart';
+import 'email_field.dart';
+import 'pick_image.dart';
+import 'confirm_password_field.dart';
+import 'password_field.dart';
+import 'username_field.dart';
 
 class AuthForm extends StatefulWidget {
   final Size screenSize;
 
-  AuthForm(this.screenSize, {Key key}) : super(key: key);
+  AuthForm(this.screenSize, {Key? key}) : super(key: key);
 
   @override
   _AuthFormState createState() => _AuthFormState();
@@ -48,7 +48,7 @@ class _AuthFormState extends State<AuthForm> {
 }
 
 class LogInFormWidget extends StatelessWidget {
-  const LogInFormWidget({Key key}) : super(key: key);
+  const LogInFormWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class LogInFormWidget extends StatelessWidget {
 }
 
 class SingUpFormWidget extends StatelessWidget {
-  const SingUpFormWidget({Key key}) : super(key: key);
+  const SingUpFormWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

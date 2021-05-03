@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_together_app/features/authentication/presentation/bloc/auth_bloc/auth_bloc.dart';
-import 'package:get_together_app/features/authentication/presentation/bloc/form_bloc/form_bloc.dart';
-import 'package:get_together_app/features/authentication/presentation/bloc/form_bloc/from_state.dart';
-import 'package:get_together_app/features/authentication/presentation/models/auth_param.dart';
+import '../bloc/auth_bloc/auth_bloc.dart';
+import '../bloc/form_bloc/form_bloc.dart';
+import '../bloc/form_bloc/from_state.dart';
+import '../models/auth_param.dart';
 
 class AuthButton extends StatelessWidget {
   @override
@@ -34,12 +34,12 @@ class AuthButton extends StatelessWidget {
             onPressed: !(state is ValidForm)
                 ? null
                 : () async {
-                    if (state is LogInForm)
+                    if (state is ValidLoginForm)
                       BlocProvider.of<AuthBloc>(context).add(
                         LogInEvent(
                           LogInParameters(
-                            email: state.email.value,
-                            password: state.password.value,
+                            email: state.email.value!,
+                            password: state.password.value!,
                           ),
                         ),
                       );
@@ -47,10 +47,10 @@ class AuthButton extends StatelessWidget {
                       BlocProvider.of<AuthBloc>(context).add(
                         SignUpEvent(
                           SignUpParameters(
-                            email: (state as SignUpForm).email.value,
-                            password: (state as SignUpForm).password.value,
-                            username: (state as SignUpForm).username.value,
-                            image: (state as SignUpForm).image,
+                            email: (state as ValidSignUpForm).email.value!,
+                            password: state.password.value!,
+                            username: state.username.value!,
+                            image: state.image!,
                           ),
                         ),
                       );

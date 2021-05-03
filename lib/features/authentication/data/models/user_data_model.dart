@@ -1,4 +1,4 @@
-import 'package:get_together_app/features/authentication/domain/entities/user_data.dart';
+import '../../domain/entities/user_data.dart';
 
 class UserDataModel extends UserData {
   UserDataModel(String email, String password) : super(email, password);

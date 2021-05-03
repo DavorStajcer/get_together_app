@@ -1,15 +1,14 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:get_together_app/core/error/failure.dart';
-import 'package:get_together_app/core/error/success.dart';
-import 'package:get_together_app/features/authentication/domain/usecases/log_user_in.dart';
-import 'package:get_together_app/features/authentication/domain/usecases/sign_user_in.dart';
-import 'package:get_together_app/features/authentication/presentation/models/auth_param.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/error/success.dart';
+import '../../../domain/usecases/log_user_in.dart';
+import '../../../domain/usecases/sign_user_in.dart';
+import '../../../domain/usecases/sign_user_out.dart';
+import '../../models/auth_param.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -17,10 +16,12 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LogUserIn logUserIn;
   final SignUserIn signUserIn;
+  final SignUserOut signUserOut;
 
   AuthBloc({
-    @required this.logUserIn,
-    @required this.signUserIn,
+    required this.logUserIn,
+    required this.signUserIn,
+    required this.signUserOut,
   }) : super(AuthInitial());
 
   @override
@@ -29,8 +30,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async* {
     yield AuthLoading();
     Either<Failure, Success> response;
-    log(event.toString());
-    if (event is LogInEvent)
+
+    if (event is SignOutEvent)
+      response = await signUserOut(NoParameters());
+    else if (event is LogInEvent)
       response = await logUserIn(event.authParam);
     else
       response = await signUserIn((event as SignUpEvent).authParam);
@@ -44,8 +47,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       failure,
     ) async* {
       String errorMessage;
-      if (failure is NetworkFailure) errorMessage = "Network failure";
-      if (failure is AuthenticationFailure)
+      if (failure is NetworkFailure)
+        errorMessage = "Network failure";
+      else if (failure is AuthenticationFailure)
         errorMessage = failure.message;
       else
         errorMessage = "Error occured";

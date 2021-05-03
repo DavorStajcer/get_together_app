@@ -20,14 +20,14 @@ class NoParameters extends Equatable {
 }
 
 class LogInParameters extends AuthenticationParameters {
-  LogInParameters({String email, String password}) : super(email, password);
+  LogInParameters({required String email, required String password}) : super(email, password);
 }
 
 class SignUpParameters extends AuthenticationParameters {
   final File image;
   final String username;
 
-  SignUpParameters({File image, String username, String email, String password})
+  SignUpParameters({required File image, required String username, required String email, required String password})
       : this.image = image,
         this.username = username,
         super(email, password);

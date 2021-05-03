@@ -1,3 +1,5 @@
+//@dart=2.6
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_together_app/core/error/failure.dart';
@@ -29,7 +31,7 @@ void main() {
       when(userRepositoryMock.logIn(tLogInParam))
           .thenAnswer((realInvocation) async => Right(Success()));
 
-      final response =
+      final Either<Failure, Success> response =
           await logUserIn(LogInParameters(email: tEmail, password: tPassword));
 
       expect(response, Right(Success()));
@@ -41,7 +43,7 @@ void main() {
       when(userRepositoryMock.logIn(tLogInParam)).thenAnswer(
           (realInvocation) async => Left(AuthenticationFailure("")));
 
-      final response =
+      final Either<Failure, Success> response =
           await logUserIn(LogInParameters(email: tEmail, password: tPassword));
 
       expect(response, Left(AuthenticationFailure("")));

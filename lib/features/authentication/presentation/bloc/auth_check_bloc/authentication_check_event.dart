@@ -10,7 +10,7 @@ abstract class AuthenticationCheckEvent extends Equatable {
 class ApplicationStarted extends AuthenticationCheckEvent {}
 
 class AuthStateChanged extends AuthenticationCheckEvent {
-  final Either<Failure, User> response;
+  final Either<Failure, User?> response;
 
   AuthStateChanged(this.response);
 

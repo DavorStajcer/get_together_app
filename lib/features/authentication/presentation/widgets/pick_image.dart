@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_together_app/features/authentication/presentation/bloc/form_bloc/form_bloc.dart';
-import 'package:get_together_app/features/authentication/presentation/bloc/form_bloc/from_state.dart';
-import 'package:get_together_app/features/authentication/presentation/bloc/form_bloc/form_event.dart';
+import '../bloc/form_bloc/form_bloc.dart';
+import '../bloc/form_bloc/from_state.dart';
+import '../bloc/form_bloc/form_event.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PickImage extends StatelessWidget {
-  const PickImage({Key key}) : super(key: key);
+  const PickImage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class PickImage extends StatelessWidget {
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(53),
                           child: Image.file(
-                            (state as SignUpForm).image,
+                            state.image!,
                             width: 100,
                             height: 100,
                             fit: BoxFit.fitHeight,

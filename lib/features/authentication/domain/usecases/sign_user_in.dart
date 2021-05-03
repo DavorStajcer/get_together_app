@@ -1,18 +1,17 @@
-import 'package:get_together_app/core/error/failure.dart';
+import '../../../../core/error/failure.dart';
 import 'package:dartz/dartz.dart';
-import 'package:get_together_app/core/error/success.dart';
-import 'package:get_together_app/core/usecases/usecase.dart';
-import 'package:get_together_app/features/authentication/domain/repository/user_repository.dart';
-import 'package:get_together_app/features/authentication/presentation/models/auth_param.dart';
+import '../../../../core/error/success.dart';
+import '../../../../core/usecases/usecase.dart';
+import '../repository/user_repository.dart';
+import '../../presentation/models/auth_param.dart';
 
-class SignUserIn extends Usecase<Success, AuthenticationParameters> {
-  final UserAuthRepository userAuthRepository;
+class SignUserIn extends Usecase<Success, SignUpParameters> {
+  final UserAuthRepository /*!*/ userAuthRepository;
 
   SignUserIn(this.userAuthRepository);
 
   @override
-  Future<Either<Failure, Success>> call(
-      AuthenticationParameters parameters) async {
+  Future<Either<Failure, Success>> call(SignUpParameters parameters) async {
     return await userAuthRepository.signUp(parameters);
   }
 }

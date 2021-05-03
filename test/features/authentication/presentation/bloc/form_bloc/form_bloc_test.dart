@@ -1,3 +1,5 @@
+//@dart=2.6
+
 import 'dart:io';
 
 import 'package:bloc_test/bloc_test.dart';
@@ -16,24 +18,24 @@ class MockImagePicker extends Mock implements ImagePicker {}
 void main() {
   MockImagePicker mockImagePicker;
   FormBloc formBloc;
-  String tEmail;
+
   String tValidEmail;
   String tPassword;
   String tUsername;
   String tConfirmPassword;
-  File tImage;
+
   String tFilePath;
 
   setUp(() {
+    print("SETUP IS RUNINIGNSIGNSIGNSDIGWSI");
     mockImagePicker = MockImagePicker();
     formBloc = FormBloc(imagePicker: mockImagePicker);
-    tEmail = "testEmail";
+
     tValidEmail = "daca@gmail.com";
     tPassword = "testPassword";
     tUsername = "testUsername";
     tConfirmPassword = "testConfirmPassword";
     tFilePath = "testPath";
-    tImage = File(tFilePath);
   });
 
   test("initial state shoudl be LogInForm", () {
@@ -42,7 +44,7 @@ void main() {
 
   blocTest("should change to good form type when event is FormTypeChanged",
       build: () => formBloc,
-      act: (bloc) {
+      act: (dynamic bloc) {
         bloc.add(FormTypeChanged());
         bloc.add(FormTypeChanged());
       },
@@ -52,7 +54,7 @@ void main() {
           ]);
   blocTest("return good ValidLoginForm after all is good",
       build: () => formBloc,
-      act: (bloc) {
+      act: (dynamic bloc) {
         bloc.add(EmailChanged(tValidEmail));
         bloc.add(PasswordChanged(tPassword));
       },
@@ -65,19 +67,19 @@ void main() {
 
   blocTest("return good ValidSingUpForm after all is good",
       build: () {
+        print(formBloc.imagePicker.runtimeType);
         when(mockImagePicker.getImage(
-                source: ImageSource.camera,
-                imageQuality: anyNamed("imageQuality")))
-            .thenAnswer((realInvocation) async => PickedFile(tFilePath));
-        when(mockImagePicker.getImage(
-                source: ImageSource.gallery,
-                imageQuality: anyNamed("imageQuality")))
+                source: ImageSource.camera, imageQuality: 70))
             .thenAnswer(
-                (realInvocation) async => PickedFile(tFilePath + "daca"));
+                (realInvocation) => Future.value(PickedFile(tFilePath)));
+        when(mockImagePicker.getImage(
+                source: ImageSource.gallery, imageQuality: 70))
+            .thenAnswer((realInvocation) =>
+                Future.value(PickedFile(tFilePath + "daca")));
 
         return formBloc;
       },
-      act: (bloc) {
+      act: (dynamic bloc) {
         bloc.add(EmailChanged(tValidEmail));
         bloc.add(PasswordChanged(tPassword));
         bloc.add(FormTypeChanged());

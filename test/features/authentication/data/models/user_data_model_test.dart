@@ -1,3 +1,5 @@
+//@dart=2.6
+
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';

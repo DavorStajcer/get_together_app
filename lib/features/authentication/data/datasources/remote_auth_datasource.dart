@@ -1,6 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:get_together_app/core/error/exceptions.dart';
-import 'package:get_together_app/features/authentication/data/models/user_data_model.dart';
+import '../../../../core/error/exceptions.dart';
+import '../models/user_data_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class RemoteAuthDatasource {
@@ -16,8 +16,8 @@ class RemoteAuthDatasourceImpl extends RemoteAuthDatasource {
   final FirebaseStorage firebaseStorage;
 
   RemoteAuthDatasourceImpl({
-    FirebaseAuth firebaseAuth,
-    FirebaseStorage firebaseStorage,
+    FirebaseAuth? firebaseAuth,
+    FirebaseStorage? firebaseStorage,
   })  : firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         firebaseStorage = firebaseStorage ?? FirebaseStorage.instance;
 

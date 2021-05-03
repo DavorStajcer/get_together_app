@@ -1,3 +1,7 @@
+//@dart=2.6
+
+import 'dart:io';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -24,6 +28,8 @@ void main() {
   String tErrorMessage;
   LogInParameters tLogInParam;
   SignUpParameters tSignUpParam;
+  String tPath;
+  File tImge;
 
   setUp(() {
     logUserInMock = LogUserInMock();
@@ -37,25 +43,15 @@ void main() {
     tPassword = "tPassword";
     tErrorMessage = "Erorr test";
     tLogInParam = LogInParameters(email: tEmail, password: tPassword);
+    tPath = "testPath";
+    tImge = File(tPath);
     tSignUpParam = SignUpParameters(
-        email: tEmail, password: tPassword, username: tUsername);
+        email: tEmail, password: tPassword, username: tUsername, image: tImge);
   });
 
   test("inital state should be AuthIntial", () {
     expect(authBloc.state, AuthInitial());
   });
-
-  /* 
-  
-  class AuthInitial extends AuthState {}
-
-class AuthLoading extends AuthState {}
-
-class AuthSuccessfull extends AuthState {}
-
-class AuthFailed extends AuthState {}
-
-  */
 
   blocTest(
       "state should emitt AuthSuccessfull if user is logged in successfully",
@@ -64,12 +60,12 @@ class AuthFailed extends AuthState {}
             .thenAnswer((realInvocation) async => Right(Success()));
         return authBloc;
       },
-      act: (testBloc) {
+      act: (dynamic testBloc) {
         testBloc.add(
             LogInEvent(LogInParameters(email: tEmail, password: tPassword)));
       },
       expect: () => [AuthLoading(), AuthSuccessfull()],
-      verify: (testBloc) {
+      verify: (dynamic testBloc) {
         verify(logUserInMock
             .call(LogInParameters(email: tEmail, password: tPassword)));
       });
@@ -80,12 +76,12 @@ class AuthFailed extends AuthState {}
             Left(AuthenticationFailure(tErrorMessage)));
         return authBloc;
       },
-      act: (testBloc) {
+      act: (dynamic testBloc) {
         testBloc.add(
             LogInEvent(LogInParameters(email: tEmail, password: tPassword)));
       },
       expect: () => [AuthLoading(), AuthFailed(tErrorMessage)],
-      verify: (testBloc) {
+      verify: (dynamic testBloc) {
         verify(logUserInMock(tLogInParam));
       });
 
@@ -95,11 +91,11 @@ class AuthFailed extends AuthState {}
             .thenAnswer((realInvocation) async => Right(Success()));
         return authBloc;
       },
-      act: (testBloc) {
+      act: (dynamic testBloc) {
         testBloc.add(SignUpEvent(tSignUpParam));
       },
       expect: () => [AuthLoading(), AuthSuccessfull()],
-      verify: (testBloc) {
+      verify: (dynamic testBloc) {
         verify(signUserInMock(tSignUpParam));
       });
 
@@ -109,11 +105,11 @@ class AuthFailed extends AuthState {}
             Left(AuthenticationFailure(tErrorMessage)));
         return authBloc;
       },
-      act: (testBloc) {
+      act: (dynamic testBloc) {
         testBloc.add(SignUpEvent(tSignUpParam));
       },
       expect: () => [AuthLoading(), AuthFailed(tErrorMessage)],
-      verify: (testBloc) {
+      verify: (dynamic testBloc) {
         verify(signUserInMock(tSignUpParam));
       });
 }

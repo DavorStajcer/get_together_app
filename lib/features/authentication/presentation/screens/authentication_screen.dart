@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_together_app/features/authentication/di/authentication_di.dart';
-import 'package:get_together_app/features/authentication/presentation/bloc/auth_bloc/auth_bloc.dart';
+import '../../di/authentication_di.dart';
+import '../bloc/auth_bloc/auth_bloc.dart';
 
-import 'package:get_together_app/features/authentication/presentation/bloc/form_bloc/form_bloc.dart';
+import '../bloc/form_bloc/form_bloc.dart';
 
-import 'package:get_together_app/features/authentication/presentation/screens/home_screen.dart';
-import 'package:get_together_app/features/authentication/presentation/widgets/auth_button.dart';
-import 'package:get_together_app/features/authentication/presentation/widgets/auth_form.dart';
-import 'package:get_together_app/features/authentication/presentation/widgets/auth_mode_picker.dart';
+import '../../../home/presentation/home_screen.dart';
+import '../widgets/auth_button.dart';
+import '../widgets/auth_form.dart';
+import '../widgets/auth_mode_picker.dart';
 
 class AuthScreen extends StatelessWidget {
   static final String route = "/auth_screen";
-  AuthScreen({Key key}) : super(key: key);
+  AuthScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class AuthScreen extends StatelessWidget {
                 }
 
                 if (state is AuthSuccessfull) {
-                  Navigator.of(context).pushNamed(HomeScreen.route);
+                  Navigator.of(context).pushNamed(HomeScreenWidget.route);
                 }
               },
               child: Stack(
@@ -68,7 +68,7 @@ class AuthScreen extends StatelessWidget {
 }
 
 class AuthBackground extends StatelessWidget {
-  const AuthBackground({Key key}) : super(key: key);
+  const AuthBackground({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
