@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_together_app/core/widgets/get_together_title.dart';
 
 class NotificationsOverviewScreen extends StatelessWidget {
   const NotificationsOverviewScreen({Key? key}) : super(key: key);
@@ -12,13 +13,8 @@ class NotificationsOverviewScreen extends StatelessWidget {
         Container(
           height: screenSize.height * 0.2,
           alignment: Alignment.topCenter,
-          padding: EdgeInsets.only(top: 15),
-          child: Text(
-            "GeTogether",
-            style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontSize: 35,
-                fontWeight: FontWeight.bold),
+          child: GetTogetherTitle(
+            textColor: Theme.of(context).primaryColor,
           ),
         ),
         Expanded(

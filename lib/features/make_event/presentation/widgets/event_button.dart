@@ -11,8 +11,9 @@ class EventButton extends StatelessWidget {
     return ElevatedButton(
       child: Text(
         text,
-        style:
-            TextStyle(color: Theme.of(context).primaryColor.withOpacity(0.6)),
+        style: TextStyle(
+          color: Theme.of(context).primaryColor.withOpacity(0.6),
+        ),
       ),
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/core/util/background_drawing.dart';
+import 'package:get_together_app/core/widgets/get_together_title.dart';
 import 'package:get_together_app/features/authentication/di/authentication_di.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_card_order_cubit/event_card_order_cubit.dart';
 import 'package:get_together_app/features/make_event/presentation/screens/choose_event_type_screen.dart';
@@ -31,18 +32,21 @@ class _EventHomeScreenState extends State<EventHomeScreen> {
     super.dispose();
   }
 
-  void goFoward() {
+  void _goFoward() {
     _pc.nextPage(duration: Duration(milliseconds: 500), curve: Curves.easeOut);
   }
 
-  void goBack() {
+  void _goBack() {
     _pc.previousPage(
         duration: Duration(milliseconds: 500), curve: Curves.easeOut);
   }
 
+  void _finishEventMaking() {
+    //TODO : Finish event making
+  }
+
   @override
   Widget build(BuildContext context) {
-    //final screenSize = MediaQuery.of(context).size;
     return BlocProvider<EventCardOrderCubit>(
       create: (context) => getIt<EventCardOrderCubit>(),
       child: SafeArea(
@@ -52,16 +56,8 @@ class _EventHomeScreenState extends State<EventHomeScreen> {
             children: [
               Flexible(
                 flex: 1,
-                child: Container(
-                  alignment: Alignment.topCenter,
-                  padding: EdgeInsets.only(top: 5),
-                  child: Text(
-                    "GeTogether",
-                    style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold),
-                  ),
+                child: GetTogetherTitle(
+                  textColor: Colors.white,
                 ),
               ),
               Flexible(
@@ -75,9 +71,10 @@ class _EventHomeScreenState extends State<EventHomeScreen> {
                     controller: _pc,
                     children: [
                       ChooseEventTypeScreen(
-                          goFowards: goFoward, goBack: goBack),
-                      ChooseLocationScreen(goFowards: goFoward, goBack: goBack),
-                      EventDetailsScreen(goFowards: goFoward, goBack: goBack)
+                          goFowards: _goFoward, goBack: _goBack),
+                      ChooseLocationScreen(
+                          goFowards: _goFoward, goBack: _goBack),
+                      EventDetailsScreen(goFowards: _goFoward, goBack: _goBack)
                     ],
                   ),
                 ),

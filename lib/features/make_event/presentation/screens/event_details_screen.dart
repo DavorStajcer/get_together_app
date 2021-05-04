@@ -3,19 +3,14 @@ import 'package:get_together_app/core/util/date_formater.dart';
 import 'package:get_together_app/features/make_event/presentation/widgets/date_time_picker_text.dart';
 import 'package:get_together_app/features/make_event/presentation/widgets/event_button.dart';
 import 'package:get_together_app/features/make_event/presentation/widgets/event_button_with_back_icon.dart';
+import 'package:get_together_app/features/make_event/presentation/widgets/event_description.dart';
 
-class EventDetailsScreen extends StatefulWidget {
+class EventDetailsScreen extends StatelessWidget {
   final Function() goFowards;
   final Function() goBack;
   EventDetailsScreen({Key? key, required this.goFowards, required this.goBack})
       : super(key: key);
 
-  @override
-  _EventDetailsState createState() => _EventDetailsState();
-}
-
-class _EventDetailsState extends State<EventDetailsScreen> {
-  final TextEditingController _descriptionController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
 
@@ -26,9 +21,12 @@ class _EventDetailsState extends State<EventDetailsScreen> {
       width: double.infinity,
       height: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.055),
-      color: Colors.green,
       child: Column(
         children: [
+          Flexible(
+            flex: 9,
+            child: EventDescription(),
+          ),
           Flexible(
             flex: 3,
             child: Container(
@@ -53,32 +51,11 @@ class _EventDetailsState extends State<EventDetailsScreen> {
             ),
           ),
           Flexible(
-            flex: 9,
-            child: Container(
-              height: double.infinity,
-              padding: EdgeInsets.only(bottom: 30),
-              child: TextField(
-                decoration: new InputDecoration(
-                  border: new OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(15.0),
-                      ),
-                      borderSide: BorderSide.none),
-                  filled: true,
-                  hintStyle: new TextStyle(color: Colors.grey[800]),
-                  hintText: "Type event description...",
-                  fillColor: Colors.white70,
-                ),
-                maxLines: 15,
-              ),
-            ),
-          ),
-          Flexible(
             flex: 2,
             child: EventButtonWithBackIcon(
               text: "Set details",
-              goBack: widget.goBack,
-              goFowards: widget.goFowards,
+              goBack: goBack,
+              goFowards: goFowards,
             ),
           ),
         ],

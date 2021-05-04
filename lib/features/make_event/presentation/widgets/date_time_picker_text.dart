@@ -34,17 +34,23 @@ class DateTimePickerText extends StatelessWidget {
                           colors: [
                             Theme.of(context).primaryColor.withOpacity(0),
                             Theme.of(context).primaryColor.withOpacity(0.05),
-                            Theme.of(context).primaryColor.withOpacity(0.2),
+                            Theme.of(context).primaryColor.withOpacity(0.1),
                             Theme.of(context).primaryColor.withOpacity(0.3),
                           ],
-                          stops: [0.3, 0.5, 0.8, 1],
+                          stops: [0.2, 0.4, 0.65, 1],
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
                           tileMode: TileMode.repeated,
                         ),
                       ),
                       alignment: Alignment.center,
-                      child: Text(text),
+                      child: Text(
+                        text,
+                        style: TextStyle(
+                            color: Theme.of(context)
+                                .primaryColor
+                                .withOpacity(0.6)),
+                      ),
                     ),
                   ),
                   Flexible(

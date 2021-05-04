@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/core/util/background_drawing.dart';
-import 'package:get_together_app/features/authentication/domain/usecases/sign_user_out.dart';
-import 'package:get_together_app/features/authentication/presentation/models/auth_param.dart';
+import 'package:get_together_app/core/widgets/get_together_title.dart';
 import 'package:get_together_app/features/profile_overview/presentation/widgets/profile_card.dart';
+import 'package:get_together_app/features/profile_overview/presentation/widgets/user_events_and_log_out.dart';
 import '../../../authentication/presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../../../home/presentation/home_screen.dart';
 
@@ -28,16 +28,8 @@ class ProfileOverviewScreen extends StatelessWidget {
             children: [
               Flexible(
                 flex: 2,
-                child: Container(
-                  alignment: Alignment.topCenter,
-                  padding: EdgeInsets.only(top: 5),
-                  child: Text(
-                    "GeTogether",
-                    style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold),
-                  ),
+                child: GetTogetherTitle(
+                  textColor: Colors.white.withOpacity(0.9),
                 ),
               ),
               Flexible(
@@ -55,19 +47,8 @@ class ProfileOverviewScreen extends StatelessWidget {
               ),
               Flexible(
                 flex: 2,
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(right: screenSize.width * 0.125),
-                  child: IconButton(
-                    icon: Icon(Icons.logout),
-                    onPressed: () {
-                      BlocProvider.of<AuthBloc>(context).add(SignOutEvent());
-                      if (ModalRoute.of(context)!.settings.name != "/")
-                        Navigator.of(context).pop();
-                    },
-                  ),
+                child: UserEventsAndLogOut(
+                  screenSize: screenSize,
                 ),
               ),
             ],
