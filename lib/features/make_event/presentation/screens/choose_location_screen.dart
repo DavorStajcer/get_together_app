@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/features/authentication/di/authentication_di.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/maps_location_cubit/maps_location_cubit.dart';
 import 'package:get_together_app/features/make_event/presentation/widgets/event_button.dart';
+import 'package:get_together_app/features/make_event/presentation/widgets/event_button_with_back_icon.dart';
 import 'package:get_together_app/features/make_event/presentation/widgets/event_maps.dart';
 
 class ChooseLocationScreen extends StatelessWidget {
@@ -34,29 +35,10 @@ class ChooseLocationScreen extends StatelessWidget {
               ),
               Flexible(
                 flex: 2,
-                child: Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  child: Row(
-                    children: [
-                      IconButton(
-                          icon: Icon(
-                            Icons.arrow_back,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          onPressed: goBack),
-                      Expanded(
-                        child: Container(
-                          width: double.infinity,
-                          height: double.infinity,
-                          child: EventButton(
-                            text: "Descritpion",
-                            navigate: goFowards,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                child: EventButtonWithBackIcon(
+                  text: "Set details",
+                  goBack: goBack,
+                  goFowards: goFowards,
                 ),
               ),
             ],

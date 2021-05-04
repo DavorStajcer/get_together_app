@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/core/util/background_drawing.dart';
 import 'package:get_together_app/features/authentication/di/authentication_di.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_card_order_cubit/event_card_order_cubit.dart';
-import 'package:get_together_app/features/make_event/presentation/screens/choose_event_type.dart';
-import 'package:get_together_app/features/make_event/presentation/screens/choose_location.dart';
+import 'package:get_together_app/features/make_event/presentation/screens/choose_event_type_screen.dart';
+import 'package:get_together_app/features/make_event/presentation/screens/choose_location_screen.dart';
+import 'package:get_together_app/features/make_event/presentation/screens/event_details_screen.dart';
 
 enum EventScreen { choose_event_type, choose_location, set_detailes }
 
@@ -76,6 +77,7 @@ class _EventHomeScreenState extends State<EventHomeScreen> {
                       ChooseEventTypeScreen(
                           goFowards: goFoward, goBack: goBack),
                       ChooseLocationScreen(goFowards: goFoward, goBack: goBack),
+                      EventDetailsScreen(goFowards: goFoward, goBack: goBack)
                     ],
                   ),
                 ),

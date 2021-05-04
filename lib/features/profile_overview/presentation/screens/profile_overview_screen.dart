@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/core/util/background_drawing.dart';
+import 'package:get_together_app/features/authentication/domain/usecases/sign_user_out.dart';
+import 'package:get_together_app/features/authentication/presentation/models/auth_param.dart';
 import 'package:get_together_app/features/profile_overview/presentation/widgets/profile_card.dart';
 import '../../../authentication/presentation/bloc/auth_bloc/auth_bloc.dart';
 import '../../../home/presentation/home_screen.dart';
@@ -61,7 +63,7 @@ class ProfileOverviewScreen extends StatelessWidget {
                   child: IconButton(
                     icon: Icon(Icons.logout),
                     onPressed: () {
-                      BlocProvider.of<AuthBloc>(context).signUserOut;
+                      BlocProvider.of<AuthBloc>(context).add(SignOutEvent());
                       if (ModalRoute.of(context)!.settings.name != "/")
                         Navigator.of(context).pop();
                     },
