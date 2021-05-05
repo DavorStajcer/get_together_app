@@ -4,12 +4,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/features/make_event/di/make_event_di.dart';
+import 'package:get_together_app/features/single_event_overview/presentation/screens/single_event_screen.dart';
+import 'package:get_together_app/features/user_events_overview/presentation/screens/user_events_screen.dart';
 import 'features/authentication/di/authentication_di.dart';
 import 'features/authentication/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'features/authentication/presentation/bloc/auth_check_bloc/authentication_check_bloc.dart';
 import 'features/authentication/presentation/screens/authentication_screen.dart';
 import 'features/home/di/home_di.dart';
-import 'features/home/presentation/home_screen.dart';
+import 'features/home/presentation/screens/home_screen.dart';
 import 'features/authentication/presentation/screens/splash_screen.dart';
 
 Future<void> main(List<String> args) async {
@@ -76,6 +78,8 @@ class _GetTogetherAppState extends State<GetTogetherApp> {
         routes: {
           HomeScreenWidget.route: (_) => HomeScreenWidget(),
           AuthScreen.route: (_) => AuthScreen(),
+          UserEventsScreen.route: (_) => UserEventsScreen(),
+          SingleEventScreen.route: (_) => SingleEventScreen(),
         });
   }
 }

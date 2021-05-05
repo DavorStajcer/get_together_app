@@ -29,12 +29,14 @@ class _MapsViewState extends State<MapsView> {
   }
 
   void _setEventMarker(LatLng location) {
-    _markers.add(Marker(
-      markerId: MarkerId(DateTime.now().toString()),
-      position: location,
-      draggable: false,
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
-    ));
+    _markers.add(
+      Marker(
+        markerId: MarkerId(DateTime.now().toString()),
+        position: location,
+        draggable: false,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+      ),
+    );
   }
 
   void _setEventCircle() {

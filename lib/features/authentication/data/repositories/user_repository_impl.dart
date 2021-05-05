@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get_together_app/core/error/exceptions.dart';
+import 'package:get_together_app/features/authentication/data/models/user_data_model.dart';
+import 'package:get_together_app/core/util/exception_mapper.dart';
 
 import '../../../../core/error/success.dart';
 import '../../../../core/error/failure.dart';
@@ -42,7 +46,11 @@ class UserAuthRepositoryImpl extends UserAuthRepository {
         return Right(Success());
       } on FirebaseAuthException catch (e) {
         print(e.message);
-        return Left(AuthenticationFailure(_mapExceptionCodeToMessage(e.code)));
+        return Left(
+          AuthenticationFailure(
+            ExceptionMapper.mapAuthExceptionCodeToMessage(e.code),
+          ),
+        );
       }
     } else
       return Left(NetworkFailure("Network error. Check your connection."));
@@ -54,13 +62,59 @@ class UserAuthRepositoryImpl extends UserAuthRepository {
       try {
         await firebaseAuth.createUserWithEmailAndPassword(
             email: parameters.email, password: parameters.password);
-
+        await _saveUserInfo(parameters);
         return Right(Success());
       } on FirebaseAuthException catch (e) {
-        return Left(AuthenticationFailure(_mapExceptionCodeToMessage(e.code)));
+        return Left(
+          AuthenticationFailure(
+            ExceptionMapper.mapAuthExceptionCodeToMessage(e.code),
+          ),
+        );
       }
     } else
       return Left(NetworkFailure("Network error. Check your connection."));
+  }
+
+  Future<void> _saveUserInfo(SignUpParameters signUpParameters) async {
+    final imageUrl = await _saveUserImageToFirestore(signUpParameters.image);
+
+    final UserDataModel userPublic = UserModelPublic(
+        userId: firebaseAuth.currentUser!.uid,
+        username: signUpParameters.username,
+        imageUrl: imageUrl);
+
+    final UserDataModel userPrivate = UserModelPrivate(
+      email: signUpParameters.email,
+      password: signUpParameters.password,
+    );
+
+    firebaseFirestore
+        .collection("users")
+        .doc(firebaseAuth.currentUser!.uid)
+        .set(
+          userPublic.toJsonMap(),
+        );
+
+    firebaseFirestore
+        .collection("users_private")
+        .doc(firebaseAuth.currentUser!.uid)
+        .set(
+          userPrivate.toJsonMap(),
+        );
+  }
+
+  Future<String> _saveUserImageToFirestore(File image) async {
+    String fileName = firebaseAuth.currentUser!.uid;
+    Reference reference =
+        firebaseStorage.ref().child("userPictures").child(fileName);
+    UploadTask uploadTask =
+        reference.putFile(image); //UploadTask implements Future indirectly
+
+    return uploadTask.then<String>((value) async {
+      return await value.ref.getDownloadURL();
+    }, onError: (error) {
+      throw ServerException();
+    });
   }
 
   @override
@@ -71,39 +125,13 @@ class UserAuthRepositoryImpl extends UserAuthRepository {
 
         return Right(Success());
       } on FirebaseAuthException catch (e) {
-        return Left(AuthenticationFailure(_mapExceptionCodeToMessage(e.code)));
+        return Left(
+          AuthenticationFailure(
+            ExceptionMapper.mapAuthExceptionCodeToMessage(e.code),
+          ),
+        );
       }
     } else
       return Left(NetworkFailure("Network error. Check your connection."));
-  }
-
-  String _mapExceptionCodeToMessage(String? exceptionCode) {
-    String errorMessage;
-    switch (exceptionCode) {
-      case "account-exists-with-different-credential":
-        errorMessage = "Wrong password for the email.";
-        break;
-      case "ERROR_INVALID_EMAIL":
-        errorMessage = "Your email address appears to be malformed.";
-        break;
-      case "ERROR_WRONG_PASSWORD":
-        errorMessage = "Your password is wrong.";
-        break;
-      case "ERROR_USER_NOT_FOUND":
-        errorMessage = "User with this email doesn't exist.";
-        break;
-      case "ERROR_USER_DISABLED":
-        errorMessage = "User with this email has been disabled.";
-        break;
-      case "ERROR_TOO_MANY_REQUESTS":
-        errorMessage = "Too many requests. Try again later.";
-        break;
-      case "ERROR_OPERATION_NOT_ALLOWED":
-        errorMessage = "Signing in with Email and Password is not enabled.";
-        break;
-      default:
-        errorMessage = exceptionCode!;
-    }
-    return errorMessage;
   }
 }

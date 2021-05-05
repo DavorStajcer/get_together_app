@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/features/authentication/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:get_together_app/features/make_event/presentation/widgets/event_button.dart';
+import 'package:get_together_app/features/user_events_overview/presentation/screens/user_events_screen.dart';
 
 class UserEventsAndLogOut extends StatelessWidget {
   final Size screenSize;
@@ -23,7 +24,10 @@ class UserEventsAndLogOut extends StatelessWidget {
                 alignment: Alignment.center,
                 width: double.infinity,
                 height: double.infinity,
-                child: EventButton(text: "Your events", navigate: () {}),
+                child: EventButton(
+                    text: "Your events",
+                    navigate: () => Navigator.of(context)
+                        .pushNamed(UserEventsScreen.route)),
               ),
             ),
             Flexible(

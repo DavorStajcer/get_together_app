@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../home_screen.dart';
+import '../screens/home_screen.dart';
 import 'nav_bar_item.dart';
 
 class CustomNavBar extends StatelessWidget {

@@ -2,75 +2,55 @@
 
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_together_app/core/error/failure.dart';
 import 'package:get_together_app/core/error/success.dart';
 import 'package:get_together_app/core/network.dart/network_info.dart';
-import 'package:get_together_app/features/authentication/data/datasources/local_datasource.dart';
-
 import 'package:get_together_app/features/authentication/data/repositories/user_repository_impl.dart';
 import 'package:get_together_app/features/authentication/presentation/models/auth_param.dart';
-
 import 'package:mockito/mockito.dart';
-
-class LocalDatasourceMock extends Mock implements LocalDatasource {}
-
-class FirebaseAuthMock extends Mock implements FirebaseAuth {}
-
-class FirebaseFirestoreMock extends Mock implements FirebaseFirestore {}
-
-class FirebaseStorageMock extends Mock implements FirebaseStorage {}
+import '../../../../firebase_mock/firebase_service.dart';
 
 class NetworkInfoMock extends Mock implements NetworkInfo {}
 
-class UserMock extends Mock implements User {}
-
-class UserCredentialsMock extends Mock implements UserCredential {}
-
 void main() {
-  //LocalDatasourceMock localDatasourceMock;
-  FirebaseAuthMock firebaseAuthMock;
-  FirebaseFirestoreMock firebaseFirestoreMock;
-  FirebaseStorageMock firebaseStorageMock;
-
-  UserCredentialsMock userCredentialsMock;
+  FirebaseService firebaseService;
   NetworkInfoMock networkInfoMock;
   UserAuthRepositoryImpl userRepositoryImpl;
   String tUserEmal;
   String tUserPassword;
   String tUserUsername;
   String tPath;
-  File tImge;
+  File tImage;
   LogInParameters tLogInParam;
   SignUpParameters tSignUpParam;
 
   setUp(() {
-    firebaseAuthMock = FirebaseAuthMock();
-    firebaseStorageMock = FirebaseStorageMock();
-    firebaseFirestoreMock = FirebaseFirestoreMock();
-    userCredentialsMock = UserCredentialsMock();
+    firebaseService = FirebaseService()
+      ..setUpFirebaseFirestore()
+      ..setUpFirebaseStorage()
+      ..setUpFirebaseAuth();
+
     networkInfoMock = NetworkInfoMock();
     userRepositoryImpl = UserAuthRepositoryImpl(
-      firebaseAuth: firebaseAuthMock,
-      firebaseFirestore: firebaseFirestoreMock,
-      firebaseStorage: firebaseStorageMock,
+      firebaseAuth: firebaseService.firebaseAuthMock,
+      firebaseFirestore: firebaseService.firebaseFirestoreMock,
+      firebaseStorage: firebaseService.firebaseStorageMock,
       networkInfo: networkInfoMock,
     );
+
     tUserEmal = "testEmail";
     tUserPassword = "testPassword";
     tUserUsername = "testUsername";
     tPath = "testPath";
-    tImge = File(tPath);
+    tImage = File(tPath);
     tLogInParam = LogInParameters(email: tUserEmal, password: tUserPassword);
     tSignUpParam = SignUpParameters(
         email: tUserEmal,
         password: tUserPassword,
         username: tUserUsername,
-        image: tImge);
+        image: tImage);
   });
 
   group("no errors", () {
@@ -81,44 +61,40 @@ void main() {
 
     group("logIn", () {
       setUp(() {
-        when(firebaseAuthMock.signInWithEmailAndPassword(
-                email: tUserEmal, password: tUserPassword))
-            .thenAnswer(((realInvocation) async => userCredentialsMock));
+        firebaseService.setUpSuccessfullAuth(tUserEmal, tUserPassword);
       });
-
       test("should return sucsess", () async {
         final response = await userRepositoryImpl.logIn(tLogInParam);
         expect(response, Right(Success()));
-        verify(firebaseAuthMock.signInWithEmailAndPassword(
+        verify(firebaseService.firebaseAuthMock.signInWithEmailAndPassword(
             email: tUserEmal, password: tUserPassword));
       });
     });
+
     group("signUp", () {
       test("should return sucsess when successfull", () async {
-        when(firebaseAuthMock.createUserWithEmailAndPassword(
-                email: tUserEmal, password: tUserPassword))
-            .thenAnswer(((realInvocation) async => userCredentialsMock));
         final response = await userRepositoryImpl.signUp(tSignUpParam);
         expect(response, Right(Success()));
-        verify(firebaseAuthMock.createUserWithEmailAndPassword(
+        verify(firebaseService.firebaseAuthMock.createUserWithEmailAndPassword(
             email: tUserEmal, password: tUserPassword));
       });
     });
   });
 
   group("errors", () {
+    setUp(() {
+      firebaseService.setUpFailedAuth(tUserEmal, tUserPassword);
+    });
+
     group("logIn", () {
       test("should return AuthenticationFailure when failed to logIn",
           () async {
         when(networkInfoMock.isConnected)
             .thenAnswer((realInvocation) async => true);
-        when(firebaseAuthMock.signInWithEmailAndPassword(
-                email: tUserEmal, password: tUserPassword))
-            .thenThrow(FirebaseAuthException(code: "exception"));
 
         final response = await userRepositoryImpl.logIn(tLogInParam);
         expect(response, Left(AuthenticationFailure("exception")));
-        verify(firebaseAuthMock.signInWithEmailAndPassword(
+        verify(firebaseService.firebaseAuthMock.signInWithEmailAndPassword(
             email: tUserEmal, password: tUserPassword));
       });
     });
@@ -128,13 +104,10 @@ void main() {
           () async {
         when(networkInfoMock.isConnected)
             .thenAnswer((realInvocation) async => true);
-        when(firebaseAuthMock.createUserWithEmailAndPassword(
-                email: tUserEmal, password: tUserPassword))
-            .thenThrow(FirebaseAuthException(code: "exception"));
 
         final response = await userRepositoryImpl.signUp(tSignUpParam);
         expect(response, Left(AuthenticationFailure("exception")));
-        verify(firebaseAuthMock.createUserWithEmailAndPassword(
+        verify(firebaseService.firebaseAuthMock.createUserWithEmailAndPassword(
             email: tUserEmal, password: tUserPassword));
       });
 
@@ -146,7 +119,7 @@ void main() {
         expect(response,
             Left(NetworkFailure("Network error. Check your connection.")));
         verify(networkInfoMock.isConnected);
-        verifyZeroInteractions(firebaseAuthMock);
+        verifyZeroInteractions(firebaseService.firebaseAuthMock);
       });
     });
   });

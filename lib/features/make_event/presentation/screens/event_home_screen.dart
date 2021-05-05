@@ -41,9 +41,7 @@ class _EventHomeScreenState extends State<EventHomeScreen> {
         duration: Duration(milliseconds: 500), curve: Curves.easeOut);
   }
 
-  void _finishEventMaking() {
-    //TODO : Finish event making
-  }
+  void _finishEventMaking() {}
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +72,8 @@ class _EventHomeScreenState extends State<EventHomeScreen> {
                           goFowards: _goFoward, goBack: _goBack),
                       ChooseLocationScreen(
                           goFowards: _goFoward, goBack: _goBack),
-                      EventDetailsScreen(goFowards: _goFoward, goBack: _goBack)
+                      EventDetailsScreen(
+                          goFowards: _finishEventMaking, goBack: _goBack)
                     ],
                   ),
                 ),

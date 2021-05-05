@@ -42,6 +42,7 @@ dependencies:
   location: ^4.1.1
   geolocator: ^7.0.3
   intl: ^0.17.0 #formating dates # import 'package:intl/intl.dart';
+  
 
 dev_dependencies:
   flutter_test:

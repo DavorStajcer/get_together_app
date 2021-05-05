@@ -1,15 +1,19 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/maps_location_cubit/maps_location_cubit.dart';
-import '../../authentication/di/authentication_di.dart';
-import '../../authentication/presentation/bloc/auth_bloc/auth_bloc.dart';
+import '../../../authentication/di/authentication_di.dart';
+import '../../../authentication/presentation/bloc/auth_bloc/auth_bloc.dart';
 
-import '../di/home_di.dart';
-import 'bloc/nav_bar_cubit/nav_bar_cubit.dart';
-import 'bloc/nav_bar_style_cubit/nav_bar_style_cubit.dart';
-import 'widgets/custom_bottom_nav_bar.dart';
-import 'widgets/nav_bar_item.dart';
+import '../../di/home_di.dart';
+import '../bloc/nav_bar_cubit/nav_bar_cubit.dart';
+import '../bloc/nav_bar_style_cubit/nav_bar_style_cubit.dart';
+import '../widgets/custom_nav_bar.dart';
+import '../widgets/nav_bar_item.dart';
 
 enum HomeScreen {
   events_overview,
@@ -26,7 +30,8 @@ class HomeScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeScreenSize = MediaQuery.of(context).size;
+    FirebaseFirestore.instance.collection("users").get().then((value) => null);
+    final homeScreenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color.fromRGBO(237, 231, 246, 1),
       body: MultiBlocProvider(
@@ -50,12 +55,12 @@ class HomeScreenWidget extends StatelessWidget {
             Column(
               children: [
                 Container(
-                  height: HomeScreenSize.height - CustomNavBar.hight,
+                  height: homeScreenSize.height - CustomNavBar.hight,
                   child: BlocBuilder<NavBarCubit, NavBarState>(
                     builder: (context, state) => state.screen,
                   ),
                 ),
-                CustomNavBar(screenSize: HomeScreenSize),
+                CustomNavBar(screenSize: homeScreenSize),
               ],
             ),
             NavBarMiddleItem(screen: HomeScreen.make_event_HomeScreen),

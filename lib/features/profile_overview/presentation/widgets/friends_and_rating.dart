@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_together_app/core/widgets/user_star_rating.dart';
 import 'package:get_together_app/features/profile_overview/presentation/widgets/rating.dart';
 
 class FriendsAndRating extends StatelessWidget {
@@ -21,7 +22,7 @@ class FriendsAndRating extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 10),
             child: VerticalDivider(),
           ),
-          Rating(),
+          UserStarRating(),
         ],
       ),
     );

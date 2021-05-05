@@ -23,16 +23,7 @@ class _AuthFormState extends State<AuthForm> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FormBloc, AuthFormState>(
-/*       buildWhen: (currState, nextState) {
-        log(currState.toString());
-        log(nextState.toString());
-        if (currState is LoginForm)
-          return nextState is SignUpForm;
-        else
-          return nextState is LoginForm;
-      }, */
       builder: (context, state) {
-        print("AUTH FORM -> $state");
         return Center(
           child: Padding(
             padding: EdgeInsets.symmetric(

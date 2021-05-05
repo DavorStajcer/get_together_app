@@ -2,7 +2,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_together_app/features/home/presentation/bloc/nav_bar_style_cubit/nav_bar_style_state.dart';
-import 'package:get_together_app/features/home/presentation/home_screen.dart';
+import 'package:get_together_app/features/home/presentation/screens/home_screen.dart';
 
 void main() {
   NavBarStyleState navBarStyle;

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_together_app/features/authentication/presentation/widgets/auth_background.dart';
 import '../../di/authentication_di.dart';
 import '../bloc/auth_bloc/auth_bloc.dart';
-
 import '../bloc/form_bloc/form_bloc.dart';
-
-import '../../../home/presentation/home_screen.dart';
+import '../../../home/presentation/screens/home_screen.dart';
 import '../widgets/auth_button.dart';
 import '../widgets/auth_form.dart';
 import '../widgets/auth_mode_picker.dart';
@@ -63,32 +62,6 @@ class AuthScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class AuthBackground extends StatelessWidget {
-  const AuthBackground({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("lib/assets/images/background_auth_image.png"),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Container(
-          width: double.infinity,
-          height: double.infinity,
-          color: Colors.black45,
-        )
-      ],
     );
   }
 }

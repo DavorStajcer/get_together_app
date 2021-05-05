@@ -5,7 +5,7 @@ import 'package:get_together_app/core/widgets/get_together_title.dart';
 import 'package:get_together_app/features/profile_overview/presentation/widgets/profile_card.dart';
 import 'package:get_together_app/features/profile_overview/presentation/widgets/user_events_and_log_out.dart';
 import '../../../authentication/presentation/bloc/auth_bloc/auth_bloc.dart';
-import '../../../home/presentation/home_screen.dart';
+import '../../../home/presentation/screens/home_screen.dart';
 
 class ProfileOverviewScreen extends StatelessWidget {
   const ProfileOverviewScreen({Key? key}) : super(key: key);

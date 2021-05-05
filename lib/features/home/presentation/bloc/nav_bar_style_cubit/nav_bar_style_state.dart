@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../home_screen.dart';
+import '../../screens/home_screen.dart';
 
 class NavBarStyleState extends Equatable {
   final Map<HomeScreen, NavItemStyle> itemsStyle;

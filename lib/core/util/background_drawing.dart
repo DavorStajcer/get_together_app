@@ -12,14 +12,6 @@ class BackgroundDrawing extends CustomPainter {
       ..moveTo(0, 0)
       ..lineTo(0, size.height * 0.33)
       ..quadraticBezierTo(size.width * 0.85, size.height * 0.37, size.width, 0);
-
-/*     canvas.rotate(-0.1);
-    canvas.drawOval(
-        Rect.fromPoints(Offset(0, -size.height * 0.225),
-            Offset(size.width, size.height * 0.225)),
-        paint);
-
-    canvas.restore(); */
     canvas.drawPath(path, paint);
   }
 

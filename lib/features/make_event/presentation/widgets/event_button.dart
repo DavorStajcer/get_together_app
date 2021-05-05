@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 class EventButton extends StatelessWidget {
   final String text;
   final Function() navigate;
-  const EventButton({Key? key, required this.text, required this.navigate})
-      : super(key: key);
+  final Color? buttonColor;
+  final Color? textColor;
+  EventButton({
+    Key? key,
+    required this.text,
+    required this.navigate,
+    this.buttonColor,
+    this.textColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +19,7 @@ class EventButton extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: Theme.of(context).primaryColor.withOpacity(0.6),
+          color: textColor ?? Theme.of(context).primaryColor.withOpacity(0.6),
         ),
       ),
       style: ButtonStyle(
@@ -21,7 +28,7 @@ class EventButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(40), side: BorderSide.none),
         ),
         backgroundColor: MaterialStateProperty.all(
-          Colors.white,
+          buttonColor ?? Colors.white,
         ),
         elevation: MaterialStateProperty.all(0),
         overlayColor: MaterialStateProperty.resolveWith(

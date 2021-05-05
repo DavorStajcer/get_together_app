@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_together_app/features/make_event/presentation/widgets/event_button.dart';
 import 'package:get_together_app/features/single_event_overview/presentation/widgets/admin_details.dart';
 import 'package:get_together_app/features/single_event_overview/presentation/widgets/description.dart';
+import 'package:get_together_app/features/single_event_overview/presentation/widgets/join_button.dart';
 import 'package:get_together_app/features/single_event_overview/presentation/widgets/people_comming..dart';
 import 'package:get_together_app/features/single_event_overview/presentation/widgets/single_event_maps.dart';
 
@@ -79,10 +80,7 @@ class SingleEventScreen extends StatelessWidget {
                     child: Container(
                       width: double.infinity,
                       height: double.infinity,
-                      child: EventButton(
-                        text: "Join event",
-                        navigate: () {},
-                      ),
+                      child: JoinButton(),
                     ),
                   ),
                 ],
