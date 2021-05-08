@@ -3,7 +3,10 @@ import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_together_app/features/chats_overview/presentation/screens/chat_screen.dart';
 import 'package:get_together_app/features/make_event/di/make_event_di.dart';
+import 'package:get_together_app/features/profile_overview/di/profile_di.dart';
+import 'package:get_together_app/features/profile_overview/presentation/bloc/profile_screen_cubit/profile_screen_cubit.dart';
 import 'package:get_together_app/features/single_event_overview/presentation/screens/single_event_screen.dart';
 import 'package:get_together_app/features/user_events_overview/presentation/screens/user_events_screen.dart';
 import 'features/authentication/di/authentication_di.dart';
@@ -20,6 +23,7 @@ Future<void> main(List<String> args) async {
   init(); //init getIt
   initHomeDi();
   initMakeEventDi();
+  initProfileDi();
   runApp(GetTogetherApp());
 }
 
@@ -43,43 +47,58 @@ class _GetTogetherAppState extends State<GetTogetherApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(primaryColor: Color.fromRGBO(255, 109, 64, 1)),
-        home: BlocProvider<AuthBloc>(
-            create: (_) => getIt<AuthBloc>(),
-            child: BlocProvider<AuthenticationCheckBloc>(
-              create: (_) => getIt<AuthenticationCheckBloc>(),
-              child: BlocConsumer<AuthenticationCheckBloc,
-                      AuthenticationCheckState>(
-                  bloc: bloc,
-                  listener: (context, state) {
-                    if (state is ServerErrorState)
-                      showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                                title: Text("Automatic atuhentication failed."),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(),
-                                    child: Text("Ok"),
-                                  ),
-                                ],
-                              ));
-                  },
-                  builder: (context, state) {
-                    log("STATE CNAGED -> $state");
-                    if (state is AuthenticationCheckInitialState)
-                      return SplashScreen();
+        theme: ThemeData(
+          primaryColor: Color.fromRGBO(255, 109, 64, 1),
+          accentColor: Color.fromRGBO(255, 109, 64, 1),
+        ),
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider<AuthBloc>(
+              create: (context) => getIt<AuthBloc>(),
+            ),
+            BlocProvider<AuthenticationCheckBloc>(
+              create: (context) => getIt<AuthenticationCheckBloc>(),
+            ),
+            BlocProvider<ProfileScreenCubit>(
+              create: (_) => getIt<ProfileScreenCubit>(),
+            ),
+          ],
+          child:
+              BlocConsumer<AuthenticationCheckBloc, AuthenticationCheckState>(
+            bloc: bloc,
+            listener: (context, state) {
+              if (state is ServerErrorState)
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: Text("Automatic atuhentication failed."),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Text("Ok"),
+                            ),
+                          ],
+                        ));
+            },
+            builder: (context, state) {
+              if (state is AuthenticationCheckInitialState)
+                return SplashScreen();
 
-                    if (state is UserLoggedInState) return HomeScreenWidget();
-                    return AuthScreen();
-                  }),
-            )),
+              if (state is UserLoggedInState) return HomeScreenWidget();
+              return AuthScreen();
+            },
+          ),
+        ),
         routes: {
           HomeScreenWidget.route: (_) => HomeScreenWidget(),
           AuthScreen.route: (_) => AuthScreen(),
           UserEventsScreen.route: (_) => UserEventsScreen(),
           SingleEventScreen.route: (_) => SingleEventScreen(),
+          ChatScreen.route: (_) => ChatScreen(),
         });
   }
 }
+
+/* 
+
+ */

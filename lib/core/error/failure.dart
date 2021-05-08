@@ -9,25 +9,32 @@ abstract class Failure extends Equatable {
 }
 
 class ServerFailure extends Failure {
-  ServerFailure(String message) : super(message);
+  ServerFailure({String? message})
+      : super(message ?? "Oops. Something went wrong. Try that again.");
 }
 
 class CashFailure extends Failure {
-  CashFailure(String message) : super(message);
+  CashFailure({String? message})
+      : super(message ?? "Error while cashing some data. Try again later.");
 }
 
 class ParsingFailure extends Failure {
-  ParsingFailure(String message) : super(message);
+  ParsingFailure({String? message})
+      : super(message ?? "Error while getting the location. Try again later.");
 }
 
 class LocationFailure extends Failure {
-  LocationFailure(String message) : super(message);
+  LocationFailure({String? message})
+      : super(message ?? "Error while getting the location. Try again later.");
 }
 
 class NetworkFailure extends Failure {
-  NetworkFailure(String message) : super(message);
+  NetworkFailure({String? message})
+      : super(message ?? "No connection. Check your internet.");
 }
 
 class AuthenticationFailure extends Failure {
-  AuthenticationFailure(String message) : super(message);
+  AuthenticationFailure({String? message})
+      : super(
+            message ?? "Error while trying to authenticate. Try again later.");
 }

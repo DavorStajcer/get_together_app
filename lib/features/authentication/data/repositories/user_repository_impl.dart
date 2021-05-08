@@ -48,12 +48,12 @@ class UserAuthRepositoryImpl extends UserAuthRepository {
         print(e.message);
         return Left(
           AuthenticationFailure(
-            ExceptionMapper.mapAuthExceptionCodeToMessage(e.code),
+            message: ExceptionMapper.mapAuthExceptionCodeToMessage(e.code),
           ),
         );
       }
     } else
-      return Left(NetworkFailure("Network error. Check your connection."));
+      return Left(NetworkFailure());
   }
 
   @override
@@ -67,16 +67,18 @@ class UserAuthRepositoryImpl extends UserAuthRepository {
       } on FirebaseAuthException catch (e) {
         return Left(
           AuthenticationFailure(
-            ExceptionMapper.mapAuthExceptionCodeToMessage(e.code),
+            message: ExceptionMapper.mapAuthExceptionCodeToMessage(e.code),
           ),
         );
       }
     } else
-      return Left(NetworkFailure("Network error. Check your connection."));
+      return Left(NetworkFailure());
   }
 
   Future<void> _saveUserInfo(SignUpParameters signUpParameters) async {
-    final imageUrl = await _saveUserImageToFirestore(signUpParameters.image);
+    final imageUrl =
+        await _saveUserImageToFirebaseStorage(signUpParameters.image);
+    //await _saveUserImageToFirebaseStorage(signUpParameters.image);
 
     final UserDataModel userPublic = UserModelPublic(
         userId: firebaseAuth.currentUser!.uid,
@@ -103,7 +105,7 @@ class UserAuthRepositoryImpl extends UserAuthRepository {
         );
   }
 
-  Future<String> _saveUserImageToFirestore(File image) async {
+  Future<String> _saveUserImageToFirebaseStorage(File image) async {
     String fileName = firebaseAuth.currentUser!.uid;
     Reference reference =
         firebaseStorage.ref().child("userPictures").child(fileName);
@@ -127,11 +129,11 @@ class UserAuthRepositoryImpl extends UserAuthRepository {
       } on FirebaseAuthException catch (e) {
         return Left(
           AuthenticationFailure(
-            ExceptionMapper.mapAuthExceptionCodeToMessage(e.code),
+            message: ExceptionMapper.mapAuthExceptionCodeToMessage(e.code),
           ),
         );
       }
     } else
-      return Left(NetworkFailure("Network error. Check your connection."));
+      return Left(NetworkFailure());
   }
 }

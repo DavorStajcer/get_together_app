@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_together_app/features/authentication/presentation/bloc/auth_check_bloc/authentication_check_bloc.dart';
 import 'package:get_together_app/features/authentication/presentation/widgets/auth_background.dart';
 import '../../di/authentication_di.dart';
 import '../bloc/auth_bloc/auth_bloc.dart';
@@ -38,10 +39,6 @@ class AuthScreen extends StatelessWidget {
                                   child: Text("Ok"))
                             ],
                           ));
-                }
-
-                if (state is AuthSuccessfull) {
-                  Navigator.of(context).pushNamed(HomeScreenWidget.route);
                 }
               },
               child: Stack(

@@ -14,7 +14,6 @@ class NavBarCubit extends Cubit<NavBarState> {
   NavBarCubit() : super(NavBarEventsOverview());
 
   void changeScreen(HomeScreen screen) {
-    print("CHANGE SCREEN");
     switch (screen) {
       case HomeScreen.events_overview:
         emit(NavBarEventsOverview());

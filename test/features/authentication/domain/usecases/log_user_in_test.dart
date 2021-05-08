@@ -41,12 +41,12 @@ void main() {
   group("error", () {
     test("should return AuthenticatioFailure", () async {
       when(userRepositoryMock.logIn(tLogInParam)).thenAnswer(
-          (realInvocation) async => Left(AuthenticationFailure("")));
+          (realInvocation) async => Left(AuthenticationFailure(message: "")));
 
       final Either<Failure, Success> response =
           await logUserIn(LogInParameters(email: tEmail, password: tPassword));
 
-      expect(response, Left(AuthenticationFailure("")));
+      expect(response, Left(AuthenticationFailure(message: "")));
       verify(userRepositoryMock.logIn(tLogInParam));
     });
   });

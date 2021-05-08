@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:get_together_app/core/usecases/usecase.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/error/success.dart';
 import '../../../domain/usecases/log_user_in.dart';

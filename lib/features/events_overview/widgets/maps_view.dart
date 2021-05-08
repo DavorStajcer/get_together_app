@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/maps_location_cubit/maps_location_cubit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 
 class MapsView extends StatefulWidget {
   MapsView({Key? key}) : super(key: key);
@@ -71,8 +70,9 @@ class _MapsViewState extends State<MapsView> {
           );
         final Position currentLocation =
             (state as MapsLocationSuccess).currentPosition;
-        _userLocation =
-            LatLng(currentLocation.latitude, currentLocation.longitude);
+        // _userLocation =
+        //     LatLng(currentLocation.latitude, currentLocation.longitude);
+        _userLocation = LatLng(0, 142);
 
         _setEventCircle();
         _setEventMarker(_userLocation);

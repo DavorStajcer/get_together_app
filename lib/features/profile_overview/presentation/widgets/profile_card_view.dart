@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get_together_app/features/authentication/domain/entities/user_data.dart';
 import 'package:get_together_app/features/profile_overview/presentation/widgets/edit_and_settings.dart';
 import 'package:get_together_app/features/profile_overview/presentation/widgets/friends_and_rating.dart';
 import 'package:get_together_app/features/profile_overview/presentation/util/profile_card_clipper.dart';
-import 'package:get_together_app/features/profile_overview/presentation/widgets/profile_picture.dart';
+import 'package:get_together_app/features/profile_overview/presentation/widgets/profile_picture_view.dart';
 
-class ProfileCard extends StatelessWidget {
+class ProfileCardView extends StatelessWidget {
   final double picHeight;
-  const ProfileCard({
+  final UserDataPublic currentUserData;
+  const ProfileCardView({
     Key? key,
     required this.picHeight,
+    required this.currentUserData,
   }) : super(key: key);
 
   @override
@@ -21,13 +24,16 @@ class ProfileCard extends StatelessWidget {
           child: Card(
             child: Column(
               children: [
-                EditAndSettings(picHeight: picHeight),
+                EditAndSettings(
+                  picHeight: picHeight,
+                  currentUserData: currentUserData,
+                ),
                 Container(
                   width: double.infinity,
                   height: 20,
                   alignment: Alignment.center,
                   child: Text(
-                    "Davor Štajcer",
+                    currentUserData.username,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -40,7 +46,7 @@ class ProfileCard extends StatelessWidget {
                   child: FittedBox(
                     fit: BoxFit.fitHeight,
                     child: Text(
-                      "Konya, Turkey",
+                      currentUserData.city + ", " + currentUserData.country,
                     ),
                   ),
                 ),
@@ -50,17 +56,21 @@ class ProfileCard extends StatelessWidget {
                     children: [
                       Flexible(
                         flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Container(
+                          height: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 5),
                           child: SingleChildScrollView(
-                            child: Text(
-                                "me long text. Some me long text. Some me long text. Some me long text. Some me long text. Some me long text. Some me long text. Some me long text. Some me long text. Some me long text. Some me long text. Some me long text. Some me long text. Some me long text. Some me long text. Some me long text. Some me long text. Some  Some long text. Some long text. Some long text. Some long text. Some long text. Some long text. Some long text. Some long text. Some long text. "),
+                            child: Text(currentUserData.description),
                           ),
                         ),
                       ),
                       Flexible(
                         flex: 1,
-                        child: FriendsAndRating(),
+                        child: FriendsAndRating(
+                          rating: currentUserData.rating,
+                          friendsNum: currentUserData.friendsCount,
+                        ),
                       ),
                     ],
                   ),
@@ -69,7 +79,10 @@ class ProfileCard extends StatelessWidget {
             ),
           ),
         ),
-        ProfilePicture(picHeight: picHeight),
+        ProfilePictureView(
+          picHeight: picHeight,
+          imageUrl: currentUserData.imageUrl,
+        ),
       ],
     );
   }

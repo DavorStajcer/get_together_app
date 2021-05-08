@@ -1,8 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:get_together_app/core/util/date_formater.dart';
 
-class DateTimePickerText extends StatelessWidget {
-  final String text;
-  const DateTimePickerText({Key? key, required this.text}) : super(key: key);
+enum Picker { date, time }
+
+class DateTimePickerButton extends StatelessWidget {
+  final Picker pickerType;
+  const DateTimePickerButton({Key? key, required this.pickerType})
+      : super(key: key);
+
+  Future<void> _selectEventDate(
+      BuildContext context, DateTime currentlySelectedDate) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: currentlySelectedDate,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2022),
+      helpText: "Change event date",
+      initialEntryMode: DatePickerEntryMode.input,
+    );
+    if (pickedDate != null && pickedDate != currentlySelectedDate)
+      //TODO: change the date
+      var a;
+  }
+
+  Future<void> _selectEventTime(
+      BuildContext context, TimeOfDay currentlySelectedTime) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: currentlySelectedTime,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +72,9 @@ class DateTimePickerText extends StatelessWidget {
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        text,
+                        pickerType == Picker.time
+                            ? TimeOfDay.now().format(context)
+                            : DateFormater.getDotFormat(DateTime.now()),
                         style: TextStyle(
                             color: Theme.of(context)
                                 .primaryColor
@@ -60,14 +89,16 @@ class DateTimePickerText extends StatelessWidget {
                       width: double.infinity,
                       color: Theme.of(context).primaryColor.withOpacity(0.3),
                       child: IconButton(
-                        icon: Icon(
-                          Icons.replay_outlined,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {},
-                      ),
+                            icon: Icon(
+                              Icons.replay_outlined,
+                              color: Colors.white,
+                            ),
+                            onPressed: () => pickerType == Picker.time
+                                ? _selectEventTime(context, TimeOfDay.now())
+                                : _selectEventDate(context, DateTime.now()),
+                          ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -81,3 +112,23 @@ class DateTimePickerText extends StatelessWidget {
     );
   }
 }
+
+/* 
+Theme(
+    data: Theme.of(context).copyWith(
+          primaryColor: Colors.amber,
+        ),
+    child: new Builder(
+      builder: (context) => new IconButton(
+                        icon: Icon(
+                          Icons.replay_outlined,
+                          color: Colors.white,
+                        ),
+                        onPressed: () => pickerType == Picker.time
+                            ? _selectEventTime(context, TimeOfDay.now())
+                            : _selectEventDate(context, DateTime.now()),
+                      ),
+          ),
+    ),
+  )
+ */

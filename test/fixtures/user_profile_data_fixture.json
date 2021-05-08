@@ -1,5 +1,7 @@
 {
+    "userId" : "tUserId",
     "username": "username",
+    "imageUrl" : "tImageUrl",
     "city": "city",
     "country": "country",
     "description": "description",

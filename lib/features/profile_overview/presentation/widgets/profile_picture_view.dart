@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
-class ProfilePicture extends StatelessWidget {
+class ProfilePictureView extends StatelessWidget {
   final double picHeight;
-  const ProfilePicture({Key? key, required this.picHeight}) : super(key: key);
+  final String imageUrl;
+  const ProfilePictureView(
+      {Key? key, required this.picHeight, required this.imageUrl})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +20,8 @@ class ProfilePicture extends StatelessWidget {
           color: Colors.black12,
         ),
         image: DecorationImage(
-          fit: BoxFit.fill,
-          image: NetworkImage("https://i.imgur.com/BoN9kdC.png"),
+          fit: BoxFit.fitWidth,
+          image: NetworkImage(imageUrl),
         ),
         color: Colors.grey,
       ),

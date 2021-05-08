@@ -15,7 +15,11 @@ class NameAndMessage extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8),
               child: Text(
                 "Samantha Cruz",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
             ),
             Expanded(

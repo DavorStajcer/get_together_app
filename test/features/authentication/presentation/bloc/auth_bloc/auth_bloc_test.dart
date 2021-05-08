@@ -73,7 +73,7 @@ void main() {
   blocTest("should emit AuthenticationFailure when loggin is not successfull",
       build: () {
         when(logUserInMock(tLogInParam)).thenAnswer((realInvocation) async =>
-            Left(AuthenticationFailure(tErrorMessage)));
+            Left(AuthenticationFailure(message: tErrorMessage)));
         return authBloc;
       },
       act: (dynamic testBloc) {
@@ -102,7 +102,7 @@ void main() {
   blocTest("should emit AuthFailed when sign in is not successfull",
       build: () {
         when(signUserInMock(tSignUpParam)).thenAnswer((realInvocation) async =>
-            Left(AuthenticationFailure(tErrorMessage)));
+            Left(AuthenticationFailure(message: tErrorMessage)));
         return authBloc;
       },
       act: (dynamic testBloc) {

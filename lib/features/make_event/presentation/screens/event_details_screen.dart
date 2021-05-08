@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_together_app/core/util/date_formater.dart';
-import 'package:get_together_app/features/make_event/presentation/widgets/date_time_picker_text.dart';
-import 'package:get_together_app/features/make_event/presentation/widgets/event_button.dart';
+import 'package:get_together_app/features/make_event/presentation/widgets/date_time_picker_button.dart';
 import 'package:get_together_app/features/make_event/presentation/widgets/event_button_with_back_icon.dart';
 import 'package:get_together_app/features/make_event/presentation/widgets/event_description.dart';
 
@@ -35,15 +34,15 @@ class EventDetailsScreen extends StatelessWidget {
                 children: [
                   Flexible(
                     flex: 4,
-                    child: DateTimePickerText(
-                      text: DateFormater.getDotFormat(_selectedDate),
+                    child: DateTimePickerButton(
+                      pickerType: Picker.date,
                     ),
                   ),
                   Flexible(flex: 1, child: Container()),
                   Flexible(
                     flex: 3,
-                    child: DateTimePickerText(
-                      text: _selectedTime.format(context),
+                    child: DateTimePickerButton(
+                      pickerType: Picker.time,
                     ),
                   ),
                 ],
@@ -53,7 +52,7 @@ class EventDetailsScreen extends StatelessWidget {
           Flexible(
             flex: 2,
             child: EventButtonWithBackIcon(
-              text: "Set details",
+              text: "Make event",
               goBack: goBack,
               goFowards: goFowards,
             ),

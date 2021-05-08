@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_together_app/features/chats_overview/presentation/screens/chat_screen.dart';
 import 'package:get_together_app/features/chats_overview/presentation/widgets/chat_list_item.dart';
 
 class ChatsOverviewScreen extends StatelessWidget {
@@ -11,7 +12,7 @@ class ChatsOverviewScreen extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            height: screenSize.height * 0.2,
+            height: screenSize.height * 0.15,
             alignment: Alignment.topCenter,
             padding: EdgeInsets.only(top: 15),
             child: Text(
@@ -26,7 +27,12 @@ class ChatsOverviewScreen extends StatelessWidget {
             child: ListView.builder(
               itemCount: 15,
               itemBuilder: (context, index) {
-                return ChatListItem();
+                return GestureDetector(
+                  child: ChatListItem(),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(ChatScreen.route);
+                  },
+                );
               },
             ),
           ),

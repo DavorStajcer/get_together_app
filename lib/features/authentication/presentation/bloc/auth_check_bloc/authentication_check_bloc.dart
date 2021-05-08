@@ -24,7 +24,6 @@ class AuthenticationCheckBloc
   Stream<AuthenticationCheckState> mapEventToState(
     AuthenticationCheckEvent event,
   ) async* {
-    print("AUTH EVENT -> $event");
     if (event is ApplicationStarted) {
       yield AuthenticationCheckInitialState();
       listenToAuthStateChanges(this);

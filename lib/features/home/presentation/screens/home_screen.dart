@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,38 +32,39 @@ class HomeScreenWidget extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color.fromRGBO(237, 231, 246, 1),
       body: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (_) => homeGetIt<NavBarCubit>(),
-          ),
-          BlocProvider(
-            create: (_) => homeGetIt<NavBarStyleCubit>(),
-          ),
-          BlocProvider<AuthBloc>(
-            create: (_) => getIt<AuthBloc>(),
-          ),
-          BlocProvider<MapsLocationCubit>(
-            create: (_) => getIt<MapsLocationCubit>(),
-          ),
-        ],
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Column(
+          providers: [
+            BlocProvider(
+              create: (_) => homeGetIt<NavBarCubit>(),
+            ),
+            BlocProvider(
+              create: (_) => homeGetIt<NavBarStyleCubit>(),
+            ),
+            BlocProvider<AuthBloc>(
+              create: (_) => getIt<AuthBloc>(),
+            ),
+            BlocProvider<MapsLocationCubit>(
+              create: (_) => getIt<MapsLocationCubit>(),
+            ),
+          ],
+          child: SingleChildScrollView(
+            child: Stack(
+              alignment: Alignment.bottomCenter,
               children: [
-                Container(
-                  height: homeScreenSize.height - CustomNavBar.hight,
-                  child: BlocBuilder<NavBarCubit, NavBarState>(
-                    builder: (context, state) => state.screen,
-                  ),
+                Column(
+                  children: [
+                    Container(
+                      height: homeScreenSize.height - CustomNavBar.hight,
+                      child: BlocBuilder<NavBarCubit, NavBarState>(
+                        builder: (context, state) => state.screen,
+                      ),
+                    ),
+                    CustomNavBar(screenSize: homeScreenSize),
+                  ],
                 ),
-                CustomNavBar(screenSize: homeScreenSize),
+                NavBarMiddleItem(screen: HomeScreen.make_event_HomeScreen),
               ],
             ),
-            NavBarMiddleItem(screen: HomeScreen.make_event_HomeScreen),
-          ],
-        ),
-      ),
+          )),
     );
   }
 }

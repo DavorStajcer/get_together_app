@@ -15,11 +15,11 @@ class ChatListItem extends StatelessWidget {
           Flexible(
             flex: 2,
             child: Container(
-              margin: EdgeInsets.all(7),
+              margin: EdgeInsets.all(15),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                   image: NetworkImage("https://i.imgur.com/BoN9kdC.png"),
                 ),
                 color: Colors.grey,
@@ -38,6 +38,7 @@ class ChatListItem extends StatelessWidget {
                 "13s",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  color: Colors.black26,
                 ),
               ),
             ),

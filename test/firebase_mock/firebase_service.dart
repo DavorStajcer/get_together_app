@@ -1,6 +1,9 @@
 //@dart=2.6
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get_together_app/core/error/exceptions.dart';
+import 'package:get_together_app/features/authentication/data/models/user_data_model.dart';
+import 'package:get_together_app/features/profile_overview/data/models/user_profile_data_model.dart';
 import 'package:mockito/mockito.dart';
 
 import 'firebase_auth_mock.dart';
@@ -21,6 +24,8 @@ class FirebaseService {
   final UploadTaskMock uploadTaskMock = UploadTaskMock();
   final ReferenceMock referenceMock = ReferenceMock();
   final UserMock userMock = UserMock();
+  final QuerySnapshotMock querySnapshot = QuerySnapshotMock();
+  final DocumentSnapshotMock documentSnapshot = DocumentSnapshotMock();
   //Test values
   static const String tDownloadUrl = "tDownloadUrl";
 
@@ -42,17 +47,41 @@ class FirebaseService {
     when(firebaseAuthMock.currentUser).thenAnswer((realInvocation) => userMock);
   }
 
+  void setUpFirebaseUserId(String userId) {
+    when(userMock.uid).thenReturn(userId);
+  }
+
   void setUpFirebaseFirestore() {
     when(firebaseFirestoreMock.doc(any))
         .thenAnswer((realInvocation) => documentReferenceMock);
 
     when(firebaseFirestoreMock.collection(any))
         .thenAnswer((realInvocation) => collectionReferenceMock);
+
+    when(collectionReferenceMock.get())
+        .thenAnswer((realInvocation) async => querySnapshot);
+    when(documentReferenceMock.get())
+        .thenAnswer((realInvocation) async => documentSnapshot);
+  }
+
+  void setUpFirestoreDocumentData(Map<String, dynamic> data) {
+    when(documentSnapshot.data()).thenReturn(data);
+  }
+
+  void setUpFirestoreForUserProfileDataSuccess(
+    UserModelPublic userProfileData,
+  ) {
+    when(documentSnapshot.data()).thenReturn(userProfileData.toJsonMap());
   }
 
   void setUpFirebaseStorage() {
     when(firebaseStorageMock.ref())
         .thenAnswer((realInvocation) => referenceMock);
+  }
+
+  void setUpFirebaseFirestoreError() {
+    when(documentSnapshot.data()).thenThrow(ServerException());
+    when(documentReferenceMock.set(any)).thenThrow(ServerException());
   }
 
   void setUpSuccessfullAuth(String tUserEmal, String tUserPassword) {

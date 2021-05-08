@@ -9,23 +9,69 @@ class UserModelPublic extends UserDataPublic implements UserDataModel {
     required String userId,
     required String username,
     required String imageUrl,
+    String? city,
+    String? country,
+    String? description,
+    int? friendsCount,
+    int? numberOfVotes,
+    int? rating,
   }) : super(
-          imageUrl: imageUrl,
           userId: userId,
           username: username,
+          imageUrl: imageUrl,
+          city: city ?? "Unknown",
+          country: "Unknown",
+          description: "New to GeTogether app. Lets get together i guess.. :)",
+          friendsCount: 0,
+          numberOfVotes: 0,
+          rating: -1,
         );
+/*   UserModelPublic copyWith({
+    String? userId,
+    String? username,
+    String? imageUrl,
+    String? city,
+    String? country,
+    String? description,
+    int? friendsCount,
+    int? numberOfVotes,
+    int? rating,
+  }) =>
+      UserModelPublic(
+        userId: userId ?? this.userId,
+        username: username ?? this.username,
+        imageUrl: imageUrl ?? this.imageUrl,
+        city: city ?? this.city,
+        country: country ?? this.country,
+        description: description ?? this.description,
+        friendsCount: friendsCount ?? this.friendsCount,
+        numberOfVotes: numberOfVotes ?? this.numberOfVotes,
+        rating: rating ?? this.rating,
+      ); */
 
   factory UserModelPublic.fromJsonMap(Map<String, dynamic> jsonMap) =>
       UserModelPublic(
         userId: jsonMap["userId"],
         username: jsonMap["username"],
         imageUrl: jsonMap["imageUrl"],
+        city: jsonMap["city"],
+        country: jsonMap["country"],
+        description: jsonMap["description"],
+        friendsCount: jsonMap["friendsCount"],
+        rating: jsonMap["rating"],
+        numberOfVotes: jsonMap["numberOfVotes"],
       );
 
   Map<String, dynamic> toJsonMap() => {
-        "userId": this.userId,
-        "username": this.username,
-        "imageUrl": this.imageUrl,
+        "userId": userId,
+        "imageUrl": imageUrl,
+        "username": username,
+        "city": city,
+        "country": country,
+        "description": description,
+        "friendsCount": friendsCount,
+        "rating": rating,
+        "numberOfVotes": numberOfVotes,
       };
 }
 

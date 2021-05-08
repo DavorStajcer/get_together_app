@@ -36,7 +36,7 @@ void main() {
       build: () {
         when(locationServiceMock.getLocation()).thenAnswer(
             (realInvocation) async => Left(LocationFailure(
-                "Application needs permission to acces location.")));
+                message: "Application needs permission to acces location.")));
         return mapsLocationCubit;
       },
       act: (cubit) {

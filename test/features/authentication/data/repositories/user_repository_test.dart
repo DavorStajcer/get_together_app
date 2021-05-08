@@ -6,13 +6,11 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_together_app/core/error/failure.dart';
 import 'package:get_together_app/core/error/success.dart';
-import 'package:get_together_app/core/network.dart/network_info.dart';
 import 'package:get_together_app/features/authentication/data/repositories/user_repository_impl.dart';
 import 'package:get_together_app/features/authentication/presentation/models/auth_param.dart';
 import 'package:mockito/mockito.dart';
 import '../../../../firebase_mock/firebase_service.dart';
-
-class NetworkInfoMock extends Mock implements NetworkInfo {}
+import '../../../../network_info_mock/network_info_mock.dart';
 
 void main() {
   FirebaseService firebaseService;
@@ -55,8 +53,7 @@ void main() {
 
   group("no errors", () {
     setUp(() {
-      when(networkInfoMock.isConnected)
-          .thenAnswer((realInvocation) async => true);
+      networkInfoMock.setUpItHasConnection();
     });
 
     group("logIn", () {
@@ -89,11 +86,10 @@ void main() {
     group("logIn", () {
       test("should return AuthenticationFailure when failed to logIn",
           () async {
-        when(networkInfoMock.isConnected)
-            .thenAnswer((realInvocation) async => true);
+        networkInfoMock.setUpItHasConnection();
 
         final response = await userRepositoryImpl.logIn(tLogInParam);
-        expect(response, Left(AuthenticationFailure("exception")));
+        expect(response, Left(AuthenticationFailure(message: "exception")));
         verify(firebaseService.firebaseAuthMock.signInWithEmailAndPassword(
             email: tUserEmal, password: tUserPassword));
       });
@@ -102,22 +98,18 @@ void main() {
     group("signUp", () {
       test("should return AuthenticationFailure when failed to signIn",
           () async {
-        when(networkInfoMock.isConnected)
-            .thenAnswer((realInvocation) async => true);
+        networkInfoMock.setUpItHasConnection();
 
         final response = await userRepositoryImpl.signUp(tSignUpParam);
-        expect(response, Left(AuthenticationFailure("exception")));
+        expect(response, Left(AuthenticationFailure(message: "exception")));
         verify(firebaseService.firebaseAuthMock.createUserWithEmailAndPassword(
             email: tUserEmal, password: tUserPassword));
       });
 
       test("should return NetworkFaiulre when no conncetion", () async {
-        when(networkInfoMock.isConnected)
-            .thenAnswer((realInvocation) async => false);
-
+        networkInfoMock.setUpNoConnection();
         final response = await userRepositoryImpl.signUp(tSignUpParam);
-        expect(response,
-            Left(NetworkFailure("Network error. Check your connection.")));
+        expect(response, Left(NetworkFailure()));
         verify(networkInfoMock.isConnected);
         verifyZeroInteractions(firebaseService.firebaseAuthMock);
       });

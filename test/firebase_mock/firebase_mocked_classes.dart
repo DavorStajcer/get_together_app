@@ -26,3 +26,11 @@ class CollectionReferenceMock extends Mock implements CollectionReference {
 class UserCredentialsMock extends Mock implements UserCredential {
   // UserCredentialsMock userCredentialsMock = UserCredentialsMock();
 }
+
+class QuerySnapshotMock extends Mock implements QuerySnapshot {
+  // UserCredentialsMock userCredentialsMock = UserCredentialsMock();
+}
+
+class DocumentSnapshotMock extends Mock implements DocumentSnapshot {
+  // UserCredentialsMock userCredentialsMock = UserCredentialsMock();
+}

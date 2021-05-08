@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get_together_app/core/widgets/user_star_rating.dart';
-import 'package:get_together_app/features/profile_overview/presentation/widgets/rating.dart';
 
 class FriendsAndRating extends StatelessWidget {
-  const FriendsAndRating({Key? key}) : super(key: key);
+  final int rating;
+  final int friendsNum;
+  const FriendsAndRating(
+      {Key? key, required this.rating, required this.friendsNum})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,7 @@ class FriendsAndRating extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("10"),
+              Text(friendsNum.toString()),
               Text("Friends"),
             ],
           ),
@@ -22,7 +25,9 @@ class FriendsAndRating extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 10),
             child: VerticalDivider(),
           ),
-          UserStarRating(),
+          UserStarRating(
+            rating: rating,
+          ),
         ],
       ),
     );

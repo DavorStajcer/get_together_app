@@ -13,7 +13,7 @@ class ListenToAuthStateChanges {
       authenticationCheckBloc.add(AuthStateChanged(Right(user)));
     }, onError: (e) {
       authenticationCheckBloc.add(AuthStateChanged(
-          Left(ServerFailure("Cannot proceed with authentication"))));
+          Left(ServerFailure(message: "Cannot proceed with authentication"))));
     });
   }
 }

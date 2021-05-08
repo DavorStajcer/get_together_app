@@ -25,7 +25,7 @@ class EventAdmin extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                         image: NetworkImage("https://i.imgur.com/BoN9kdC.png"),
                       ),
                       color: Colors.grey,
@@ -66,7 +66,7 @@ class EventAdmin extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
-              UserStarRating(),
+              UserStarRating(rating: 5),
             ],
           ),
         ),
