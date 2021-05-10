@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/core/util/background_drawing.dart';
 import 'package:get_together_app/core/widgets/get_together_title.dart';
 import 'package:get_together_app/features/authentication/di/authentication_di.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_card_order_cubit/event_card_order_cubit.dart';
+import 'package:get_together_app/features/make_event/presentation/blocs/event_cubit/event_cubit.dart';
+import 'package:get_together_app/features/make_event/presentation/blocs/maps_location_cubit/maps_location_cubit.dart';
 import 'package:get_together_app/features/make_event/presentation/screens/choose_event_type_screen.dart';
 import 'package:get_together_app/features/make_event/presentation/screens/choose_location_screen.dart';
 import 'package:get_together_app/features/make_event/presentation/screens/event_details_screen.dart';
@@ -45,44 +49,57 @@ class _EventHomeScreenState extends State<EventHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<EventCardOrderCubit>(
-      create: (context) => getIt<EventCardOrderCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<EventCardOrderCubit>(
+          create: (_) => getIt(),
+        ),
+        BlocProvider<EventCubit>(
+          create: (_) => getIt(),
+        ),
+        BlocProvider<MapsLocationCubit>(
+          create: (context) => getIt<MapsLocationCubit>(),
+        ),
+      ],
       child: SafeArea(
-        child: CustomPaint(
-          painter: BackgroundDrawing(context),
-          child: Column(
-            children: [
-              Flexible(
-                flex: 1,
-                child: GetTogetherTitle(
-                  textColor: Colors.white,
-                ),
-              ),
-              Flexible(
-                flex: 5,
-                child: Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  color: Colors.transparent,
-                  child: PageView(
-                    physics: NeverScrollableScrollPhysics(),
-                    controller: _pc,
-                    children: [
-                      ChooseEventTypeScreen(
-                          goFowards: _goFoward, goBack: _goBack),
-                      ChooseLocationScreen(
-                          goFowards: _goFoward, goBack: _goBack),
-                      EventDetailsScreen(
-                          goFowards: _finishEventMaking, goBack: _goBack)
-                    ],
+        child: Container(
+          color: Color.fromRGBO(237, 231, 246, 1),
+          child: CustomPaint(
+            painter: BackgroundDrawing(context),
+            child: Column(
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: GetTogetherTitle(
+                    textColor: Colors.white,
                   ),
                 ),
-              ),
-              Flexible(
-                flex: 1,
-                child: SizedBox(),
-              ),
-            ],
+                Flexible(
+                  flex: 5,
+                  child: Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    color: Colors.transparent,
+                    child: PageView(
+                      physics: NeverScrollableScrollPhysics(),
+                      controller: _pc,
+                      children: [
+                        ChooseEventTypeScreen(
+                            goFowards: _goFoward, goBack: _goBack),
+                        ChooseLocationScreen(
+                            goFowards: _goFoward, goBack: _goBack),
+                        EventDetailsScreen(
+                            goFowards: _finishEventMaking, goBack: _goBack)
+                      ],
+                    ),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: SizedBox(),
+                ),
+              ],
+            ),
           ),
         ),
       ),

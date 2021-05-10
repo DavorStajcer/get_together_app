@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_together_app/core/widgets/event_card.dart';
-import 'package:get_together_app/features/events_overview/widgets/maps_view.dart';
+import 'package:get_together_app/features/events_overview/presentation/widgets/maps_view.dart';
 import 'package:get_together_app/features/home/presentation/widgets/nav_bar_item.dart';
 
 class EventsOverviewScreen extends StatelessWidget {
@@ -13,6 +13,7 @@ class EventsOverviewScreen extends StatelessWidget {
         ),
         Expanded(
           child: Container(
+            color: Color.fromRGBO(237, 231, 246, 1),
             padding: EdgeInsets.only(
                 bottom: NavBarMiddleItem.radius * 1.5,
                 top: NavBarMiddleItem.radius / 2),

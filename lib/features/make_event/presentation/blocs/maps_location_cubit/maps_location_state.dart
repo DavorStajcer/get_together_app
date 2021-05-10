@@ -7,11 +7,11 @@ abstract class MapsLocationState extends Equatable {
   List<Object> get props => [];
 }
 
-class MapsLocationInitial extends MapsLocationState {}
+class MapsLocationNotLoaded extends MapsLocationState {}
 
-class MapsLocationSuccess extends MapsLocationState {
+class MapsLocationLoaded extends MapsLocationState {
   final Position currentPosition;
-  MapsLocationSuccess({required this.currentPosition});
+  MapsLocationLoaded({required this.currentPosition});
 }
 
 class MapsLocationFailure extends MapsLocationState {

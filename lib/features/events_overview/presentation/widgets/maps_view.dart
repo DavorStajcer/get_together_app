@@ -56,7 +56,7 @@ class _MapsViewState extends State<MapsView> {
   Widget build(BuildContext context) {
     return BlocBuilder<MapsLocationCubit, MapsLocationState>(
       builder: (context, state) {
-        if (state is MapsLocationInitial)
+        if (state is MapsLocationNotLoaded)
           return Center(
             child: CircularProgressIndicator(),
           );
@@ -69,7 +69,7 @@ class _MapsViewState extends State<MapsView> {
             ),
           );
         final Position currentLocation =
-            (state as MapsLocationSuccess).currentPosition;
+            (state as MapsLocationLoaded).currentPosition;
         // _userLocation =
         //     LatLng(currentLocation.latitude, currentLocation.longitude);
         _userLocation = LatLng(0, 142);

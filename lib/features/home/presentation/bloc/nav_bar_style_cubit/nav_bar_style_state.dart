@@ -53,7 +53,7 @@ abstract class NavItemStyle extends Equatable {
 class NavItemPressed extends NavItemStyle {
   NavItemPressed()
       : super(
-          Color.fromRGBO(255, 109, 64, 1),
+          Color.fromRGBO(40, 53, 147, 1),
           45,
         );
 }
@@ -61,7 +61,7 @@ class NavItemPressed extends NavItemStyle {
 class NavItemNotPressed extends NavItemStyle {
   NavItemNotPressed()
       : super(
-          Color.fromRGBO(255, 109, 64, 0.2).withOpacity(0.2),
+          Color.fromRGBO(144, 144, 144, 1),
           35,
         );
 }

@@ -33,6 +33,7 @@ class DateTimePickerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DateFormater dateFormater = DateFormater();
     return Column(
       children: [
         Flexible(
@@ -74,7 +75,7 @@ class DateTimePickerButton extends StatelessWidget {
                       child: Text(
                         pickerType == Picker.time
                             ? TimeOfDay.now().format(context)
-                            : DateFormater.getDotFormat(DateTime.now()),
+                            : dateFormater.getDotFormat(DateTime.now()),
                         style: TextStyle(
                             color: Theme.of(context)
                                 .primaryColor
@@ -89,14 +90,14 @@ class DateTimePickerButton extends StatelessWidget {
                       width: double.infinity,
                       color: Theme.of(context).primaryColor.withOpacity(0.3),
                       child: IconButton(
-                            icon: Icon(
-                              Icons.replay_outlined,
-                              color: Colors.white,
-                            ),
-                            onPressed: () => pickerType == Picker.time
-                                ? _selectEventTime(context, TimeOfDay.now())
-                                : _selectEventDate(context, DateTime.now()),
-                          ),
+                        icon: Icon(
+                          Icons.replay_outlined,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onPressed: () => pickerType == Picker.time
+                            ? _selectEventTime(context, TimeOfDay.now())
+                            : _selectEventDate(context, DateTime.now()),
+                      ),
                     ),
                   ),
                 ],

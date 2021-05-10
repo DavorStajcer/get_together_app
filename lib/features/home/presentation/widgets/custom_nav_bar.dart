@@ -16,20 +16,40 @@ class CustomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          NavBarItem(
-            screen: HomeScreen.events_overview,
-          ),
-          NavBarItem(
-            screen: HomeScreen.notifications_overview,
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                  child: NavBarItem(
+                    screen: HomeScreen.events_overview,
+                  ),
+                ),
+                Expanded(
+                  child: NavBarItem(
+                    screen: HomeScreen.notifications_overview,
+                  ),
+                )
+              ],
+            ),
           ),
           SizedBox(
-            width: NavBarMiddleItem.radius,
+            width: NavBarMiddleItem.radius * 2,
           ),
-          NavBarItem(
-            screen: HomeScreen.chats_overview,
-          ),
-          NavBarItem(
-            screen: HomeScreen.profile_overview,
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                  child: NavBarItem(
+                    screen: HomeScreen.chats_overview,
+                  ),
+                ),
+                Expanded(
+                  child: NavBarItem(
+                    screen: HomeScreen.profile_overview,
+                  ),
+                )
+              ],
+            ),
           ),
         ],
       ),

@@ -5,7 +5,10 @@ abstract class Exception extends Equatable {
   List<Object> get props => [];
 }
 
-class ServerException extends Exception {}
+class ServerException extends Exception {
+  final String message;
+  ServerException({String? message}) : message = message ?? "Server exception";
+}
 
 class CashException extends Exception {}
 

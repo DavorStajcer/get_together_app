@@ -3,34 +3,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mockito/mockito.dart';
 
-class UserMock extends Mock implements User {
-  // static final UserMock userMock = UserMock();
-}
+class UserMock extends Mock implements User {}
 
-class ReferenceMock extends Mock implements Reference {
-  // static final ReferenceMock referenceMock = ReferenceMock();
-}
+class ReferenceMock extends Mock implements Reference {}
 
-class UploadTaskMock extends Mock implements UploadTask {
-  // UploadTaskMock uploadTaskMock = UploadTaskMock();
-}
+class UploadTaskMock extends Mock implements UploadTask {}
 
-class DocumentReferenceMock extends Mock implements DocumentReference {
-  // DocumentReferenceMock documentReferenceMock = DocumentReferenceMock();
-}
+class DocumentReferenceMock extends Mock implements DocumentReference {}
 
-class CollectionReferenceMock extends Mock implements CollectionReference {
-  // CollectionReferenceMock collectionReferenceMock = CollectionReferenceMock();
-}
+class CollectionReferenceMock extends Mock implements CollectionReference {}
 
-class UserCredentialsMock extends Mock implements UserCredential {
-  // UserCredentialsMock userCredentialsMock = UserCredentialsMock();
-}
+class UserCredentialsMock extends Mock implements UserCredential {}
 
-class QuerySnapshotMock extends Mock implements QuerySnapshot {
-  // UserCredentialsMock userCredentialsMock = UserCredentialsMock();
-}
+class QuerySnapshotMock extends Mock implements QuerySnapshot {}
 
-class DocumentSnapshotMock extends Mock implements DocumentSnapshot {
-  // UserCredentialsMock userCredentialsMock = UserCredentialsMock();
-}
+class DocumentSnapshotMock extends Mock implements DocumentSnapshot {}

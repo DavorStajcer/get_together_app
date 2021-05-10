@@ -10,22 +10,28 @@ class PickImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
     return Container(
       child: Column(
         children: [
           BlocBuilder<FormBloc, AuthFormState>(
             builder: (context, state) {
               return CircleAvatar(
-                  radius: 54,
+                  radius: screenSize.width * 0.15,
                   backgroundColor: Theme.of(context).primaryColor,
                   child: (state as SignUpForm).image != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(53),
-                          child: Image.file(
-                            state.image!,
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.fitHeight,
+                      ? Container(
+                          margin: EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage(state.image!.path),
+                            ),
+                            color: Colors.grey,
+                            border: Border.all(
+                                width: 0.2,
+                                color: Theme.of(context).primaryColor),
                           ),
                         )
                       : Container(

@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_together_app/features/authentication/presentation/bloc/auth_check_bloc/authentication_check_bloc.dart';
 import 'package:get_together_app/features/authentication/presentation/widgets/auth_background.dart';
 import '../../di/authentication_di.dart';
 import '../bloc/auth_bloc/auth_bloc.dart';
 import '../bloc/form_bloc/form_bloc.dart';
-import '../../../home/presentation/screens/home_screen.dart';
-import '../widgets/auth_button.dart';
+import '../widgets/auth_buttons.dart';
 import '../widgets/auth_form.dart';
-import '../widgets/auth_mode_picker.dart';
 
 class AuthScreen extends StatelessWidget {
   static final String route = "/auth_screen";
@@ -17,6 +14,7 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+    final double horizontalPadding = screenSize.width * 0.07;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -48,11 +46,13 @@ class AuthScreen extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      AuthForm(screenSize),
-                      AuthButton(),
+                      AuthForm(
+                        screenSize: screenSize,
+                        horizontalPadding: horizontalPadding,
+                      ),
+                      AuthButtons(horizontalPadding),
                     ],
                   ),
-                  BottomAuthPicker(screenSize),
                 ],
               ),
             ),

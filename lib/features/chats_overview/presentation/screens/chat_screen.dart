@@ -8,7 +8,7 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MediaQueryData mediaQuerData = MediaQuery.of(context);
+    // final MediaQueryData mediaQuerData = MediaQuery.of(context);
     final appBar = AppBar(
       title: Text("Zimica"),
     );

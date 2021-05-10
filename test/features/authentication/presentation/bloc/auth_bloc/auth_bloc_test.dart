@@ -10,6 +10,7 @@ import 'package:get_together_app/core/error/success.dart';
 
 import 'package:get_together_app/features/authentication/domain/usecases/log_user_in.dart';
 import 'package:get_together_app/features/authentication/domain/usecases/sign_user_in.dart';
+import 'package:get_together_app/features/authentication/domain/usecases/sign_user_out.dart';
 import 'package:get_together_app/features/authentication/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:get_together_app/features/authentication/presentation/models/auth_param.dart';
 import 'package:mockito/mockito.dart';
@@ -18,9 +19,12 @@ class LogUserInMock extends Mock implements LogUserIn {}
 
 class SignUserInMock extends Mock implements SignUserIn {}
 
+class SignUserOutMock extends Mock implements SignUserOut {}
+
 void main() {
   LogUserInMock logUserInMock;
   SignUserInMock signUserInMock;
+  SignUserOutMock signUserOutMock;
   AuthBloc authBloc;
   String tEmail;
   String tUsername;
@@ -34,9 +38,11 @@ void main() {
   setUp(() {
     logUserInMock = LogUserInMock();
     signUserInMock = SignUserInMock();
+    signUserOutMock = SignUserOutMock();
     authBloc = AuthBloc(
       logUserIn: logUserInMock,
       signUserIn: signUserInMock,
+      signUserOut: signUserOutMock,
     );
     tEmail = "testEmail";
     tUsername = "tUsername";

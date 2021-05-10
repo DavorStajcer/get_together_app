@@ -11,7 +11,7 @@ class NotificationsOverviewScreen extends StatelessWidget {
         child: Column(
       children: [
         Container(
-          height: screenSize.height * 0.2,
+          height: screenSize.height * 0.15,
           alignment: Alignment.topCenter,
           child: GetTogetherTitle(
             textColor: Theme.of(context).primaryColor,

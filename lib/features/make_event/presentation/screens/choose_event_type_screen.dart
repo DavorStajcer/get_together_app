@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:get_together_app/features/make_event/presentation/widgets/event_button.dart';
 
 import 'package:get_together_app/features/make_event/presentation/widgets/event_type_browser.dart';
@@ -25,19 +26,10 @@ class ChooseEventTypeScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.11),
             width: double.infinity,
             height: double.infinity,
-            child: EventButton(
-              text: "Choose location",
-              navigate: goFowards,
-            ),
+            child: EventButton(text: "Choose location", navigate: goFowards),
           ),
         ),
       ],
     );
   }
 }
-
-/* 
- 
-
-     
- */

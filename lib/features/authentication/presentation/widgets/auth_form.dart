@@ -10,16 +10,16 @@ import 'confirm_password_field.dart';
 import 'password_field.dart';
 import 'username_field.dart';
 
-class AuthForm extends StatefulWidget {
+class AuthForm extends StatelessWidget {
   final Size screenSize;
+  final double horizontalPadding;
 
-  AuthForm(this.screenSize, {Key? key}) : super(key: key);
+  AuthForm({
+    required this.screenSize,
+    required this.horizontalPadding,
+    Key? key,
+  }) : super(key: key);
 
-  @override
-  _AuthFormState createState() => _AuthFormState();
-}
-
-class _AuthFormState extends State<AuthForm> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FormBloc, AuthFormState>(
@@ -27,7 +27,7 @@ class _AuthFormState extends State<AuthForm> {
         return Center(
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: 10,
+              horizontal: horizontalPadding,
             ),
             child:
                 (state is LogInForm) ? LogInFormWidget() : SingUpFormWidget(),

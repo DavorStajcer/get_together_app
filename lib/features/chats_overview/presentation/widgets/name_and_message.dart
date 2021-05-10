@@ -18,7 +18,7 @@ class NameAndMessage extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
-                  color: Theme.of(context).primaryColor,
+                  color: Colors.black,
                 ),
               ),
             ),
@@ -29,6 +29,9 @@ class NameAndMessage extends StatelessWidget {
                   "Ive got your message. I want to tell you that you are not that OG as you think. I am CJ in real life motherfucker.",
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Color.fromRGBO(161, 160, 160, 1),
+                  ),
                 ),
               ),
             )

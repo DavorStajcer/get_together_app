@@ -23,6 +23,8 @@ class ChatListItem extends StatelessWidget {
                   image: NetworkImage("https://i.imgur.com/BoN9kdC.png"),
                 ),
                 color: Colors.grey,
+                border: Border.all(
+                    width: 0.2, color: Theme.of(context).primaryColor),
               ),
             ),
           ),
@@ -38,7 +40,7 @@ class ChatListItem extends StatelessWidget {
                 "13s",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.black26,
+                  color: Colors.black,
                 ),
               ),
             ),

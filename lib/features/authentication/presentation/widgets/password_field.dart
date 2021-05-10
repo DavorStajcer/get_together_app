@@ -14,16 +14,22 @@ class PasswordField extends StatelessWidget {
         builder: (context, state) {
           return TextFormField(
             decoration: InputDecoration(
-                labelText: "Password",
-                errorText: state.password.errorMessage,
-                icon: Icon(
-                  Icons.lock,
-                  color: Theme.of(context).primaryColor,
-                )),
+              labelText: "Password",
+              labelStyle: TextStyle(color: Colors.white70),
+              errorText: state.password.errorMessage,
+              icon: Icon(
+                Icons.lock,
+                color: Theme.of(context).primaryColor,
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white70),
+              ),
+            ),
             obscureText: true,
             onChanged: (value) {
               BlocProvider.of<FormBloc>(context).add(PasswordChanged(value));
             },
+            style: TextStyle(color: Colors.white70),
           );
         },
       ),

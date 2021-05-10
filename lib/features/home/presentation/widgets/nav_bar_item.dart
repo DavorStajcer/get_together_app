@@ -15,17 +15,20 @@ class NavBarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<NavBarStyleCubit, NavBarStyleState>(
       builder: (context, state) {
-        return IconButton(
-          icon: Icon(
-            _mapScreenToNavBarIcon(screen),
-            size: state.itemsStyle[screen]!.iconSize,
-            color: state.itemsStyle[screen]!.color,
-          ),
-          onPressed: () {
-            BlocProvider.of<NavBarStyleCubit>(context).changeNavStyle(screen);
-            BlocProvider.of<NavBarCubit>(context).changeScreen(screen);
-          },
-        );
+        return GestureDetector(
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              child: Icon(
+                _mapScreenToNavBarIcon(screen),
+                size: state.itemsStyle[screen]!.iconSize,
+                color: state.itemsStyle[screen]!.color,
+              ),
+            ),
+            onTap: () {
+              BlocProvider.of<NavBarStyleCubit>(context).changeNavStyle(screen);
+              BlocProvider.of<NavBarCubit>(context).changeScreen(screen);
+            });
       },
     );
   }
@@ -66,7 +69,7 @@ class NavBarMiddleItem extends StatelessWidget {
 IconData _mapScreenToNavBarIcon(HomeScreen screen) {
   switch (screen) {
     case HomeScreen.events_overview:
-      return Icons.account_tree_outlined;
+      return Icons.language;
 
     case HomeScreen.notifications_overview:
       return Icons.wrap_text_sharp;
@@ -75,7 +78,7 @@ IconData _mapScreenToNavBarIcon(HomeScreen screen) {
       return Icons.adjust_rounded;
 
     case HomeScreen.chats_overview:
-      return Icons.textsms;
+      return Icons.chat_bubble;
     case HomeScreen.profile_overview:
       return Icons.accessibility_new_sharp;
     default:

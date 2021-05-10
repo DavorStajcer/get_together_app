@@ -15,10 +15,14 @@ class ConfirmPasswordField extends StatelessWidget {
           return TextFormField(
             decoration: InputDecoration(
               labelText: "Confirm password",
+              labelStyle: TextStyle(color: Colors.white70),
               errorText: (state as SignUpForm).confirmPassword.errorMessage,
               icon: Icon(
                 Icons.verified_sharp,
                 color: Theme.of(context).primaryColor,
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white70),
               ),
             ),
             obscureText: true,
@@ -26,6 +30,7 @@ class ConfirmPasswordField extends StatelessWidget {
               BlocProvider.of<FormBloc>(context)
                   .add(ConfirmPasswordChanged(value));
             },
+            style: TextStyle(color: Colors.white70),
           );
         },
       ),

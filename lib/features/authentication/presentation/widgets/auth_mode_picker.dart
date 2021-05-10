@@ -41,7 +41,7 @@ class BottomAuthPicker extends StatelessWidget {
               child: GestureDetector(
                   child: Container(
                     height: double.infinity,
-                    decoration: _getSingUpDecoration(state),
+                    decoration: _getSingUpDecoration(context, state),
                     alignment: Alignment.center,
                     child: Text(
                       "Sign Up",
@@ -65,7 +65,9 @@ class BottomAuthPicker extends StatelessWidget {
     });
   }
 
-  BoxDecoration _getSingUpDecoration(AuthFormState state) => BoxDecoration(
+  BoxDecoration _getSingUpDecoration(
+          BuildContext context, AuthFormState state) =>
+      BoxDecoration(
         border: Border(
           top: BorderSide(width: 2.0, color: Colors.white54),
           left: BorderSide(width: 1.0, color: Colors.white54),
@@ -79,7 +81,10 @@ class BottomAuthPicker extends StatelessWidget {
                 ? Color.fromRGBO(158, 158, 158, 1).withOpacity(0.2)
                 : Colors.transparent,
             (state is SignUpForm)
-                ? Color.fromRGBO(158, 158, 158, 1)
+                ? Theme.of(context).primaryColor.withOpacity(0.4)
+                : Colors.transparent,
+            (state is SignUpForm)
+                ? Theme.of(context).primaryColor.withOpacity(0.6)
                 : Colors.transparent,
           ],
         ),

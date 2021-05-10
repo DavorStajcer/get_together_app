@@ -29,12 +29,16 @@ class SendMessage extends StatelessWidget {
         ),
         Flexible(
           flex: 2,
-          child: IconButton(
+          child: Container(
+            alignment: Alignment.center,
+            child: IconButton(
               color: Theme.of(context).primaryColor,
               icon: Icon(Icons.send),
               onPressed: () {
                 //TODO: Send a message
-              }),
+              },
+            ),
+          ),
         )
       ],
     );

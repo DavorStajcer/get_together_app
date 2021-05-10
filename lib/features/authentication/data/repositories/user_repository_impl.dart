@@ -78,7 +78,6 @@ class UserAuthRepositoryImpl extends UserAuthRepository {
   Future<void> _saveUserInfo(SignUpParameters signUpParameters) async {
     final imageUrl =
         await _saveUserImageToFirebaseStorage(signUpParameters.image);
-    //await _saveUserImageToFirebaseStorage(signUpParameters.image);
 
     final UserDataModel userPublic = UserModelPublic(
         userId: firebaseAuth.currentUser!.uid,

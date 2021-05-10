@@ -15,15 +15,21 @@ class EmailField extends StatelessWidget {
           return TextFormField(
             initialValue: state.email.value,
             decoration: InputDecoration(
-                labelText: "Email",
-                errorText: state.email.errorMessage,
-                icon: Icon(
-                  Icons.email,
-                  color: Theme.of(context).primaryColor,
-                )),
+              labelText: "Email",
+              errorText: state.email.errorMessage,
+              labelStyle: TextStyle(color: Colors.white70),
+              icon: Icon(
+                Icons.email,
+                color: Theme.of(context).primaryColor,
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white70),
+              ),
+            ),
             onChanged: (value) {
               BlocProvider.of<FormBloc>(context).add(EmailChanged(value));
             },
+            style: TextStyle(color: Colors.white,),
           );
         },
       ),

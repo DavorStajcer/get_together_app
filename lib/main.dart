@@ -48,7 +48,8 @@ class _GetTogetherAppState extends State<GetTogetherApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
         theme: ThemeData(
-          primaryColor: Color.fromRGBO(255, 109, 64, 1),
+          //primaryColor: Color.fromRGBO(255, 109, 64, 1),
+          primaryColor: Color.fromRGBO(255, 110, 64, 1),
           accentColor: Color.fromRGBO(255, 109, 64, 1),
         ),
         home: MultiBlocProvider(

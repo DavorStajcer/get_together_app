@@ -32,6 +32,10 @@ void main() {
     );
   });
 
+  test("inital state should be LocationNotLoaded", () {
+    expect(mapsLocationCubit.state, MapsLocationNotLoaded());
+  });
+
   blocTest("emit MapsLocationFailure when cant get location",
       build: () {
         when(locationServiceMock.getLocation()).thenAnswer(
@@ -48,7 +52,7 @@ void main() {
           ],
       verify: (cubit) => {verify(locationServiceMock.getLocation())});
 
-  blocTest("emit MapsLocationSuccess when position/location is got",
+  blocTest("emit MapsLocationLoaded when position/location is got",
       build: () {
         when(locationServiceMock.getLocation()).thenAnswer(
           (realInvocation) async => Right(
@@ -60,6 +64,36 @@ void main() {
       act: (cubit) {
         (cubit as MapsLocationCubit).requestLocation();
       },
-      expect: () => [MapsLocationSuccess(currentPosition: tPosition)],
+      expect: () => [MapsLocationLoaded(currentPosition: tPosition)],
+      verify: (cubit) => {verify(locationServiceMock.getLocation())});
+
+  blocTest("emit MapsLocationLoaded when position/location is got",
+      build: () {
+        when(locationServiceMock.getLocation()).thenAnswer(
+          (realInvocation) async => Right(
+            tPosition,
+          ),
+        );
+        return mapsLocationCubit;
+      },
+      act: (cubit) {
+        (cubit as MapsLocationCubit).requestLocation();
+      },
+      expect: () => [MapsLocationLoaded(currentPosition: tPosition)],
+      verify: (cubit) => {verify(locationServiceMock.getLocation())});
+
+  blocTest("if location is allready loaded, dont emit anything",
+      build: () {
+        when(locationServiceMock.getLocation()).thenAnswer(
+          (realInvocation) async => Right(
+            tPosition,
+          ),
+        );
+        return mapsLocationCubit;
+      },
+      act: (cubit) {
+        (cubit as MapsLocationCubit).requestLocation();
+      },
+      expect: () => [MapsLocationLoaded(currentPosition: tPosition)],
       verify: (cubit) => {verify(locationServiceMock.getLocation())});
 }

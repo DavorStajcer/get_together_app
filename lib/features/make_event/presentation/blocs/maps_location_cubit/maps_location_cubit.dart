@@ -7,7 +7,7 @@ part 'maps_location_state.dart';
 class MapsLocationCubit extends Cubit<MapsLocationState> {
   final LocationService locationService;
   MapsLocationCubit({required this.locationService})
-      : super(MapsLocationInitial());
+      : super(MapsLocationNotLoaded());
 
   void requestLocation() async {
     final response = await locationService.getLocation();
@@ -22,7 +22,7 @@ class MapsLocationCubit extends Cubit<MapsLocationState> {
         position,
       ) =>
           emit(
-        MapsLocationSuccess(currentPosition: position),
+        MapsLocationLoaded(currentPosition: position),
       ),
     );
   }

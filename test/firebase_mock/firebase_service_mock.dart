@@ -2,16 +2,13 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_together_app/core/error/exceptions.dart';
-import 'package:get_together_app/features/authentication/data/models/user_data_model.dart';
-import 'package:get_together_app/features/profile_overview/data/models/user_profile_data_model.dart';
 import 'package:mockito/mockito.dart';
-
 import 'firebase_auth_mock.dart';
 import 'firebase_firestore_mock.dart';
 import 'firebase_mocked_classes.dart';
 import 'firebase_storage_mock.dart';
 
-class FirebaseService {
+class FirebaseServiceMock {
   //Services
   final FirebaseAuthMock firebaseAuthMock = FirebaseAuthMock();
   final FirebaseStorageMock firebaseStorageMock = FirebaseStorageMock();
@@ -25,11 +22,11 @@ class FirebaseService {
   final ReferenceMock referenceMock = ReferenceMock();
   final UserMock userMock = UserMock();
   final QuerySnapshotMock querySnapshot = QuerySnapshotMock();
-  final DocumentSnapshotMock documentSnapshot = DocumentSnapshotMock();
+  final DocumentSnapshotMock documentSnapshotMock = DocumentSnapshotMock();
   //Test values
   static const String tDownloadUrl = "tDownloadUrl";
 
-  FirebaseService() {
+  FirebaseServiceMock() {
     when(userMock.uid).thenAnswer((realInvocation) => "tUserId");
     when(referenceMock.child(any))
         .thenAnswer((realInvocation) => referenceMock);
@@ -51,6 +48,9 @@ class FirebaseService {
     when(userMock.uid).thenReturn(userId);
   }
 
+  void returnNullForCurrentUser() =>
+      when(firebaseAuthMock.currentUser).thenReturn(null);
+
   void setUpFirebaseFirestore() {
     when(firebaseFirestoreMock.doc(any))
         .thenAnswer((realInvocation) => documentReferenceMock);
@@ -60,18 +60,13 @@ class FirebaseService {
 
     when(collectionReferenceMock.get())
         .thenAnswer((realInvocation) async => querySnapshot);
+
     when(documentReferenceMock.get())
-        .thenAnswer((realInvocation) async => documentSnapshot);
+        .thenAnswer((realInvocation) async => documentSnapshotMock);
   }
 
   void setUpFirestoreDocumentData(Map<String, dynamic> data) {
-    when(documentSnapshot.data()).thenReturn(data);
-  }
-
-  void setUpFirestoreForUserProfileDataSuccess(
-    UserModelPublic userProfileData,
-  ) {
-    when(documentSnapshot.data()).thenReturn(userProfileData.toJsonMap());
+    when(documentSnapshotMock.data()).thenReturn(data);
   }
 
   void setUpFirebaseStorage() {
@@ -79,8 +74,9 @@ class FirebaseService {
         .thenAnswer((realInvocation) => referenceMock);
   }
 
-  void setUpFirebaseFirestoreError() {
-    when(documentSnapshot.data()).thenThrow(ServerException());
+  void setUpFirebaseFirestoreError({String message}) {
+    when(documentSnapshotMock.data())
+        .thenThrow(ServerException(message: message));
     when(documentReferenceMock.set(any)).thenThrow(ServerException());
   }
 

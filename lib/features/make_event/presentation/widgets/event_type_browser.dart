@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_card_order_cubit/event_card_order_cubit.dart';
+import 'package:get_together_app/features/make_event/presentation/blocs/event_cubit/event_cubit.dart';
 import 'package:get_together_app/features/make_event/presentation/widgets/event_type_card.dart';
 
 class EvenTypeBrowser extends StatelessWidget {
@@ -24,12 +25,14 @@ class EvenTypeBrowser extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<EventCardOrderCubit, EventCardOrderState>(
       builder: (context, state) {
-        log("${state.eventTypeOrder}");
         log(state.eventTypeOrder
             .map((eventType) =>
                 (_eventTypeCard[eventType]! as EventTypeCard).eventType)
             .toList()
             .toString());
+        log("NULTO MIJESTO -> ${state.eventTypeOrder[0]}");
+        BlocProvider.of<EventCubit>(context)
+            .eventTypeChanged(state.eventTypeOrder[0]);
         return Stack(
           alignment: Alignment.centerLeft,
           children: state.eventTypeOrder

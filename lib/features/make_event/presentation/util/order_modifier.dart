@@ -7,19 +7,15 @@ abstract class OrderModifier {
 class OrderModifierImpl implements OrderModifier {
   @override
   List<EventType> moveToTop(List<EventType> order, EventType eventType) {
-    print([
-      EventType.games.index,
-      EventType.coffe.index,
-      EventType.food.index,
-    ]);
+    //Get inital type order (sorted order)
     List<EventType> sortedList = EventCardOrderInitial().eventTypeOrder;
     final List<EventType> newList = [];
+    //Put the event type that is picked in first place of the list -> first place of the list represents the top of the stack
     newList.add(eventType);
-
+    //put other elements in the list from the sorted array -> this way other elements are stacked on top of each other from left to right
     sortedList.forEach((element) {
       if (element != eventType) newList.add(element);
     });
-    print("NEW LIST -> $newList");
     return newList;
   }
 }

@@ -9,34 +9,37 @@ class ChatsOverviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return SafeArea(
-      child: Column(
-        children: [
-          Container(
-            height: screenSize.height * 0.15,
-            alignment: Alignment.topCenter,
-            padding: EdgeInsets.only(top: 15),
-            child: Text(
-              "GeTogether",
-              style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold),
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          children: [
+            Container(
+              height: screenSize.height * 0.15,
+              alignment: Alignment.topCenter,
+              padding: EdgeInsets.only(top: 15),
+              child: Text(
+                "GeTogether",
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 15,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  child: ChatListItem(),
-                  onTap: () {
-                    Navigator.of(context).pushNamed(ChatScreen.route);
-                  },
-                );
-              },
+            Expanded(
+              child: ListView.builder(
+                itemCount: 15,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    child: ChatListItem(),
+                    onTap: () {
+                      Navigator.of(context).pushNamed(ChatScreen.route);
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

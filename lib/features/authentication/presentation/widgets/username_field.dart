@@ -14,15 +14,20 @@ class UsernameField extends StatelessWidget {
         return TextFormField(
           decoration: InputDecoration(
             labelText: "Username",
+            labelStyle: TextStyle(color: Colors.white70),
             errorText: (state as SignUpForm).username.errorMessage,
             icon: Icon(
               Icons.person,
               color: Theme.of(context).primaryColor,
             ),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white70),
+            ),
           ),
           onChanged: (value) {
             BlocProvider.of<FormBloc>(context).add(UsernameChanged(value));
           },
+          style: TextStyle(color: Colors.white70),
         );
       },
     );

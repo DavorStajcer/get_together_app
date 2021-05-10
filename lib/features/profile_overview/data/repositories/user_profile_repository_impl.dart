@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:get_together_app/core/error/exceptions.dart';
 import 'package:get_together_app/core/error/success.dart';
 import 'package:get_together_app/core/error/failure.dart';
 import 'package:get_together_app/core/network.dart/network_info.dart';
@@ -37,8 +36,11 @@ class UserProfileRepositoryImpl extends UserProfileRepository {
     if (!isConnected) return Left(NetworkFailure());
     try {
       final currentUserId = userId ?? firebaseAuth.currentUser!.uid;
+      print(
+          "GETTING DATA FROM FKING FIRESTORTE PIJHBFsnbi fWSAE'R3QŠ+BRFšiheAfršiAWEgAĐBSfrhgšiADĐŠS");
       return await _getDataFromFirestore(currentUserId);
     } catch (e) {
+      print("ERROR -> $e");
       return Left(ServerFailure());
     }
   }
@@ -47,6 +49,7 @@ class UserProfileRepositoryImpl extends UserProfileRepository {
       String currentUserId) async {
     final response =
         await firebaseFirestore.collection("users").doc(currentUserId).get();
+    print("RESPONSE -> $response");
     final Map<String, dynamic> userProfileJsonMap = response.data()!;
     return Right(UserModelPublic.fromJsonMap(userProfileJsonMap));
   }
@@ -58,7 +61,6 @@ class UserProfileRepositoryImpl extends UserProfileRepository {
     final isConnected = await networkInfo.isConnected;
     if (!isConnected) return Left(NetworkFailure());
     try {
-      //  final imageUrl = _saveUserImageToFirebaseStorage(userProfileData.image);
       await firebaseFirestore
           .collection("users")
           .doc(firebaseAuth.currentUser!.uid)
@@ -70,7 +72,8 @@ class UserProfileRepositoryImpl extends UserProfileRepository {
   }
 
   Future<Either<Failure, String>> saveUserImageToFirebaseStorage(
-      String image) async {
+    String image,
+  ) async {
     final isConnected = await networkInfo.isConnected;
     if (!isConnected) return Left(NetworkFailure());
     String fileName = firebaseAuth.currentUser!.uid;
