@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_together_app/features/make_event/presentation/blocs/event_card_order_cubit/event_card_order_cubit.dart';
-import 'package:get_together_app/features/make_event/presentation/blocs/event_cubit/event_cubit.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/maps_location_cubit/maps_location_cubit.dart';
 import '../../../authentication/di/authentication_di.dart';
 import '../../../authentication/presentation/bloc/auth_bloc/auth_bloc.dart';

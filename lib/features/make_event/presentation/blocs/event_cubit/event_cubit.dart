@@ -54,6 +54,7 @@ class EventCubit extends Cubit<EventState> {
 
   void createEvent() async {
     print("CREATING EVENT .. current state -> $state");
+
     if (!(state is EventStateFinished))
       emit(EventStateServerFailure(stateErrorMessage));
     else {

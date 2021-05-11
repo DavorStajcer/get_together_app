@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:get_together_app/core/util/date_formater.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_together_app/features/make_event/presentation/blocs/event_cubit/event_cubit.dart';
+import 'package:get_together_app/features/make_event/presentation/blocs/event_cubit/event_state.dart';
 import 'package:get_together_app/features/make_event/presentation/widgets/date_time_picker_button.dart';
 import 'package:get_together_app/features/make_event/presentation/widgets/event_button_with_back_icon.dart';
 import 'package:get_together_app/features/make_event/presentation/widgets/event_description.dart';
 
 class EventDetailsScreen extends StatelessWidget {
-  final Function() goFowards;
+  final Function(BuildContext) createEvent;
   final Function() goBack;
-  EventDetailsScreen({Key? key, required this.goFowards, required this.goBack})
+  EventDetailsScreen(
+      {Key? key, required this.createEvent, required this.goBack})
       : super(key: key);
-
-  DateTime _selectedDate = DateTime.now();
-  TimeOfDay _selectedTime = TimeOfDay.now();
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +51,16 @@ class EventDetailsScreen extends StatelessWidget {
           ),
           Flexible(
             flex: 2,
-            child: EventButtonWithBackIcon(
-              text: "Make event",
-              goBack: goBack,
-              goFowards: goFowards,
+            child: BlocBuilder<EventCubit, EventState>(
+              builder: (context, state) {
+                return EventButtonWithBackIcon(
+                  text: "Make event",
+                  goBack: goBack,
+                  goFowards: () {
+                    (state is EventStateFinished) ? createEvent(context) : null;
+                  },
+                );
+              },
             ),
           ),
         ],

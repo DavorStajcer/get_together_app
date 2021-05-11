@@ -23,6 +23,8 @@ class FirebaseServiceMock {
   final UserMock userMock = UserMock();
   final QuerySnapshotMock querySnapshot = QuerySnapshotMock();
   final DocumentSnapshotMock documentSnapshotMock = DocumentSnapshotMock();
+  final QueryDocumentSnapshotMock queryDocumentSnapshotMock =
+      QueryDocumentSnapshotMock();
   //Test values
   static const String tDownloadUrl = "tDownloadUrl";
 
@@ -38,6 +40,8 @@ class FirebaseServiceMock {
         .thenAnswer((realInvocation) => Future.value(tDownloadUrl));
     when(collectionReferenceMock.doc(any))
         .thenAnswer((realInvocation) => documentReferenceMock);
+    when(collectionReferenceMock.snapshots())
+        .thenAnswer((realInvocation) => Stream.value(querySnapshot));
   }
 
   void setUpFirebaseAuth() {
@@ -63,10 +67,21 @@ class FirebaseServiceMock {
 
     when(documentReferenceMock.get())
         .thenAnswer((realInvocation) async => documentSnapshotMock);
+
+    when(documentReferenceMock.collection(any))
+        .thenAnswer((realInvocation) => collectionReferenceMock);
   }
 
   void setUpFirestoreDocumentData(Map<String, dynamic> data) {
     when(documentSnapshotMock.data()).thenReturn(data);
+    when(queryDocumentSnapshotMock.data()).thenReturn(data);
+  }
+
+  void setUpNumberOfDocumentsInCollectionSnapshot(int num) {
+    if (num < 1) return;
+    List<QueryDocumentSnapshotMock> docList = [];
+    for (int i = 0; i < num; i++) docList.add(queryDocumentSnapshotMock);
+    when(querySnapshot.docs).thenReturn(docList);
   }
 
   void setUpFirebaseStorage() {

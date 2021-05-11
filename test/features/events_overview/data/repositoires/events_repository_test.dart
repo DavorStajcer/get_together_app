@@ -4,7 +4,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_together_app/core/error/failure.dart';
 import 'package:get_together_app/core/error/success.dart';
-import 'package:get_together_app/core/util/date_formater.dart';
 import 'package:get_together_app/features/authentication/data/models/user_data_model.dart';
 import 'package:get_together_app/features/events_overview/data/models/event_model.dart';
 import 'package:get_together_app/features/events_overview/data/repositories/events_repository_impl.dart';
@@ -16,6 +15,7 @@ import 'package:mockito/mockito.dart';
 
 import '../../../../firebase_mock/firebase_service_mock.dart';
 import '../../../../network_info_mock/network_info_mock.dart';
+import '../../../make_event/presentation/maps_location_cubit/maps_location_cubit_test.dart';
 
 void main() {
   EventsRepository eventsRepository;
@@ -23,16 +23,22 @@ void main() {
   NetworkInfoMock networkInfoMock;
   CreateEventData tFinishedData;
   UserModelPublic tUserProfileData;
-/*   EventModel tEventModel; */
+  EventModel tEventModel;
   String tUserId;
+  String tCity;
+  LatLng tLocation;
+  LocationServiceMock locationServiceMock;
+
   setUp(() {
     networkInfoMock = NetworkInfoMock();
     firebaseServiceMock = FirebaseServiceMock();
+    locationServiceMock = LocationServiceMock();
     eventsRepository = EventsRepositoryImpl(
       networkInfo: networkInfoMock,
       firebaseAuth: firebaseServiceMock.firebaseAuthMock,
       firebaseFirestore: firebaseServiceMock.firebaseFirestoreMock,
       firebaseStorage: firebaseServiceMock.firebaseStorageMock,
+      locationService: locationServiceMock,
     );
     tFinishedData = CreateEventData(
       type: EventType.games,
@@ -41,7 +47,7 @@ void main() {
       timeString: "21:10",
       description: "Some description",
     );
-/*     tEventModel = EventModel(
+    tEventModel = EventModel(
         eventId: "undefinedNow",
         eventType: tFinishedData.type,
         dateString: tFinishedData.dateString,
@@ -53,7 +59,7 @@ void main() {
         adminRating: -1,
         numberOfPeople: 0,
         description: tFinishedData.description,
-        peopleImageUrls: []); */
+        peopleImageUrls: []);
     tUserProfileData = UserModelPublic(
       userId: tUserId,
       username: "username",
@@ -69,24 +75,34 @@ void main() {
 
     firebaseServiceMock.setUpFirebaseFirestore();
     firebaseServiceMock.setUpFirebaseAuth();
-    firebaseServiceMock.setUpFirebaseUserId(tUserId);
-    firebaseServiceMock
-        .setUpFirestoreDocumentData(tUserProfileData.toJsonMap());
+    tLocation = LatLng(1, 1);
+    tCity = "someCity";
   });
 
   group("no errors", () {
     setUp(() {
       networkInfoMock.setUpItHasConnection();
+      firebaseServiceMock.setUpFirebaseUserId(tUserId);
+      firebaseServiceMock
+          .setUpFirestoreDocumentData(tUserProfileData.toJsonMap());
+      firebaseServiceMock.setUpNumberOfDocumentsInCollectionSnapshot(2);
+      when(locationServiceMock.mapLocationToCity(any))
+          .thenAnswer((realInvocation) async => tCity);
     });
 
     //createEvent
-
     test("should make a call to firebaseFirestore", () async {
       await eventsRepository.createEvent(tFinishedData);
       verify(firebaseServiceMock.firebaseFirestoreMock.collection("events"))
           .called(1);
     });
-    test("should acces ", () async {
+    //createEvent
+    test("should save the event under the city name", () async {
+      await eventsRepository.createEvent(tFinishedData);
+      verify(firebaseServiceMock.collectionReferenceMock.doc(tCity)).called(1);
+    });
+
+    test("should acces user data", () async {
       await eventsRepository.createEvent(tFinishedData);
       verify(firebaseServiceMock.collectionReferenceMock.doc(tUserId))
           .called(1);
@@ -101,9 +117,21 @@ void main() {
       final response = await eventsRepository.createEvent(tFinishedData);
       expect(response, Right(Success()));
     });
+
+    //getAllEvents()
+    test("should make a call to firebaseFirestore", () async {
+      await eventsRepository.getAllEvents(tLocation);
+      verify(firebaseServiceMock.firebaseFirestoreMock.collection("events"));
+    });
+    test("should make a call document  with the name of the good city",
+        () async {
+      await eventsRepository.getAllEvents(tLocation);
+      verify(firebaseServiceMock.collectionReferenceMock.doc(tCity));
+    });
   });
 
   group("errors", () {
+    //createEvent()
     test("should return network failure when no connection", () async {
       networkInfoMock.setUpNoConnection();
       final response = await eventsRepository.createEvent(tFinishedData);

@@ -5,8 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/core/util/background_drawing.dart';
 import 'package:get_together_app/core/widgets/get_together_title.dart';
 import 'package:get_together_app/features/authentication/di/authentication_di.dart';
+import 'package:get_together_app/features/home/presentation/bloc/nav_bar_cubit/nav_bar_cubit.dart';
+import 'package:get_together_app/features/home/presentation/bloc/nav_bar_style_cubit/nav_bar_style_cubit.dart';
+import 'package:get_together_app/features/home/presentation/screens/home_screen.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_card_order_cubit/event_card_order_cubit.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_cubit/event_cubit.dart';
+import 'package:get_together_app/features/make_event/presentation/blocs/event_cubit/event_state.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/maps_location_cubit/maps_location_cubit.dart';
 import 'package:get_together_app/features/make_event/presentation/screens/choose_event_type_screen.dart';
 import 'package:get_together_app/features/make_event/presentation/screens/choose_location_screen.dart';
@@ -45,7 +49,9 @@ class _EventHomeScreenState extends State<EventHomeScreen> {
         duration: Duration(milliseconds: 500), curve: Curves.easeOut);
   }
 
-  void _finishEventMaking() {}
+  void _finishEventMaking(BuildContext context) {
+    BlocProvider.of<EventCubit>(context).createEvent();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,17 +86,32 @@ class _EventHomeScreenState extends State<EventHomeScreen> {
                     height: double.infinity,
                     width: double.infinity,
                     color: Colors.transparent,
-                    child: PageView(
-                      physics: NeverScrollableScrollPhysics(),
-                      controller: _pc,
-                      children: [
-                        ChooseEventTypeScreen(
-                            goFowards: _goFoward, goBack: _goBack),
-                        ChooseLocationScreen(
-                            goFowards: _goFoward, goBack: _goBack),
-                        EventDetailsScreen(
-                            goFowards: _finishEventMaking, goBack: _goBack)
-                      ],
+                    child: Builder(
+                      builder: (context) =>
+                          BlocListener<EventCubit, EventState>(
+                        listenWhen: (previousState, currentState) =>
+                            currentState is EventStateCreated,
+                        listener: (previousState, currentState) {
+                          if (currentState is EventStateCreated)
+                            BlocProvider.of<NavBarCubit>(context)
+                                .changeScreen(HomeScreen.events_overview);
+                          BlocProvider.of<NavBarStyleCubit>(context)
+                              .changeNavStyle(HomeScreen.events_overview);
+                        },
+                        child: PageView(
+                          physics: NeverScrollableScrollPhysics(),
+                          controller: _pc,
+                          children: [
+                            ChooseEventTypeScreen(
+                                goFowards: _goFoward, goBack: _goBack),
+                            ChooseLocationScreen(
+                                goFowards: _goFoward, goBack: _goBack),
+                            EventDetailsScreen(
+                                createEvent: _finishEventMaking,
+                                goBack: _goBack)
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),

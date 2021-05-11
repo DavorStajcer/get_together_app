@@ -17,4 +17,6 @@ class UserCredentialsMock extends Mock implements UserCredential {}
 
 class QuerySnapshotMock extends Mock implements QuerySnapshot {}
 
+class QueryDocumentSnapshotMock extends Mock implements QueryDocumentSnapshot {}
+
 class DocumentSnapshotMock extends Mock implements DocumentSnapshot {}

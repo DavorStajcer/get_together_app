@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -38,7 +40,7 @@ class _MapsViewState extends State<MapsView> {
     );
   }
 
-  void _setEventCircle() {
+/*   void _setEventCircle() {
     eventCircle = Circle(
       circleId: CircleId(DateTime.now().toString()),
       radius: 5000,
@@ -50,7 +52,7 @@ class _MapsViewState extends State<MapsView> {
       strokeWidth: 1,
       fillColor: Color.fromRGBO(97, 136, 255, 0.2),
     );
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -70,11 +72,10 @@ class _MapsViewState extends State<MapsView> {
           );
         final Position currentLocation =
             (state as MapsLocationLoaded).currentPosition;
-        // _userLocation =
-        //     LatLng(currentLocation.latitude, currentLocation.longitude);
-        _userLocation = LatLng(0, 142);
+        _userLocation =
+            LatLng(currentLocation.latitude, currentLocation.longitude);
 
-        _setEventCircle();
+        //_setEventCircle();
         _setEventMarker(_userLocation);
 
         return GoogleMap(
@@ -85,7 +86,7 @@ class _MapsViewState extends State<MapsView> {
           ),
           myLocationEnabled: true,
           markers: _markers,
-          circles: {eventCircle},
+          // circles: {eventCircle},
         );
       },
     );

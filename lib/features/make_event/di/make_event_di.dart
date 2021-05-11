@@ -14,7 +14,7 @@ void initMakeEventDi() {
   getIt.registerSingleton<LocationService>(LocationServiceImpl(getIt()));
   getIt.registerFactory(() => MapsLocationCubit(locationService: getIt()));
   getIt.registerSingleton<EventsRepository>(
-      EventsRepositoryImpl(networkInfo: getIt()));
+      EventsRepositoryImpl(networkInfo: getIt(), locationService: getIt()));
   getIt.registerSingleton(CreateEvent(getIt()));
   getIt.registerFactory(() => EventCubit(getIt()));
 }

@@ -12,18 +12,17 @@ class MapsLocationCubit extends Cubit<MapsLocationState> {
   void requestLocation() async {
     final response = await locationService.getLocation();
     response.fold(
-      (
-        failure,
-      ) =>
-          emit(
-        MapsLocationFailure(errorMessage: failure.message),
-      ),
-      (
-        position,
-      ) =>
-          emit(
+        (
+          failure,
+        ) =>
+            emit(
+              MapsLocationFailure(errorMessage: failure.message),
+            ), (
+      position,
+    ) async {
+      emit(
         MapsLocationLoaded(currentPosition: position),
-      ),
-    );
+      );
+    });
   }
 }

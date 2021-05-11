@@ -40,7 +40,13 @@ class EventCard extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(
-                    child: SizedBox(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Date:  "),
+                        Text("26.1.2021."),
+                      ],
+                    ),
                   ),
                   Container(
                     height: 40,

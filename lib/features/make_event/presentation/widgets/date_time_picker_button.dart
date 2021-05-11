@@ -1,5 +1,9 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/core/util/date_formater.dart';
+import 'package:get_together_app/features/make_event/presentation/blocs/event_cubit/event_cubit.dart';
+import 'package:get_together_app/features/make_event/presentation/blocs/event_cubit/event_state.dart';
 
 enum Picker { date, time }
 
@@ -8,32 +12,38 @@ class DateTimePickerButton extends StatelessWidget {
   const DateTimePickerButton({Key? key, required this.pickerType})
       : super(key: key);
 
-  Future<void> _selectEventDate(
-      BuildContext context, DateTime currentlySelectedDate) async {
+  Future<DateTime?> _selectEventDate(
+      BuildContext context, DateTime? currentlySelectedDate) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: currentlySelectedDate,
+      initialDate: currentlySelectedDate ?? DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(2022),
       helpText: "Change event date",
       initialEntryMode: DatePickerEntryMode.input,
     );
     if (pickedDate != null && pickedDate != currentlySelectedDate)
-      //TODO: change the date
-      var a;
+      BlocProvider.of<EventCubit>(context).eventDateChanged(pickedDate);
+    return pickedDate;
   }
 
-  Future<void> _selectEventTime(
-      BuildContext context, TimeOfDay currentlySelectedTime) async {
+  Future<TimeOfDay?> _selectEventTime(
+      BuildContext context, TimeOfDay? currentlySelectedTime) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
-      initialTime: currentlySelectedTime,
+      initialTime: currentlySelectedTime ?? TimeOfDay.now(),
     );
+    if (pickedTime != null && pickedTime != currentlySelectedTime)
+      BlocProvider.of<EventCubit>(context)
+          .eventTimeChanged(pickedTime.format(context));
+    return pickedTime;
   }
 
   @override
   Widget build(BuildContext context) {
     final DateFormater dateFormater = DateFormater();
+    TimeOfDay? currentlySelectedTime;
+    DateTime? currentlySelectedDate;
     return Column(
       children: [
         Flexible(
@@ -57,6 +67,7 @@ class DateTimePickerButton extends StatelessWidget {
                     child: Container(
                       width: double.infinity,
                       height: double.infinity,
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
@@ -72,15 +83,36 @@ class DateTimePickerButton extends StatelessWidget {
                         ),
                       ),
                       alignment: Alignment.center,
-                      child: Text(
-                        pickerType == Picker.time
-                            ? TimeOfDay.now().format(context)
-                            : dateFormater.getDotFormat(DateTime.now()),
-                        style: TextStyle(
-                            color: Theme.of(context)
-                                .primaryColor
-                                .withOpacity(0.6)),
-                      ),
+                      child: BlocBuilder<EventCubit, EventState>(
+                          builder: (context, state) {
+                        if (state is EventStateLoading ||
+                            state is EventStateCreated)
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        if (state is EventStateFailure)
+                          return FittedBox(child: Text("???"));
+
+                        return FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: AutoSizeText(
+                            pickerType == Picker.time
+                                ? (state as EventStateUnfinished)
+                                        .createEventData
+                                        .timeString ??
+                                    "Pick time ->"
+                                : (state as EventStateUnfinished)
+                                        .createEventData
+                                        .dateString ??
+                                    "Pick date ->",
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .primaryColor
+                                  .withOpacity(0.6),
+                            ),
+                          ),
+                        );
+                      }),
                     ),
                   ),
                   Flexible(
@@ -94,9 +126,13 @@ class DateTimePickerButton extends StatelessWidget {
                           Icons.replay_outlined,
                           color: Theme.of(context).primaryColor,
                         ),
-                        onPressed: () => pickerType == Picker.time
-                            ? _selectEventTime(context, TimeOfDay.now())
-                            : _selectEventDate(context, DateTime.now()),
+                        onPressed: () async {
+                          pickerType == Picker.time
+                              ? currentlySelectedTime = await _selectEventTime(
+                                  context, currentlySelectedTime)
+                              : currentlySelectedDate = await _selectEventDate(
+                                  context, currentlySelectedDate);
+                        },
                       ),
                     ),
                   ),
