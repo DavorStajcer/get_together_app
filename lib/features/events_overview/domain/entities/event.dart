@@ -34,6 +34,9 @@ class Event extends Equatable {
   @override
   List<Object?> get props => [
         eventId,
+        eventType,
+        dateString,
+        timeString,
         location,
         adminId,
         adminUsername,

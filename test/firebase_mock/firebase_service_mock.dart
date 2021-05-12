@@ -77,11 +77,13 @@ class FirebaseServiceMock {
     when(queryDocumentSnapshotMock.data()).thenReturn(data);
   }
 
-  void setUpNumberOfDocumentsInCollectionSnapshot(int num) {
-    if (num < 1) return;
+  void setUpNumberOfDocumentsInCollectionSnapshot(
+      {int numOfDocs, String docId}) {
+    if (numOfDocs < 1) return;
     List<QueryDocumentSnapshotMock> docList = [];
-    for (int i = 0; i < num; i++) docList.add(queryDocumentSnapshotMock);
+    for (int i = 0; i < numOfDocs; i++) docList.add(queryDocumentSnapshotMock);
     when(querySnapshot.docs).thenReturn(docList);
+    when(queryDocumentSnapshotMock.id).thenReturn(docId);
   }
 
   void setUpFirebaseStorage() {

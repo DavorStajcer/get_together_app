@@ -7,12 +7,14 @@ import 'package:get_together_app/core/error/success.dart';
 import 'package:get_together_app/features/authentication/data/models/user_data_model.dart';
 import 'package:get_together_app/features/events_overview/data/models/event_model.dart';
 import 'package:get_together_app/features/events_overview/data/repositories/events_repository_impl.dart';
+import 'package:get_together_app/features/events_overview/domain/entities/event.dart';
 import 'package:get_together_app/features/events_overview/domain/repositoires/events_repository.dart';
 import 'package:get_together_app/features/make_event/domain/entities/create_event_data.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_card_order_cubit/event_card_order_cubit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../../../core/location_service_mock.dart';
 import '../../../../firebase_mock/firebase_service_mock.dart';
 import '../../../../network_info_mock/network_info_mock.dart';
 import '../../../make_event/presentation/maps_location_cubit/maps_location_cubit_test.dart';
@@ -24,6 +26,7 @@ void main() {
   CreateEventData tFinishedData;
   UserModelPublic tUserProfileData;
   EventModel tEventModel;
+  Event tEvent;
   String tUserId;
   String tCity;
   LatLng tLocation;
@@ -48,6 +51,19 @@ void main() {
       description: "Some description",
     );
     tEventModel = EventModel(
+        eventId: "undefinedNow",
+        eventType: tFinishedData.type,
+        dateString: tFinishedData.dateString,
+        timeString: tFinishedData.timeString,
+        location: tFinishedData.location,
+        adminId: tUserId,
+        adminUsername: "username",
+        adminImageUrl: "imageUrl",
+        adminRating: -1,
+        numberOfPeople: 0,
+        description: tFinishedData.description,
+        peopleImageUrls: []);
+    tEvent = Event(
         eventId: "undefinedNow",
         eventType: tFinishedData.type,
         dateString: tFinishedData.dateString,
@@ -85,7 +101,8 @@ void main() {
       firebaseServiceMock.setUpFirebaseUserId(tUserId);
       firebaseServiceMock
           .setUpFirestoreDocumentData(tUserProfileData.toJsonMap());
-      firebaseServiceMock.setUpNumberOfDocumentsInCollectionSnapshot(2);
+      firebaseServiceMock.setUpNumberOfDocumentsInCollectionSnapshot(
+          numOfDocs: 3, docId: "undefinedNow");
       when(locationServiceMock.mapLocationToCity(any))
           .thenAnswer((realInvocation) async => tCity);
     });
@@ -128,6 +145,27 @@ void main() {
       await eventsRepository.getAllEvents(tLocation);
       verify(firebaseServiceMock.collectionReferenceMock.doc(tCity));
     });
+
+    test("should make a call to city_events", () async {
+      await eventsRepository.getAllEvents(tLocation);
+      verify(firebaseServiceMock.documentReferenceMock
+              .collection("city_events"))
+          .called(1);
+    });
+
+/*     test("should return the list of events", () async {
+      firebaseServiceMock.setUpFirestoreDocumentData(tEventModel
+          .toJsonMap()); // !! The list that I get back is the same, the type and all the data types.. dunno why it sais they are not eaqual, dafuq
+      final response = await eventsRepository.getAllEvents(tLocation);
+
+      expect(
+          response,
+          Right([
+            tEventModel,
+            tEventModel,
+            tEventModel,
+          ]));
+    }); */
   });
 
   group("errors", () {
