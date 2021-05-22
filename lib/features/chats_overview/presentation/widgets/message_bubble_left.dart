@@ -1,34 +1,60 @@
 import "package:flutter/material.dart";
+import 'package:get_together_app/features/chats_overview/domain/enitites/message.dart';
 import 'package:get_together_app/features/chats_overview/util/left_message_clipper.dart';
+import 'package:intl/intl.dart';
 
 class MessageBubbleLeft extends StatelessWidget {
-  const MessageBubbleLeft({Key? key}) : super(key: key);
+  final Message message;
+  const MessageBubbleLeft(this.message, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Flexible(
-          flex: 2,
-          child: ClipPath(
-            clipper: LeftMessageClipper(20),
-            child: Container(
-              color: Theme.of(context).primaryColor.withOpacity(0.8),
-              width: double.infinity,
-              /*   padding:
-                  EdgeInsets.only(bottom: 30, right: 30, top: 10, left: 10), */
-              padding:
-                  EdgeInsets.only(left: 30, bottom: 30, top: 10, right: 10),
-              child: Text(
-                "Hello ! Its me. Daca the dacmen. Wačju bin ap tu ?",
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.white,
+            flex: 2,
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(left: 30, right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        DateFormat.Hms().format(message.date),
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 9,
+                        ),
+                      ),
+                      Text(
+                        message.username,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
-          ),
-        ),
+                ClipPath(
+                  clipper: LeftMessageClipper(20),
+                  child: Container(
+                    color: Theme.of(context).primaryColor.withOpacity(0.8),
+                    width: double.infinity,
+                    padding: EdgeInsets.only(
+                        left: 30, bottom: 30, top: 10, right: 10),
+                    child: Text(
+                      message.content,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )),
         Flexible(
           flex: 2,
           child: Container(
@@ -39,3 +65,7 @@ class MessageBubbleLeft extends StatelessWidget {
     );
   }
 }
+
+/* 
+
+ */

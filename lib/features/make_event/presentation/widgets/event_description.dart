@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_cubit/event_cubit.dart';
@@ -25,6 +27,7 @@ class _EventDescriptionState extends State<EventDescription> {
         listenWhen: (previousState, currentState) =>
             currentState is EventStateFinished,
         builder: (context, state) {
+          log("STATE IS -> $state ");
           if (state is EventStateNetworkFailure)
             return Center(
               child: Text(state.message),

@@ -1,12 +1,13 @@
-import 'dart:developer';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_together_app/features/chats_overview/di/chats_di.dart';
 import 'package:get_together_app/features/chats_overview/presentation/screens/chat_screen.dart';
+import 'package:get_together_app/features/events_overview/di/event_overview_di.dart';
 import 'package:get_together_app/features/make_event/di/make_event_di.dart';
 import 'package:get_together_app/features/profile_overview/di/profile_di.dart';
 import 'package:get_together_app/features/profile_overview/presentation/bloc/profile_screen_cubit/profile_screen_cubit.dart';
+import 'package:get_together_app/features/single_event_overview/di/single_event_overview_di.dart';
 import 'package:get_together_app/features/single_event_overview/presentation/screens/single_event_screen.dart';
 import 'package:get_together_app/features/user_events_overview/presentation/screens/user_events_screen.dart';
 import 'features/authentication/di/authentication_di.dart';
@@ -24,6 +25,9 @@ Future<void> main(List<String> args) async {
   initHomeDi();
   initMakeEventDi();
   initProfileDi();
+  initEventsOverviewDi();
+  initSingleEventDi();
+  initChatDi();
   runApp(GetTogetherApp());
 }
 

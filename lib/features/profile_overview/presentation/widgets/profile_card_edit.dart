@@ -5,7 +5,6 @@ import 'package:get_together_app/features/authentication/domain/entities/user_da
 import 'package:get_together_app/features/profile_overview/presentation/bloc/profile_screen_cubit/profile_screen_cubit.dart';
 import 'package:get_together_app/features/profile_overview/presentation/util/profile_card_clipper.dart';
 import 'package:get_together_app/features/profile_overview/presentation/widgets/profile_picture_edit.dart';
-import 'package:get_together_app/features/profile_overview/presentation/widgets/profile_picture_view.dart';
 
 class ProfileCardEdit extends StatelessWidget {
   final double picHeight;

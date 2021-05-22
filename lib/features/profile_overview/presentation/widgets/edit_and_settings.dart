@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_together_app/features/authentication/data/models/user_data_model.dart';
 import 'package:get_together_app/features/authentication/domain/entities/user_data.dart';
 import 'package:get_together_app/features/profile_overview/presentation/bloc/profile_screen_cubit/profile_screen_cubit.dart';
 

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SingleEventMaps extends StatelessWidget {
-  const SingleEventMaps({Key? key}) : super(key: key);
+  final LatLng _eventLocation;
+  const SingleEventMaps(this._eventLocation, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _eventLocation = LatLng(-34.397, 150.644);
     final _initalCameraPosition = CameraPosition(
       target: _eventLocation,
       zoom: 13,

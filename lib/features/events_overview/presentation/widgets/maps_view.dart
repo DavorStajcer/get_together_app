@@ -1,8 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get_together_app/core/widgets/network_error.dart';
+import 'package:get_together_app/features/events_overview/domain/entities/event.dart';
+import 'package:get_together_app/features/events_overview/presentation/bloc/event_pick_cubit/event_pick_cubit_cubit.dart';
+import 'package:get_together_app/features/events_overview/presentation/bloc/load_events_bloc/events_overview_bloc.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/maps_location_cubit/maps_location_cubit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -29,15 +31,18 @@ class _MapsViewState extends State<MapsView> {
     BlocProvider.of<MapsLocationCubit>(context).requestLocation();
   }
 
-  void _setEventMarker(LatLng location) {
-    _markers.add(
-      Marker(
-        markerId: MarkerId(DateTime.now().toString()),
-        position: location,
-        draggable: false,
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
-      ),
-    );
+  void _setEventMarkers(List<Event> events) {
+    events.forEach((event) {
+      _markers.add(
+        Marker(
+          markerId: MarkerId(DateTime.now().toString()),
+          position: event.location,
+          draggable: false,
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+        ),
+      );
+    });
   }
 
 /*   void _setEventCircle() {
@@ -75,18 +80,33 @@ class _MapsViewState extends State<MapsView> {
         _userLocation =
             LatLng(currentLocation.latitude, currentLocation.longitude);
 
-        //_setEventCircle();
-        _setEventMarker(_userLocation);
-
-        return GoogleMap(
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(
-            target: _userLocation,
-            zoom: 12,
-          ),
-          myLocationEnabled: true,
-          markers: _markers,
-          // circles: {eventCircle},
+        return BlocBuilder<EventsOverviewBloc, EventsOverviewState>(
+          builder: (context, state) {
+            if (state is EventsOverviewNetworkFailure)
+              return NetworkErrorWidget(state.message);
+            if (state is EventsOverviewServerFailure)
+              return NetworkErrorWidget(state.message);
+            if (state is EventsOverviewLoading)
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            _setEventMarkers((state as EventsOverviewLoaded).events);
+            return BlocListener<EventPickCubit, PickedEventState>(
+              listener: (context, state) {
+                _controller
+                    .animateCamera(CameraUpdate.newLatLng(state.location!));
+              },
+              child: GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: _userLocation,
+                  zoom: 12,
+                ),
+                myLocationEnabled: true,
+                markers: _markers,
+              ),
+            );
+          },
         );
       },
     );

@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_together_app/core/error/failure.dart';
 import 'package:get_together_app/core/error/success.dart';
 
-import 'package:get_together_app/features/authentication/domain/repository/user_repository.dart';
+import 'package:get_together_app/features/authentication/domain/repository/user_auth_repository.dart';
 import 'package:get_together_app/features/authentication/domain/usecases/log_user_in.dart';
 import 'package:get_together_app/features/authentication/presentation/models/auth_param.dart';
 import 'package:mockito/mockito.dart';

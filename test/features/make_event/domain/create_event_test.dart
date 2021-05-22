@@ -4,8 +4,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_together_app/core/error/failure.dart';
 import 'package:get_together_app/core/error/success.dart';
-import 'package:get_together_app/core/util/date_formater.dart';
-import 'package:get_together_app/features/events_overview/data/models/event_model.dart';
 import 'package:get_together_app/features/events_overview/domain/repositoires/events_repository.dart';
 import 'package:get_together_app/features/make_event/domain/entities/create_event_data.dart';
 import 'package:get_together_app/features/make_event/domain/usecases/create_event.dart';

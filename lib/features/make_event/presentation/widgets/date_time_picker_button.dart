@@ -41,7 +41,7 @@ class DateTimePickerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateFormater dateFormater = DateFormater();
+    // final DateFormater dateFormater = DateFormater();
     TimeOfDay? currentlySelectedTime;
     DateTime? currentlySelectedDate;
     return Column(

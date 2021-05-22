@@ -7,7 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get_together_app/core/error/failure.dart';
 import 'package:get_together_app/features/events_overview/domain/entities/event.dart';
 import 'package:get_together_app/features/events_overview/domain/usecases/getEventsForCurrentLocation.dart';
-import 'package:get_together_app/features/events_overview/presentation/bloc/bloc/events_overview_bloc.dart';
+import 'package:get_together_app/features/events_overview/presentation/bloc/load_events_bloc/events_overview_bloc.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_card_order_cubit/event_card_order_cubit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mockito/mockito.dart';
@@ -55,7 +55,7 @@ void main() {
         adminRating: -1,
         numberOfPeople: 1,
         description: "description",
-        peopleImageUrls: []);
+        peopleImageUrls: {});
   });
 
   test("inital state should be EventsOverviewLoading", () {

@@ -6,7 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_together_app/core/error/failure.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/maps_location_cubit/maps_location_cubit.dart';
-import 'package:get_together_app/core/maps/location_service.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../../../core/location_service_mock.dart';

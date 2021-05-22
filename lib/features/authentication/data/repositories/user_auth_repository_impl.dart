@@ -12,7 +12,7 @@ import '../../../../core/error/success.dart';
 import '../../../../core/error/failure.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/network.dart/network_info.dart';
-import '../../domain/repository/user_repository.dart';
+import '../../domain/repository/user_auth_repository.dart';
 import '../../presentation/models/auth_param.dart';
 
 class UserAuthRepositoryImpl extends UserAuthRepository {

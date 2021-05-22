@@ -10,6 +10,7 @@ class UserDataPublic extends Equatable {
   final int friendsCount;
   final int numberOfVotes;
   final int rating;
+  //final Map<String, dynamic> userEvents;
 
   UserDataPublic({
     required this.userId,
@@ -21,6 +22,7 @@ class UserDataPublic extends Equatable {
     this.friendsCount = 0,
     this.numberOfVotes = 0,
     this.rating = -1,
+    // this.userEvents = const {},
   });
 
   @override

@@ -2,11 +2,9 @@
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_together_app/core/error/failure.dart';
 import 'package:get_together_app/core/error/success.dart';
-import 'package:get_together_app/core/util/date_formater.dart';
 import 'package:get_together_app/features/make_event/domain/entities/create_event_data.dart';
 import 'package:get_together_app/features/make_event/domain/usecases/create_event.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_card_order_cubit/event_card_order_cubit.dart';
@@ -27,7 +25,7 @@ void main() {
   CreateEventMock createEventMock;
   EventCubit eventCubit;
   CreateEventData tCreateEventData;
-  CreateEventData tFinishedData;
+  //CreateEventData tFinishedData;
 
   setUp(() {
     //dateFormaterMock = DateFormaterMock();
@@ -43,13 +41,13 @@ void main() {
     );
     // when(dateFormaterMock.getDotFormat(any)).thenReturn("01.01.1111");
 
-    tFinishedData = CreateEventData(
+/*     tFinishedData = CreateEventData(
       type: EventType.games,
       location: LatLng(0, 0),
       dateString: "07.12.1998",
       timeString: "21:10",
       description: "Some description",
-    );
+    ); */
   });
 
   test("inital state should be all default values (except time and date)", () {

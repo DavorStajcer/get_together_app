@@ -27,16 +27,16 @@ class EventsOverviewServerFailure extends EventsOverviewFailure {
 
 class EventsOverviewLoaded extends EventsOverviewState {
   final List<Event> events;
-  final currentlySelectedEvent;
+/*   final currentlySelectedEvent; */
   EventsOverviewLoaded({
-    this.currentlySelectedEvent =
-        -1, // -1 means that no event is selected (when events are first loaded to the screen)
+/*     this.currentlySelectedEvent =
+        -1, // -1 means that no event is selected (when events are first loaded to the screen) */
     required this.events,
   });
 
   @override
   List<Object> get props => [
         events,
-        currentlySelectedEvent,
+        /*       currentlySelectedEvent, */
       ];
 }

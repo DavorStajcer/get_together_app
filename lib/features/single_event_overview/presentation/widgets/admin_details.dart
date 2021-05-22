@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get_together_app/core/widgets/event_admin.dart';
+import 'package:get_together_app/features/make_event/presentation/blocs/event_card_order_cubit/event_card_order_cubit.dart';
 
 class AdminDetails extends StatelessWidget {
-  const AdminDetails({Key? key}) : super(key: key);
+  final EventType eventType;
+  final String adminImageUrl;
+  final int numberOfPeople;
+  final String adminUsername;
+  const AdminDetails({
+    Key? key,
+    required this.eventType,
+    required this.adminImageUrl,
+    required this.numberOfPeople,
+    required this.adminUsername,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +41,12 @@ class AdminDetails extends StatelessWidget {
         Flexible(
           flex: 5,
           child: Center(
-            child: EventAdmin(),
+            child: EventAdmin(
+              eventType: eventType,
+              imageUrl: adminImageUrl,
+              numberOfPeople: numberOfPeople,
+              username: adminUsername,
+            ),
           ),
         ),
         Flexible(

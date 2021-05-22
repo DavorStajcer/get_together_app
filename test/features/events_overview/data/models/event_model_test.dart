@@ -28,7 +28,11 @@ void main() {
         adminRating: 0,
         numberOfPeople: 0,
         description: "description",
-        peopleImageUrls: ["url1", "url2", "url3"]);
+        peopleImageUrls: {
+          "userId1": "url1",
+          "userId2": "url2",
+          "userId3": "url3",
+        });
   });
 
   test("should be an instance of Event", () {

@@ -15,7 +15,7 @@ class EventModel extends Event {
     required int adminRating,
     required int numberOfPeople,
     required String description,
-    required List<String> peopleImageUrls,
+    required Map<String, dynamic> peopleImageUrls,
   }) : super(
           eventId: eventId,
           eventType: eventType,
@@ -51,7 +51,7 @@ class EventModel extends Event {
             ? (json["numberOfPeople"] as double).toInt()
             : json["numberOfPeople"],
         description: json["description"],
-        peopleImageUrls: List.from(json["peopleImageUrls"]),
+        peopleImageUrls: json["peopleImageUrls"],
       );
 
   Map<String, dynamic> toJsonMap() => {

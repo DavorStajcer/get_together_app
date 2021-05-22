@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class ServerError extends StatelessWidget {
+class ServerErrorWidget extends StatelessWidget {
   final String message;
-  const ServerError(this.message, {Key? key}) : super(key: key);
+  const ServerErrorWidget(this.message, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

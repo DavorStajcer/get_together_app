@@ -2,11 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_together_app/features/chats_overview/presentation/bloc/chats_overivew/chats_overview_cubit.dart';
+import 'package:get_together_app/features/events_overview/presentation/bloc/load_events_bloc/events_overview_bloc.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/maps_location_cubit/maps_location_cubit.dart';
 import '../../../authentication/di/authentication_di.dart';
 import '../../../authentication/presentation/bloc/auth_bloc/auth_bloc.dart';
 
-import '../../di/home_di.dart';
 import '../bloc/nav_bar_cubit/nav_bar_cubit.dart';
 import '../bloc/nav_bar_style_cubit/nav_bar_style_cubit.dart';
 import '../widgets/custom_nav_bar.dart';
@@ -33,16 +34,22 @@ class HomeScreenWidget extends StatelessWidget {
       body: MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (_) => homeGetIt<NavBarCubit>(),
+              create: (_) => getIt<NavBarCubit>(),
             ),
             BlocProvider(
-              create: (_) => homeGetIt<NavBarStyleCubit>(),
+              create: (_) => getIt<NavBarStyleCubit>(),
             ),
             BlocProvider<AuthBloc>(
               create: (_) => getIt<AuthBloc>(),
             ),
             BlocProvider<MapsLocationCubit>(
               create: (_) => getIt<MapsLocationCubit>(),
+            ),
+            BlocProvider<EventsOverviewBloc>(
+              create: (_) => getIt<EventsOverviewBloc>(),
+            ),
+            BlocProvider<ChatsOverviewCubit>(
+              create: (_) => getIt<ChatsOverviewCubit>(),
             ),
           ],
           child: SingleChildScrollView(

@@ -5,9 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_together_app/core/error/failure.dart';
 import 'package:get_together_app/core/error/success.dart';
 import 'package:get_together_app/features/authentication/data/models/user_data_model.dart';
-import 'package:get_together_app/features/events_overview/data/models/event_model.dart';
 import 'package:get_together_app/features/events_overview/data/repositories/events_repository_impl.dart';
-import 'package:get_together_app/features/events_overview/domain/entities/event.dart';
 import 'package:get_together_app/features/events_overview/domain/repositoires/events_repository.dart';
 import 'package:get_together_app/features/make_event/domain/entities/create_event_data.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_card_order_cubit/event_card_order_cubit.dart';
@@ -17,7 +15,6 @@ import 'package:mockito/mockito.dart';
 import '../../../../core/location_service_mock.dart';
 import '../../../../firebase_mock/firebase_service_mock.dart';
 import '../../../../network_info_mock/network_info_mock.dart';
-import '../../../make_event/presentation/maps_location_cubit/maps_location_cubit_test.dart';
 
 void main() {
   EventsRepository eventsRepository;
@@ -25,8 +22,8 @@ void main() {
   NetworkInfoMock networkInfoMock;
   CreateEventData tFinishedData;
   UserModelPublic tUserProfileData;
-  EventModel tEventModel;
-  Event tEvent;
+/*   EventModel tEventModel;
+  Event tEvent; */
   String tUserId;
   String tCity;
   LatLng tLocation;
@@ -50,7 +47,7 @@ void main() {
       timeString: "21:10",
       description: "Some description",
     );
-    tEventModel = EventModel(
+    /*    tEventModel = EventModel(
         eventId: "undefinedNow",
         eventType: tFinishedData.type,
         dateString: tFinishedData.dateString,
@@ -75,7 +72,7 @@ void main() {
         adminRating: -1,
         numberOfPeople: 0,
         description: tFinishedData.description,
-        peopleImageUrls: []);
+        peopleImageUrls: []); */
     tUserProfileData = UserModelPublic(
       userId: tUserId,
       username: "username",

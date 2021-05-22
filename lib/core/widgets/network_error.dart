@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class NetworkError extends StatelessWidget {
+class NetworkErrorWidget extends StatelessWidget {
   final String message;
-  const NetworkError(this.message, {Key? key}) : super(key: key);
+  const NetworkErrorWidget(this.message, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

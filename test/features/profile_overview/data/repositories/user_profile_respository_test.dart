@@ -1,5 +1,4 @@
 //@dart=2.6
-import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';

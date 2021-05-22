@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Description extends StatelessWidget {
-  const Description({Key? key}) : super(key: key);
+  final String _description;
+  const Description(this._description, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +35,7 @@ class Description extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   height: double.infinity,
-                  child: Text(
-                    "Some long description of a event made by who else than CJ. Perfect black man. Has guns, money, drugs, alcohol, women and most of all respect. He earns respect +100 on a daily basis. Thats just who he is. A bad madakafa. Paka paka pakaaa madakafa.",
-                  ),
+                  child: Text(_description),
                 ),
               )
             ],

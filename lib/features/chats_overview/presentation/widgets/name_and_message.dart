@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 class NameAndMessage extends StatelessWidget {
-  const NameAndMessage({Key? key}) : super(key: key);
+  final String name;
+  final String messageSnippet;
+  const NameAndMessage({
+    required this.name,
+    required this.messageSnippet,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +20,7 @@ class NameAndMessage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Text(
-                "Samantha Cruz",
+                name,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -24,14 +30,18 @@ class NameAndMessage extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(top: 7),
+                margin: EdgeInsets.only(top: 7, bottom: 15),
+                width: double.infinity,
+                height: double.infinity,
+                alignment: Alignment.centerLeft,
                 child: Text(
-                  "Ive got your message. I want to tell you that you are not that OG as you think. I am CJ in real life motherfucker.",
+                  messageSnippet,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Color.fromRGBO(161, 160, 160, 1),
                   ),
+                  textAlign: TextAlign.left,
                 ),
               ),
             )

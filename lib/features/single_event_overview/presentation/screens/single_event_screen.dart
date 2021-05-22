@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get_together_app/features/single_event_overview/presentation/widgets/admin_details.dart';
-import 'package:get_together_app/features/single_event_overview/presentation/widgets/description.dart';
-import 'package:get_together_app/features/single_event_overview/presentation/widgets/join_button.dart';
-import 'package:get_together_app/features/single_event_overview/presentation/widgets/people_comming..dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_together_app/core/widgets/server_error.dart';
+import 'package:get_together_app/features/authentication/di/authentication_di.dart';
+import 'package:get_together_app/features/events_overview/domain/entities/event.dart';
+import 'package:get_together_app/features/single_event_overview/presentation/bloc/join_event_cubit/join_event_cubit.dart';
+import 'package:get_together_app/features/single_event_overview/presentation/bloc/single_event_screen_cubit/single_event_screen_cubit.dart';
+import 'package:get_together_app/features/single_event_overview/presentation/widgets/event_details.dart';
 import 'package:get_together_app/features/single_event_overview/presentation/widgets/single_event_maps.dart';
 
 class SingleEventScreen extends StatelessWidget {
@@ -11,99 +14,63 @@ class SingleEventScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final Size screenSize = MediaQuery.of(context).size;
+    final event = ModalRoute.of(context)!.settings.arguments as Event;
     return Scaffold(
       backgroundColor: Color.fromRGBO(237, 231, 246, 1),
-      body: Column(
-        children: [
-          Flexible(
-            flex: 4,
-            child: SingleEventMaps(),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider<SingleEventScreenCubit>(
+            create: (context) => getIt<SingleEventScreenCubit>(),
           ),
-          Flexible(
-            flex: 6,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Column(
+          BlocProvider<JoinEventCubit>(
+            create: (context) => getIt<JoinEventCubit>(),
+          ),
+        ],
+        child: Builder(
+          builder: (context) =>
+              BlocBuilder<SingleEventScreenCubit, SingleEventScreenState>(
+            builder: (context, state) {
+              if (state is SingleEventScreenLoading) {
+                BlocProvider.of<SingleEventScreenCubit>(context)
+                    .checkIsAdminOfEventCurrentUser(event.adminId);
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              if (state is SingleEventScreenFailure)
+                return ServerErrorWidget(state.message);
+
+              return Column(
                 children: [
                   Flexible(
-                    flex: 1,
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      child: Row(
-                        children: [
-                          Flexible(
-                            flex: 3,
-                            child: Container(
-                              width: double.infinity,
-                              height: double.infinity,
-                              child: Text(
-                                "Date/Time",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            flex: 6,
-                            child: Container(
-                              height: double.infinity,
-                              width: double.infinity,
-                              alignment: Alignment.center,
-                              child: Text(
-                                "20.2.2020. / 15:30",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                    flex: 4,
+                    child: SingleEventMaps(event.location),
+                  ),
+                  Flexible(
+                    flex: 6,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 10),
+                      child: EventDetails(
+                        event: event,
+                        isCurrentUserEventAdmin:
+                            (state as SingleEventScreenLoaded)
+                                .isCurrentUserEventAdmin,
                       ),
                     ),
-                  ),
-                  Flexible(
-                    flex: 2,
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      child: AdminDetails(),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 3,
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      child: Description(),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 3,
-                    child: PoepleComming(),
-                  ),
-                  //TODO: build this if current uid == admin id
-                  //TODO: change text to "Leave event" if the user is allready joined
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      child: JoinButton(),
-                    ),
-                  ),
+                  )
                 ],
-              ),
-            ),
-          )
-        ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }
 }
+
+
+/* 
+
+ */

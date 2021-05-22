@@ -20,34 +20,13 @@ class UserModelPublic extends UserDataPublic implements UserDataModel {
           username: username,
           imageUrl: imageUrl,
           city: city ?? "Unknown",
-          country: "Unknown",
-          description: "New to GeTogether app. Lets get together i guess.. :)",
-          friendsCount: 0,
-          numberOfVotes: 0,
-          rating: -1,
+          country: country ?? "Unknown",
+          description: description ??
+              "New to GeTogether app. Lets get together i guess.. :)",
+          friendsCount: friendsCount ?? 0,
+          numberOfVotes: numberOfVotes ?? 0,
+          rating: rating ?? -1,
         );
-/*   UserModelPublic copyWith({
-    String? userId,
-    String? username,
-    String? imageUrl,
-    String? city,
-    String? country,
-    String? description,
-    int? friendsCount,
-    int? numberOfVotes,
-    int? rating,
-  }) =>
-      UserModelPublic(
-        userId: userId ?? this.userId,
-        username: username ?? this.username,
-        imageUrl: imageUrl ?? this.imageUrl,
-        city: city ?? this.city,
-        country: country ?? this.country,
-        description: description ?? this.description,
-        friendsCount: friendsCount ?? this.friendsCount,
-        numberOfVotes: numberOfVotes ?? this.numberOfVotes,
-        rating: rating ?? this.rating,
-      ); */
 
   factory UserModelPublic.fromJsonMap(Map<String, dynamic> jsonMap) =>
       UserModelPublic(
@@ -94,4 +73,27 @@ class UserModelPrivate extends UserDataPrivate implements UserDataModel {
         "email": this.email,
         "password": this.password,
       };
+
+  /*   UserModelPublic copyWith({
+    String? userId,
+    String? username,
+    String? imageUrl,
+    String? city,
+    String? country,
+    String? description,
+    int? friendsCount,
+    int? numberOfVotes,
+    int? rating,
+  }) =>
+      UserModelPublic(
+        userId: userId ?? this.userId,
+        username: username ?? this.username,
+        imageUrl: imageUrl ?? this.imageUrl,
+        city: city ?? this.city,
+        country: country ?? this.country,
+        description: description ?? this.description,
+        friendsCount: friendsCount ?? this.friendsCount,
+        numberOfVotes: numberOfVotes ?? this.numberOfVotes,
+        rating: rating ?? this.rating,
+      ); */
 }

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_together_app/features/authentication/di/authentication_di.dart';
-import 'package:get_together_app/features/make_event/presentation/blocs/maps_location_cubit/maps_location_cubit.dart';
 import 'package:get_together_app/features/make_event/presentation/widgets/event_button_with_back_icon.dart';
 import 'package:get_together_app/features/make_event/presentation/widgets/location_chooser.dart';
 
