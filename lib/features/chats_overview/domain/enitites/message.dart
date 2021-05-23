@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_together_app/features/chats_overview/presentation/widgets/chat_messages.dart';
 
@@ -9,7 +8,7 @@ class Message extends Equatable {
   final String content;
   //final Timestamp timestamp;
   final Sender sender;
-  final DateTime date;
+  final DateTime? date;
 
   Message({
     // required this.userId,
@@ -21,5 +20,11 @@ class Message extends Equatable {
   });
 
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [
+        username,
+        userImageUrl,
+        content,
+        sender,
+        date,
+      ];
 }

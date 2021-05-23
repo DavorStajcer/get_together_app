@@ -17,9 +17,11 @@ class EventMessageRepositoryImpl extends EventMessagesRepository {
   NetworkInfo networkInfo;
   late StreamController<Either<Failure, List<Message>>>
       _messageStreamController;
-  int _lastPageNum = 0;
   StreamSubscription<QuerySnapshot>? _currentMessageSubscription;
   StreamSubscription<DocumentSnapshot>? _currentSnippetSubscription;
+  int _lastPageNum = -1;
+  int _nextPageToLoad = -1;
+  bool _canLoadNewPage = true;
 
   EventMessageRepositoryImpl({
     FirebaseAuth? firebaseAuth,
@@ -39,6 +41,7 @@ class EventMessageRepositoryImpl extends EventMessagesRepository {
   @override
   Stream<Either<Failure, List<Message>>> listenToChatMessages(String eventId) {
     _messageStreamController = StreamController();
+    _listenToPage(eventId);
     _currentSnippetSubscription = firebaseFirestore
         .collection("chats")
         .doc(eventId)
@@ -69,13 +72,23 @@ class EventMessageRepositoryImpl extends EventMessagesRepository {
         .orderBy("timestamp")
         .snapshots()
         .listen((pageMessages) {
-      final messages = pageMessages.docs.map((doc) {
+      final List<Map<String, dynamic>> changedData = [];
+      final docChanges = pageMessages.docChanges;
+      for (var docChange in docChanges) {
+        if (docChange.type == DocumentChangeType.modified) {
+          if (docChange.doc.data() != null)
+            changedData.add(docChange.doc.data()!);
+        }
+      }
+
+      final messages = changedData.map((data) {
         final currentUserUid = firebaseAuth.currentUser!.uid;
-        final senderId = doc.data()["senderId"];
+        final senderId = data["senderId"];
         Sender messageSender = Sender.other;
         if (currentUserUid == senderId) messageSender = Sender.currentUser;
-        return MessageModel.fromJsonMap(messageSender, doc.data());
+        return MessageModel.fromJsonMap(messageSender, data);
       }).toList();
+      messages.removeWhere((messageModel) => messageModel.date == null);
       _messageStreamController.sink.add(Right(messages));
     },
             onError: (error) =>
@@ -83,7 +96,8 @@ class EventMessageRepositoryImpl extends EventMessagesRepository {
   }
 
   Future<void> stopListeningToChatMessages() async {
-    _lastPageNum = 0;
+    _lastPageNum = -1;
+    _nextPageToLoad = -1;
     await _messageStreamController.sink.close();
     if (_currentMessageSubscription != null)
       await _currentMessageSubscription!.cancel();
@@ -131,4 +145,84 @@ class EventMessageRepositoryImpl extends EventMessagesRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, List<Message>>> loadInitMessages(
+      String eventId) async {
+    try {
+      final eventDoc =
+          await firebaseFirestore.collection("chats").doc(eventId).get();
+      final data = eventDoc.data();
+      if (data == null) return Left(ServerFailure());
+      _lastPageNum = data["lastPageNum"];
+      List<Map<String, dynamic>> messagesData = [];
+      messagesData.insertAll(0, await _getPageData(eventId, _lastPageNum));
+      if (_lastPageNum > 1)
+        messagesData.insertAll(
+            0, await _getPageData(eventId, _lastPageNum - 1));
+      final currentUser = firebaseAuth.currentUser;
+      if (currentUser == null) return Left(ServerFailure());
+      final String currentUid = currentUser.uid;
+      final List<Message> messages =
+          _mapMessageDataToMessage(messagesData, currentUid);
+      if (_lastPageNum > 2) _nextPageToLoad = _lastPageNum - 2;
+      return Right(messages);
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Message>>> loadNextPage(String eventId) async {
+    if (_nextPageToLoad == -1) return Right([]);
+    if (!_canLoadNewPage) return Right([]);
+    try {
+      final List<Map<String, dynamic>> pageMessagesData = [];
+      pageMessagesData.insertAll(
+          0, await _getPageData(eventId, _nextPageToLoad));
+
+      final currentUser = firebaseAuth.currentUser;
+      if (currentUser == null) return Left(ServerFailure());
+      final String currentUid = currentUser.uid;
+      final List<Message> messages =
+          _mapMessageDataToMessage(pageMessagesData, currentUid);
+      _nextPageToLoad--;
+      if (_nextPageToLoad == 0) _nextPageToLoad = -1;
+      return Right(messages);
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  List<Message> _mapMessageDataToMessage(
+      List<Map<String, dynamic>> data, String uid) {
+    return data.map(
+      (messageData) {
+        Sender messageSender = Sender.other;
+        if (uid == messageData["senderId"]) messageSender = Sender.currentUser;
+        return MessageModel.fromJsonMap(messageSender, messageData);
+      },
+    ).toList();
+  }
+
+  Future<List<Map<String, dynamic>>> _getPageData(
+      String eventId, int page) async {
+    final List<Map<String, dynamic>> pageMessagesData = [];
+    final pageSnapshot = await firebaseFirestore
+        .collection("chats")
+        .doc(eventId)
+        .collection("messages")
+        .doc("page$page")
+        .collection("page_messages")
+        .orderBy("timestamp")
+        .get();
+
+    for (var messageSnapshot in pageSnapshot.docs) {
+      pageMessagesData.add(messageSnapshot.data());
+    }
+    return pageMessagesData;
+  }
+
+  @override
+  bool isAableToLoadMorePages() => _nextPageToLoad != -1;
 }

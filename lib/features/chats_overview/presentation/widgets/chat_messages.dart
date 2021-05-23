@@ -1,12 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/core/widgets/network_error.dart';
 import 'package:get_together_app/core/widgets/server_error.dart';
 import 'package:get_together_app/features/chats_overview/presentation/bloc/chat_messages_bloc/chat_messages_bloc.dart';
-import 'package:get_together_app/features/chats_overview/presentation/widgets/message_bubble_left.dart';
-import 'package:get_together_app/features/chats_overview/presentation/widgets/message_bubble_right.dart';
 
 enum Sender { currentUser, other }
 
@@ -19,25 +18,59 @@ class ChatMessages extends StatefulWidget {
 }
 
 class _ChatMessagesState extends State<ChatMessages> {
-  late ChatMessagesBloc chatMessagesBloc;
+  late ChatMessagesBloc _chatMessagesBloc;
+  late ScrollController _scrollController;
+  final _centerKey = UniqueKey();
 
   @override
   void initState() {
-    chatMessagesBloc = BlocProvider.of<ChatMessagesBloc>(context)
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+    _chatMessagesBloc = BlocProvider.of<ChatMessagesBloc>(context)
       ..add(ChatMessagesScreenInitialized(widget.eventId));
     super.initState();
   }
 
   @override
   void dispose() {
-    log("DISPOSING STATE");
-    chatMessagesBloc.add(ChatMessagesLeavignScreen());
+    _chatMessagesBloc.add(LeavingChatScreen());
     super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.offset <=
+            _scrollController.position.minScrollExtent + 30 &&
+        !_scrollController.position.outOfRange) {
+      // log("SCROLLED TO TOP");
+      _chatMessagesBloc.add(MessagesScrolledToTop(widget.eventId));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatMessagesBloc, ChatMessagesState>(
+    return BlocConsumer<ChatMessagesBloc, ChatMessagesState>(
+      listener: (context, state) {
+        log("LISTENER ");
+        if (state is NewPageAdded) _chatMessagesBloc.add(NewPageLoaded());
+        if (state is InitialMessagesLoaded)
+          _chatMessagesBloc.add(MessagesBuilt());
+        if (state is NewMessagesAdded || state is InitialMessagesDisplayed) {
+          log("LISTENER BEFORE SCROLLING ,Scheduler -> ${SchedulerBinding.instance}, hasClients -> ${_scrollController.hasClients}");
+          if (SchedulerBinding.instance != null &&
+              _scrollController.hasClients) {
+            log("listener SCROLLING DOWN");
+            SchedulerBinding.instance!.addPostFrameCallback((_) {
+              _scrollController.animateTo(
+                  _scrollController.position.maxScrollExtent,
+                  duration: Duration(milliseconds: 200),
+                  curve: Curves.easeOut);
+            });
+          }
+        }
+        if (state is FailedToDisplayMoreMessages)
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(state.message)));
+      },
       builder: (context, state) {
         if (state is ChatMessagesNetworkFailure)
           return NetworkErrorWidget(state.message);
@@ -47,14 +80,26 @@ class _ChatMessagesState extends State<ChatMessages> {
           return Center(
             child: CircularProgressIndicator(),
           );
-        if ((state as ChatMessagesLoaded).messageWidgets.length == 0)
-          return Center(
-            child: Text("No messages yet"),
-          );
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: (state as ChatMessagesLoaded).messageWidgets.length,
-          itemBuilder: (context, index) => state.messageWidgets[index],
+        return CustomScrollView(
+          center: _centerKey,
+          controller: _scrollController,
+          slivers: [
+            SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return (state as MessagesDisplayChanged)
+                    .topSliverMessages[index];
+              },
+                  childCount: (state as MessagesDisplayChanged)
+                      .topSliverMessages
+                      .length),
+            ),
+            SliverList(
+              key: _centerKey,
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return state.bottomSliverMessages[index];
+              }, childCount: state.bottomSliverMessages.length),
+            ),
+          ],
         );
       },
     );

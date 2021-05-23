@@ -12,12 +12,24 @@ class ChatMessagesScreenInitialized extends ChatMessagesEvent {
   ChatMessagesScreenInitialized(this.eventId);
 }
 
-class ChatMessagesLeavignScreen extends ChatMessagesEvent {}
+class LeavingChatScreen extends ChatMessagesEvent {}
 
-class ChatMessagesChanged extends ChatMessagesEvent {
+class MessagesAdded extends ChatMessagesEvent {
   final Either<Failure, List<Message>> response;
-  ChatMessagesChanged(this.response);
+  MessagesAdded(this.response);
 
   @override
   List<Object> get props => [response];
 }
+
+class MessagesScrolledToTop extends ChatMessagesEvent {
+  final String eventId;
+  MessagesScrolledToTop(this.eventId);
+
+  @override
+  List<Object> get props => [eventId];
+}
+
+class NewPageLoaded extends ChatMessagesEvent {}
+
+class MessagesBuilt extends ChatMessagesEvent {}

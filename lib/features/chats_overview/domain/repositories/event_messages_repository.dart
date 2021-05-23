@@ -10,4 +10,7 @@ abstract class EventMessagesRepository {
   Stream<Either<Failure, List<Message>>> listenToChatMessages(String eventId);
   Future<void> stopListeningToChatMessages();
   Future<Either<Failure, Success>> addMessage(String eventId, String message);
+  Future<Either<Failure, List<Message>>> loadNextPage(String eventId);
+  Future<Either<Failure, List<Message>>> loadInitMessages(String eventId);
+  bool isAableToLoadMorePages();
 }

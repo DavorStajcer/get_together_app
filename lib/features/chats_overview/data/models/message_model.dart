@@ -8,7 +8,7 @@ class MessageModel extends Message {
     required String username,
     required String userImageUrl,
     required String content,
-    required DateTime date,
+    required DateTime? date,
     required Sender sender,
   }) : super(
           // userId: userId,
@@ -29,7 +29,9 @@ class MessageModel extends Message {
         username: json["username"],
         userImageUrl: json["userImageUrl"],
         content: json["content"],
-        date: (json["timestamp"] as Timestamp).toDate(),
+        date: json["timestamp"] == null
+            ? json["timestamp"]
+            : (json["timestamp"] as Timestamp).toDate(),
         sender: sender,
       );
 

@@ -32,7 +32,9 @@ class MessageBubbleRight extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      DateFormat.Hms().format(message.date),
+                      message.date == null
+                          ? " "
+                          : DateFormat.Hms().format(message.date!),
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 9,

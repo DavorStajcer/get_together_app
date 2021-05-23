@@ -21,7 +21,9 @@ class MessageBubbleLeft extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        DateFormat.Hms().format(message.date),
+                        message.date == null
+                            ? " "
+                            : DateFormat.Hms().format(message.date!),
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 9,

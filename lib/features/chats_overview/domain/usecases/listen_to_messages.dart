@@ -7,7 +7,7 @@ class ListenToMessages {
 
   void call(ChatMessagesBloc bloc, String eventId) {
     eventMessagesRepository.listenToChatMessages(eventId).listen((response) {
-      bloc.add(ChatMessagesChanged(response));
+      bloc.add(MessagesAdded(response));
     });
   }
 

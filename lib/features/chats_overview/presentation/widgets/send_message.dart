@@ -61,7 +61,9 @@ class _SendMessageState extends State<SendMessage> {
                     icon: Icon(Icons.send),
                     onPressed: () {
                       BlocProvider.of<SendMessageCubit>(context).sendNewMessage(
-                          widget.eventId, _messageController.text);
+                        widget.eventId,
+                        _messageController.text,
+                      );
                       _messageController.text = "";
                     },
                   ),

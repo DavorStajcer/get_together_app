@@ -4,6 +4,8 @@ import 'package:get_together_app/features/chats_overview/domain/repositories/eve
 import 'package:get_together_app/features/chats_overview/domain/usecases/get_all_user_events.dart';
 import 'package:get_together_app/features/chats_overview/domain/usecases/listen_to_last_message_snippet.dart';
 import 'package:get_together_app/features/chats_overview/domain/usecases/listen_to_messages.dart';
+import 'package:get_together_app/features/chats_overview/domain/usecases/load_initial_messages.dart';
+import 'package:get_together_app/features/chats_overview/domain/usecases/load_new_page.dart';
 import 'package:get_together_app/features/chats_overview/domain/usecases/send_message.dart';
 import 'package:get_together_app/features/chats_overview/presentation/bloc/chat_messages_bloc/chat_messages_bloc.dart';
 import 'package:get_together_app/features/chats_overview/presentation/bloc/chats_overivew/chats_overview_cubit.dart';
@@ -17,9 +19,15 @@ void initChatDi() {
   getIt.registerSingleton(ListenToLastMessageSnippet(getIt()));
   getIt.registerSingleton(ListenToMessages(getIt()));
   getIt.registerSingleton(SendMessage(getIt()));
+  getIt.registerSingleton(LoadNewPage(getIt()));
+  getIt.registerSingleton(LoadInitalMessages(getIt()));
   getIt.registerFactory(() => ChatsOverviewCubit(getIt()));
   getIt.registerFactory(
       () => ChatSnippetBloc(listenToLastMessageSnippet: getIt()));
-  getIt.registerFactory(() => ChatMessagesBloc(getIt()));
+  getIt.registerFactory(() => ChatMessagesBloc(
+        listenToMessages: getIt(),
+        loadInitalMessages: getIt(),
+        loadNewPage: getIt(),
+      ));
   getIt.registerFactory(() => SendMessageCubit(getIt()));
 }
