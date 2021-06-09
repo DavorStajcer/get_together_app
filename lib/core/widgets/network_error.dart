@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_together_app/features/make_event/presentation/widgets/event_button.dart';
 
 class NetworkErrorWidget extends StatelessWidget {
   final String message;
@@ -7,7 +8,22 @@ class NetworkErrorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(message),
+      child: Column(
+        children: [
+          Flexible(
+            flex: 5,
+            child: Center(
+              child: Icon(
+                Icons.wifi_off,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+          ),
+          Flexible(
+              flex: 1,
+              child: EventButton(text: "Refresh page", navigate: () {})),
+        ],
+      ),
     );
   }
 }

@@ -1,58 +1,69 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_together_app/core/error/failure.dart';
 import 'package:get_together_app/features/events_overview/domain/entities/event.dart';
-import 'package:get_together_app/features/single_event_overview/domain/entities/event_join_data.dart';
-import 'package:get_together_app/features/single_event_overview/domain/usecase/change_user_join_status.dart';
+import 'package:get_together_app/features/notifications_overview/domain/usecase/send_join_request.dart';
+import 'package:get_together_app/features/single_event_overview/data/repositoires/user_events_repository_impl.dart';
+import 'package:get_together_app/features/single_event_overview/domain/usecase/add_user_to_event.dart';
 import 'package:get_together_app/features/single_event_overview/domain/usecase/check_is_user_joined.dart';
+import 'package:get_together_app/features/single_event_overview/domain/usecase/remove_user_from_event.dart';
 
 part 'join_event_state.dart';
 
 class JoinEventCubit extends Cubit<JoinEventState> {
   final CheckIsUserJoined checkIsUserJoined;
-  final ChangeUserJoinStatus changeUserJoinStatus;
+  final SendJoinRequest sendJoinRequest;
+  final AddUserToEvent addUserToEvent;
+  final RemoveUserFromEvent removeUserFromEvent;
   JoinEventCubit({
-    required this.changeUserJoinStatus,
+    required this.sendJoinRequest,
     required this.checkIsUserJoined,
+    required this.addUserToEvent,
+    required this.removeUserFromEvent,
   }) : super(JoinEventLoading());
 
   void geUserJoinedStatus(BuildContext context, Event event) async {
     final response = await checkIsUserJoined(event);
-    log("GOT RESPONSE -> $response");
     response.fold((failure) {
-      log("SOME FAILURE");
       if (failure is NetworkFailure)
         emit(JoinEventNetworkFailure(failure.message));
       else
         emit(JoinEventServerFailure(failure.message));
-    }, (isJoined) {
-      print("IS JOINDE -> $isJoined");
-      if (isJoined)
+    }, (userJoineStatus) async {
+      if (userJoineStatus == UserJoinStatus.joined)
         emit(JoinEventFinished(buttonData: ButtonJoinedUi(context)));
+      else if (userJoineStatus == UserJoinStatus.requested)
+        emit(JoinEventFinished(buttonData: ButtonRequestedUi(context)));
       else
         emit(JoinEventFinished(buttonData: ButtonNotJoinedUi(context)));
     });
   }
 
-  void changeJoinedStatus(
-      BuildContext context, EventJoinData eventJoinData) async {
+  void makeRequestToJoin(BuildContext context, Event event) async {
+    final response = await sendJoinRequest.call(event);
     emit(JoinEventLoading());
-    final response = await changeUserJoinStatus(eventJoinData);
     response.fold((failure) {
-      log("SOME FAILURE WHILE CHANGING JOIN STATUS");
       if (failure is NetworkFailure)
         emit(JoinEventNetworkFailure(failure.message));
       else
         emit(JoinEventServerFailure(failure.message));
     }, (success) {
-      if (eventJoinData.eventChange == EventChange.join)
-        emit(JoinEventFinished(buttonData: ButtonJoinedUi(context)));
-      else
-        emit(JoinEventFinished(buttonData: ButtonNotJoinedUi(context)));
+      emit(JoinEventFinished(buttonData: ButtonRequestedUi(context)));
     });
+  }
+
+  void leaveEvent(BuildContext context, Event event) async {
+    final response = await removeUserFromEvent(event);
+    emit(JoinEventLoading());
+    response.fold((failure) {
+      if (failure is NetworkFailure)
+        emit(JoinEventNetworkFailure(failure.message));
+      else
+        emit(JoinEventServerFailure(failure.message));
+    },
+        (success) =>
+            emit(JoinEventFinished(buttonData: ButtonNotJoinedUi(context))));
   }
 }

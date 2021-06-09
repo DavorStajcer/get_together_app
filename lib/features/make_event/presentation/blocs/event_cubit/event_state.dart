@@ -33,6 +33,7 @@ class EventStateUnfinished extends EventState {
             CreateEventData(
               type: EventType.games,
               location: LatLng(0, 0),
+              eventName: "",
               description: "This is some event.",
               dateString: null,
               timeString: null,

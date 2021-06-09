@@ -50,15 +50,12 @@ class _ChatMessagesState extends State<ChatMessages> {
   Widget build(BuildContext context) {
     return BlocConsumer<ChatMessagesBloc, ChatMessagesState>(
       listener: (context, state) {
-        log("LISTENER ");
         if (state is NewPageAdded) _chatMessagesBloc.add(NewPageLoaded());
         if (state is InitialMessagesLoaded)
           _chatMessagesBloc.add(MessagesBuilt());
         if (state is NewMessagesAdded || state is InitialMessagesDisplayed) {
-          log("LISTENER BEFORE SCROLLING ,Scheduler -> ${SchedulerBinding.instance}, hasClients -> ${_scrollController.hasClients}");
           if (SchedulerBinding.instance != null &&
               _scrollController.hasClients) {
-            log("listener SCROLLING DOWN");
             SchedulerBinding.instance!.addPostFrameCallback((_) {
               _scrollController.animateTo(
                   _scrollController.position.maxScrollExtent,

@@ -23,8 +23,8 @@ class EventDetailsScreen extends StatelessWidget {
       child: Column(
         children: [
           Flexible(
-            flex: 9,
-            child: EventDescription(),
+            flex: 10,
+            child: EventNameAndDescription(),
           ),
           Flexible(
             flex: 3,
@@ -57,7 +57,7 @@ class EventDetailsScreen extends StatelessWidget {
                   text: "Make event",
                   goBack: goBack,
                   goFowards: () {
-                    (state is EventStateFinished) ? createEvent(context) : null;
+                    if (state is EventStateFinished) createEvent(context);
                   },
                 );
               },

@@ -1,4 +1,4 @@
-//@dart=2.6
+/* //@dart=2.6
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
@@ -8,8 +8,9 @@ import 'package:get_together_app/core/error/failure.dart';
 import 'package:get_together_app/core/error/success.dart';
 import 'package:get_together_app/features/events_overview/domain/entities/event.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_card_order_cubit/event_card_order_cubit.dart';
+import 'package:get_together_app/features/notifications_overview/domain/usecase/send_join_request.dart';
 import 'package:get_together_app/features/single_event_overview/domain/entities/event_join_data.dart';
-import 'package:get_together_app/features/single_event_overview/domain/usecase/change_user_join_status.dart';
+import 'package:get_together_app/features/single_event_overview/domain/usecase/add_user_to_event.dart';
 import 'package:get_together_app/features/single_event_overview/domain/usecase/check_is_user_joined.dart';
 import 'package:get_together_app/features/single_event_overview/presentation/bloc/join_event_cubit/join_event_cubit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -19,17 +20,21 @@ class CheckIsUserJoinedMock extends Mock implements CheckIsUserJoined {}
 
 class ChangeUserJoinStatusMock extends Mock implements ChangeUserJoinStatus {}
 
+class SendJoinRequestMock extends Mock implements SendJoinRequest {}
+
 class ContextMock extends Mock implements BuildContext {}
 
 void main() {
   CheckIsUserJoinedMock checkIsUserJoinedMock;
   ChangeUserJoinStatusMock changeUserJoinStatusMock;
+  SendJoinRequestMock sendJoinRequestMock;
   JoinEventCubit joinEventCubit;
   Event tEvent;
   ContextMock contextMock;
   setUp(() {
     checkIsUserJoinedMock = CheckIsUserJoinedMock();
     changeUserJoinStatusMock = ChangeUserJoinStatusMock();
+    sendJoinRequestMock = SendJoinRequestMock();
     contextMock = ContextMock();
     tEvent = Event(
       eventId: "tEventId",
@@ -48,6 +53,7 @@ void main() {
     joinEventCubit = JoinEventCubit(
       changeUserJoinStatus: changeUserJoinStatusMock,
       checkIsUserJoined: checkIsUserJoinedMock,
+      sendJoinRequest: sendJoinRequestMock,
     );
   });
 
@@ -240,3 +246,4 @@ void main() {
     );
   });
 }
+ */

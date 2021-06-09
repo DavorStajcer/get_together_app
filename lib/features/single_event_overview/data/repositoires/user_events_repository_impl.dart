@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_together_app/core/error/success.dart';
 import 'package:get_together_app/core/error/failure.dart';
@@ -8,8 +6,11 @@ import 'package:dartz/dartz.dart';
 import 'package:get_together_app/core/maps/location_service.dart';
 import 'package:get_together_app/core/network.dart/network_info.dart';
 import 'package:get_together_app/features/events_overview/domain/entities/event.dart';
-import 'package:get_together_app/features/single_event_overview/domain/entities/event_join_data.dart';
+import 'package:get_together_app/features/notifications_overview/data/models/notification_model.dart';
+import 'package:get_together_app/features/notifications_overview/presentation/widgets/join_request.dart';
 import 'package:get_together_app/features/single_event_overview/domain/repositoires/user_events_repository.dart';
+
+enum UserJoinStatus { joined, requested, not }
 
 class UserEventsRepositoryImpl extends UserEventsRepository {
   final NetworkInfo networkInfo;
@@ -25,21 +26,13 @@ class UserEventsRepositoryImpl extends UserEventsRepository {
         firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   @override
-  Future<Either<Failure, Success>> changeUserJoinStatus(
-      EventJoinData eventJoinData) async {
+  Future<Either<Failure, Success>> removeUserFromEvent(Event event) async {
     final isConnected = await networkInfo.isConnected;
     if (!isConnected) return Left(NetworkFailure());
-
     final User? currentUser = firebaseAuth.currentUser;
     if (currentUser == null)
       return Left(ServerFailure(message: "Problem identifyng current user"));
     final currentUserId = currentUser.uid;
-
-    final String? eventCity =
-        await locationService.mapLocationToCity(eventJoinData.event.location);
-    if (eventCity == null)
-      return Left(ServerFailure(message: "Problem identifyng event location"));
-
     try {
       final userDocSnapshot =
           await firebaseFirestore.collection("users").doc(currentUserId).get();
@@ -51,21 +44,14 @@ class UserEventsRepositoryImpl extends UserEventsRepository {
                 "Not able to get your user data at the moment. Please try again later.",
           ),
         );
-      final String userImageUrl = userData["imageUrl"];
-      if (eventJoinData.eventChange == EventChange.join)
-        await firebaseFirestore
-            .collection("events")
-            .doc(eventCity)
-            .collection("city_events")
-            .doc(eventJoinData.event.eventId)
-            .update({"peopleImageUrls.$currentUserId": userImageUrl});
-      else
-        await firebaseFirestore
-            .collection("events")
-            .doc(eventCity)
-            .collection("city_events")
-            .doc(eventJoinData.event.eventId)
-            .update({"peopleImageUrls.$currentUserId": FieldValue.delete()});
+      final city = await locationService.mapLocationToCity(event.location);
+      if (city == null) return Left(ServerFailure(message: "Location problem"));
+      await firebaseFirestore
+          .collection("events")
+          .doc(city)
+          .collection("city_events")
+          .doc(event.eventId)
+          .update({"peopleImageUrls.$currentUserId": FieldValue.delete()});
       return Right(Success());
     } catch (e) {
       return Left(ServerFailure());
@@ -73,7 +59,63 @@ class UserEventsRepositoryImpl extends UserEventsRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> checkIsUserJoined(Event event) async {
+  Future<Either<Failure, Success>> declineJoinRequest(
+      JoinEventNotificationModel notification) async {
+    final isConnected = await networkInfo.isConnected;
+    if (!isConnected) return Left(NetworkFailure());
+    final User? currentUser = firebaseAuth.currentUser;
+    if (currentUser == null)
+      return Left(ServerFailure(message: "Problem identifyng current user"));
+    final currentUserId = currentUser.uid;
+    try {
+      await firebaseFirestore
+          .collection("users")
+          .doc(currentUserId)
+          .collection("user_notifications")
+          .doc(notification.notificationId)
+          .update({
+        "resolvedStatus": NotificationResolved.rejected.index,
+      });
+      return Right(Success());
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Success>> joinUserToEvent(
+      JoinEventNotificationModel notification) async {
+    final isConnected = await networkInfo.isConnected;
+    if (!isConnected) return Left(NetworkFailure());
+    final User? currentUser = firebaseAuth.currentUser;
+    if (currentUser == null)
+      return Left(ServerFailure(message: "Problem identifyng current user"));
+    final currentUserId = currentUser.uid;
+    try {
+      await firebaseFirestore
+          .collection("events")
+          .doc(notification.eventCity)
+          .collection("city_events")
+          .doc(notification.eventId)
+          .update({
+        "peopleImageUrls.${notification.senderId}": notification.senderImageUrl
+      });
+      await firebaseFirestore
+          .collection("users")
+          .doc(currentUserId)
+          .collection("user_notifications")
+          .doc(notification.notificationId)
+          .update({
+        "resolvedStatus": NotificationResolved.accepted.index,
+      });
+      return Right(Success());
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserJoinStatus>> checkIsUserJoined(Event event) async {
     final isConnected = await networkInfo.isConnected;
     if (!isConnected) return Left(NetworkFailure());
     final User? currentUser = firebaseAuth.currentUser;
@@ -94,17 +136,32 @@ class UserEventsRepositoryImpl extends UserEventsRepository {
       final data = dataSnapshot.data();
 
       if (data == null) {
-        return Right(false);
+        return Right(UserJoinStatus.not);
       }
       final listOfUserJoinedEvents = List.from(data["eventIds"]);
-      bool isUserJoined = false;
+      UserJoinStatus isUserJoined = UserJoinStatus.not;
       listOfUserJoinedEvents.forEach((userEventId) {
-        if (userEventId == event.eventId) isUserJoined = true;
+        if (userEventId == event.eventId) isUserJoined = UserJoinStatus.joined;
       });
+      if (isUserJoined != UserJoinStatus.joined)
+        isUserJoined = await _isJoinRequested(currentUserId, event.eventId);
       return Right(isUserJoined);
     } catch (e) {
       return Left(ServerFailure());
     }
+  }
+
+  Future<UserJoinStatus> _isJoinRequested(String userId, String eventId) async {
+    final requestDocSnapshot = await firebaseFirestore
+        .collection("users")
+        .doc(userId)
+        .collection("sent_requests")
+        .doc(eventId)
+        .get();
+    if (requestDocSnapshot.exists)
+      return UserJoinStatus.requested;
+    else
+      return UserJoinStatus.not;
   }
 
   @override

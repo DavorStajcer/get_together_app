@@ -1,4 +1,4 @@
-//@dart=2.6
+/* //@dart=2.6
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -185,3 +185,4 @@ void main() {
     });
   });
 }
+ */

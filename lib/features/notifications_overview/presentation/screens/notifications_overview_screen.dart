@@ -1,8 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/core/widgets/get_together_title.dart';
+import 'package:get_together_app/core/widgets/server_error.dart';
+import 'package:get_together_app/features/notifications_overview/data/models/notification_model.dart';
+import 'package:get_together_app/features/notifications_overview/domain/entities/notification.dart';
+import 'package:get_together_app/features/notifications_overview/presentation/bloc/notifications_bloc/notifications_bloc.dart';
+import 'package:get_together_app/features/notifications_overview/presentation/bloc/notifications_bloc/notifications_bloc_event.dart';
+import 'package:get_together_app/features/notifications_overview/presentation/bloc/notifications_bloc/notifications_bloc_state.dart';
+import 'package:get_together_app/features/notifications_overview/presentation/widgets/event_info.dart';
+import 'package:get_together_app/features/notifications_overview/presentation/widgets/join_request.dart';
+import 'package:get_together_app/features/notifications_overview/presentation/widgets/leave_event_info.dart';
 
-class NotificationsOverviewScreen extends StatelessWidget {
+class NotificationsOverviewScreen extends StatefulWidget {
   const NotificationsOverviewScreen({Key? key}) : super(key: key);
+
+  @override
+  _NotificationsOverviewScreenState createState() =>
+      _NotificationsOverviewScreenState();
+}
+
+class _NotificationsOverviewScreenState
+    extends State<NotificationsOverviewScreen> {
+  late NotificationsBloc notificationsBloc;
+  @override
+  void initState() {
+    super.initState();
+    notificationsBloc = BlocProvider.of<NotificationsBloc>(context);
+    notificationsBloc.add(NotificationsScreenInitialized());
+  }
+
+  @override
+  void dispose() {
+    notificationsBloc.add(NotificationScreenLeft());
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,28 +48,37 @@ class NotificationsOverviewScreen extends StatelessWidget {
             textColor: Theme.of(context).primaryColor,
           ),
         ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: 15,
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  ListTile(
-                    leading: Container(
-                      height: double.infinity,
-                      child: Icon(
-                        Icons.announcement_outlined,
-                      ),
-                    ),
-                    title: Text("You have received a new friend request"),
-                    subtitle: Text("DADSADASDAS"),
-                  ),
-                  Divider(),
-                ],
+        Expanded(child: BlocBuilder<NotificationsBloc, NotificationsState>(
+          builder: (context, state) {
+            if (state is NotificationsLoading)
+              return Center(
+                child: CircularProgressIndicator(),
               );
-            },
-          ),
-        ),
+            if (state is NotificationsServerFailure)
+              return ServerErrorWidget(state.message);
+            if (state is NotificationsNetworkFailure)
+              return ServerErrorWidget(state.message);
+            else
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: ListView.builder(
+                  itemCount:
+                      (state as NotificationsLoaded).notifications.length,
+                  itemBuilder: (context, index) {
+                    final notification = state.notifications[index];
+                    if (notification is JoinEventNotification)
+                      return JoinRequestWidget(
+                          notification as JoinEventNotificationModel);
+                    else if (notification is LeaveEventInfoNotification)
+                      return LeaveEventInfoWidget(
+                          notification as LeaveEventInfoNotificationModel);
+                    else
+                      return EventInfoWidget(notification);
+                  },
+                ),
+              );
+          },
+        )),
       ],
     ));
   }

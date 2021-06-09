@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
@@ -76,8 +77,13 @@ class EventMessageRepositoryImpl extends EventMessagesRepository {
       final docChanges = pageMessages.docChanges;
       for (var docChange in docChanges) {
         if (docChange.type == DocumentChangeType.modified) {
+          log("DOC MODIFIED");
           if (docChange.doc.data() != null)
             changedData.add(docChange.doc.data()!);
+        }
+        if (docChange.type == DocumentChangeType.added) {
+          final timestamp = docChange.doc.data()!["timestamp"];
+          log("DOC ADDED -> $timestamp");
         }
       }
 
@@ -89,7 +95,8 @@ class EventMessageRepositoryImpl extends EventMessagesRepository {
         return MessageModel.fromJsonMap(messageSender, data);
       }).toList();
       messages.removeWhere((messageModel) => messageModel.date == null);
-      _messageStreamController.sink.add(Right(messages));
+      if (messages.isNotEmpty)
+        _messageStreamController.sink.add(Right(messages));
     },
             onError: (error) =>
                 _messageStreamController.sink.add(Left(ServerFailure())));

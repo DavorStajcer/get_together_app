@@ -5,6 +5,7 @@ import 'package:get_together_app/features/chats_overview/di/chats_di.dart';
 import 'package:get_together_app/features/chats_overview/presentation/screens/chat_screen.dart';
 import 'package:get_together_app/features/events_overview/di/event_overview_di.dart';
 import 'package:get_together_app/features/make_event/di/make_event_di.dart';
+import 'package:get_together_app/features/notifications_overview/di/notifications_di.dart';
 import 'package:get_together_app/features/profile_overview/di/profile_di.dart';
 import 'package:get_together_app/features/profile_overview/presentation/bloc/profile_screen_cubit/profile_screen_cubit.dart';
 import 'package:get_together_app/features/single_event_overview/di/single_event_overview_di.dart';
@@ -26,6 +27,7 @@ Future<void> main(List<String> args) async {
   initMakeEventDi();
   initProfileDi();
   initEventsOverviewDi();
+  initNotificationsDi();
   initSingleEventDi();
   initChatDi();
   runApp(GetTogetherApp());

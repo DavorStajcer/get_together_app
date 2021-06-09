@@ -46,6 +46,7 @@ class UserEventsScreen extends StatelessWidget {
                           adminRating: -1,
                           numberOfPeople: 2,
                           description: "some event i dunno",
+                          eventName: "Some black event",
                           peopleImageUrls: {},
                         ),
                         color: Colors.white,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/features/events_overview/domain/entities/event.dart';
 import 'package:get_together_app/features/single_event_overview/presentation/widgets/admin_details.dart';
 import 'package:get_together_app/features/single_event_overview/presentation/widgets/description.dart';
@@ -82,7 +81,7 @@ class EventDetails extends StatelessWidget {
         ),
         Flexible(
           flex: 3,
-          child: PoepleComming(),
+          child: PoepleComming(event.peopleImageUrls),
         ),
         Flexible(
           flex: 1,

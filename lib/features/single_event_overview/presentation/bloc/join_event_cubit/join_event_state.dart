@@ -45,8 +45,20 @@ class ButtonJoinedUi extends ButtonJoinUiData {
             Colors.white);
 }
 
+class ButtonRequestedUi extends ButtonJoinUiData {
+  ButtonRequestedUi(BuildContext context)
+      : super(
+          Theme.of(context).primaryColor.withOpacity(0.2),
+          "Request sent",
+          Theme.of(context).primaryColor.withOpacity(0.6),
+        );
+}
+
 class ButtonNotJoinedUi extends ButtonJoinUiData {
   ButtonNotJoinedUi(BuildContext context)
-      : super(Colors.white, "Join event",
-            Theme.of(context).primaryColor.withOpacity(0.6));
+      : super(
+          Colors.white,
+          "Join event",
+          Theme.of(context).primaryColor.withOpacity(0.6),
+        );
 }

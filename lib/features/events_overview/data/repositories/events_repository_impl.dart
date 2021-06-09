@@ -126,6 +126,7 @@ class EventsRepositoryImpl extends EventsRepository {
         adminImageUrl: adminImageUrl,
         adminRating: adminRating,
         numberOfPeople: 0,
+        eventName: createEventData.eventName,
         description: createEventData.description,
         peopleImageUrls: {});
     return event;

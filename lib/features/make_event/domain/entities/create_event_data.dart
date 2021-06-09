@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class CreateEventData extends Equatable {
   final EventType type;
   final LatLng location;
+  final String eventName;
   final String description;
   final String? dateString;
   final String? timeString;
@@ -12,6 +13,7 @@ class CreateEventData extends Equatable {
   CreateEventData({
     required this.type,
     required this.location,
+    required this.eventName,
     required this.description,
     required this.dateString,
     required this.timeString,
@@ -20,6 +22,7 @@ class CreateEventData extends Equatable {
   CreateEventData copyWith({
     EventType? type,
     LatLng? location,
+    String? eventName,
     String? description,
     String? dateString,
     String? timeString,
@@ -27,6 +30,7 @@ class CreateEventData extends Equatable {
       CreateEventData(
         type: type ?? this.type,
         location: location ?? this.location,
+        eventName: eventName ?? this.eventName,
         description: description ?? this.description,
         dateString: dateString ?? this.dateString,
         timeString: timeString ?? this.timeString,
@@ -38,6 +42,7 @@ class CreateEventData extends Equatable {
         location.latitude,
         location.longitude,
         description,
+        eventName,
         dateString,
         timeString,
       ];

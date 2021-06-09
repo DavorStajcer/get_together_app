@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class PoepleComming extends StatelessWidget {
-  const PoepleComming({Key? key}) : super(key: key);
+  final Map<String, dynamic> peopleImageUrls;
+  const PoepleComming(this.peopleImageUrls, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,30 +35,21 @@ class PoepleComming extends StatelessWidget {
                 flex: 13,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 7,
+                  itemCount: peopleImageUrls.length,
                   itemBuilder: (ctx, index) => Container(
                     height: double.infinity,
                     width: 35,
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 35,
-                          height: 35,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: NetworkImage(
-                                  "https://i.imgur.com/BoN9kdC.png"),
-                            ),
-                            color: Colors.grey,
-                          ),
+                    child: Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(
+                              peopleImageUrls.values.toList()[index]),
                         ),
-                        FittedBox(
-                          child: Text(
-                            "Thompson",
-                          ),
-                        ),
-                      ],
+                        color: Colors.grey,
+                      ),
                     ),
                   ),
                 ),

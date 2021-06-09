@@ -14,6 +14,7 @@ class EventModel extends Event {
     required String adminImageUrl,
     required int adminRating,
     required int numberOfPeople,
+    required String eventName,
     required String description,
     required Map<String, dynamic> peopleImageUrls,
   }) : super(
@@ -27,6 +28,7 @@ class EventModel extends Event {
           adminImageUrl: adminImageUrl,
           adminRating: adminRating,
           numberOfPeople: numberOfPeople,
+          eventName: eventName,
           description: description,
           peopleImageUrls: peopleImageUrls,
         );
@@ -50,6 +52,7 @@ class EventModel extends Event {
         numberOfPeople: json["numberOfPeople"] is double
             ? (json["numberOfPeople"] as double).toInt()
             : json["numberOfPeople"],
+        eventName: json["eventName"],
         description: json["description"],
         peopleImageUrls: json["peopleImageUrls"],
       );
@@ -70,6 +73,7 @@ class EventModel extends Event {
         "numberOfPeople": numberOfPeople,
         "description": description,
         "peopleImageUrls": peopleImageUrls,
+        "eventName": eventName,
       };
 }
 

@@ -24,6 +24,13 @@ class EventCubit extends Cubit<EventState> {
     _emitNewSate(newData);
   }
 
+  void eventNameChanged(String newEventName) {
+    final CreateEventData newData = (state as EventStateUnfinished)
+        .createEventData
+        .copyWith(eventName: newEventName);
+    _emitNewSate(newData);
+  }
+
   void evenLocationChanged(LatLng newlocation) {
     final CreateEventData newData = (state as EventStateUnfinished)
         .createEventData
@@ -82,7 +89,8 @@ class EventCubit extends Cubit<EventState> {
 
   bool _areAllFieldsValid(CreateEventData createEventData) {
     if (createEventData.dateString == null ||
-        createEventData.timeString == null) return false;
+        createEventData.timeString == null ||
+        createEventData.eventName.isEmpty) return false;
     return createEventData.dateString!.isNotEmpty &&
         createEventData.timeString!.isNotEmpty &&
         createEventData.description.isNotEmpty;

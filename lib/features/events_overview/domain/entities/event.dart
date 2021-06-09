@@ -13,6 +13,7 @@ class Event extends Equatable {
   final String adminImageUrl;
   final int adminRating;
   final int numberOfPeople;
+  final String eventName;
   final String description;
   final Map<String, dynamic> peopleImageUrls;
 
@@ -27,6 +28,7 @@ class Event extends Equatable {
     required this.adminImageUrl,
     required this.adminRating,
     required this.numberOfPeople,
+    required this.eventName,
     required this.description,
     required this.peopleImageUrls,
   });

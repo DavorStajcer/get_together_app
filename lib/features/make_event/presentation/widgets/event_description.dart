@@ -1,33 +1,23 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_cubit/event_cubit.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_cubit/event_state.dart';
 
-class EventDescription extends StatefulWidget {
-  EventDescription({Key? key}) : super(key: key);
+class EventNameAndDescription extends StatefulWidget {
+  EventNameAndDescription({Key? key}) : super(key: key);
 
   @override
   _EventDescriptionState createState() => _EventDescriptionState();
 }
 
-class _EventDescriptionState extends State<EventDescription> {
-  // final TextEditingController _descriptionController = TextEditingController();
-
+class _EventDescriptionState extends State<EventNameAndDescription> {
   @override
   Widget build(BuildContext context) {
     return Container(
       height: double.infinity,
       padding: EdgeInsets.only(bottom: 30),
-      child: BlocConsumer<EventCubit, EventState>(
-        listener: (context, state) {
-          print("LISTENER STATE -> $state");
-        },
-        listenWhen: (previousState, currentState) =>
-            currentState is EventStateFinished,
+      child: BlocBuilder<EventCubit, EventState>(
         builder: (context, state) {
-          log("STATE IS -> $state ");
           if (state is EventStateNetworkFailure)
             return Center(
               child: Text(state.message),
@@ -40,24 +30,57 @@ class _EventDescriptionState extends State<EventDescription> {
             return Center(
               child: CircularProgressIndicator(),
             );
-
-          return TextFormField(
-            initialValue:
-                (state as EventStateUnfinished).createEventData.description,
-            decoration: new InputDecoration(
-              border: new OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(
-                    const Radius.circular(15.0),
+          return Column(
+            children: [
+              Flexible(
+                flex: 2,
+                child: TextFormField(
+                  initialValue:
+                      (state as EventStateUnfinished).createEventData.eventName,
+                  decoration: new InputDecoration(
+                    border: new OutlineInputBorder(
+                        borderRadius: const BorderRadius.all(
+                          const Radius.circular(15.0),
+                        ),
+                        borderSide: BorderSide.none),
+                    filled: true,
+                    hintStyle:
+                        new TextStyle(color: Color.fromRGBO(255, 175, 150, 1)),
+                    hintText: "Type event name...",
+                    fillColor: Colors.white,
                   ),
-                  borderSide: BorderSide.none),
-              filled: true,
-              hintStyle: new TextStyle(color: Color.fromRGBO(255, 175, 150, 1)),
-              hintText: "Type event description...",
-              fillColor: Colors.white,
-            ),
-            maxLines: 15,
-            onChanged: (value) => BlocProvider.of<EventCubit>(context)
-                .eventDescriptionChanged(value),
+                  maxLines: 15,
+                  onChanged: (value) => BlocProvider.of<EventCubit>(context)
+                      .eventNameChanged(value),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Flexible(
+                flex: 7,
+                child: TextFormField(
+                  initialValue: (state as EventStateUnfinished)
+                      .createEventData
+                      .description,
+                  decoration: new InputDecoration(
+                    border: new OutlineInputBorder(
+                        borderRadius: const BorderRadius.all(
+                          const Radius.circular(15.0),
+                        ),
+                        borderSide: BorderSide.none),
+                    filled: true,
+                    hintStyle:
+                        new TextStyle(color: Color.fromRGBO(255, 175, 150, 1)),
+                    hintText: "Type event description...",
+                    fillColor: Colors.white,
+                  ),
+                  maxLines: 15,
+                  onChanged: (value) => BlocProvider.of<EventCubit>(context)
+                      .eventDescriptionChanged(value),
+                ),
+              ),
+            ],
           );
         },
       ),

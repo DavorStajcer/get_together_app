@@ -1,4 +1,4 @@
-//@dart=2.6
+/* //@dart=2.6
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,7 +7,6 @@ import 'package:get_together_app/features/events_overview/domain/entities/event.
 import 'package:get_together_app/features/make_event/presentation/blocs/event_card_order_cubit/event_card_order_cubit.dart';
 import 'package:get_together_app/features/single_event_overview/domain/entities/event_join_data.dart';
 import 'package:get_together_app/features/single_event_overview/domain/repositoires/user_events_repository.dart';
-import 'package:get_together_app/features/single_event_overview/domain/usecase/change_user_join_status.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mockito/mockito.dart';
 
@@ -87,3 +86,4 @@ void main() {
     });
   });
 }
+ */
