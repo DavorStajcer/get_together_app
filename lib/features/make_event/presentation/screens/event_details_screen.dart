@@ -9,9 +9,13 @@ import 'package:get_together_app/features/make_event/presentation/widgets/event_
 class EventDetailsScreen extends StatelessWidget {
   final Function(BuildContext) createEvent;
   final Function() goBack;
-  EventDetailsScreen(
-      {Key? key, required this.createEvent, required this.goBack})
-      : super(key: key);
+  final Function() onError;
+  EventDetailsScreen({
+    Key? key,
+    required this.createEvent,
+    required this.goBack,
+    required this.onError,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,9 @@ class EventDetailsScreen extends StatelessWidget {
         children: [
           Flexible(
             flex: 10,
-            child: EventNameAndDescription(),
+            child: EventNameAndDescription(
+              onError: this.onError,
+            ),
           ),
           Flexible(
             flex: 3,

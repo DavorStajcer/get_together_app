@@ -33,9 +33,15 @@ class _JoinButtonState extends State<JoinButton> {
             child: CircularProgressIndicator(),
           );
         if (state is JoinEventNetworkFailure)
-          return NetworkErrorWidget(state.message);
+          return NetworkErrorWidget(
+            state.message,
+            onReload: () {},
+          );
         if (state is JoinEventServerFailure)
-          return ServerErrorWidget(state.message);
+          return ServerErrorWidget(
+            state.message,
+            onReload: () {},
+          );
 
         return EventButton(
           text: (state as JoinEventFinished).buttonData.text,

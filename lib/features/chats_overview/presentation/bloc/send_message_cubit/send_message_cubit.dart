@@ -9,10 +9,9 @@ class SendMessageCubit extends Cubit<SendMessageState> {
   final SendMessage sendMessage;
   SendMessageCubit(this.sendMessage) : super(SendMessageNormal());
 
-  void sendNewMessage(String eventId, String message) async {
+  void sendNewMessage(SendMessagePrameters sendMessagePrameters) async {
     if (state is SendMessageFailure) emit(SendMessageNormal());
-    final response = await sendMessage(
-        SendMessagePrameters(eventId: eventId, message: message));
+    final response = await sendMessage(sendMessagePrameters);
     response.fold(
         (failure) => emit(
               SendMessageFailure(failure.message),

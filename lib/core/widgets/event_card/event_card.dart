@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_together_app/core/widgets/event_admin.dart';
+import 'package:get_together_app/core/widgets/event_card/event_admin.dart';
 import 'package:get_together_app/core/widgets/event_card/find_out_more_button.dart';
 import 'package:get_together_app/features/events_overview/domain/entities/event.dart';
 import 'package:get_together_app/features/events_overview/presentation/bloc/event_pick_cubit/event_pick_cubit_cubit.dart';
@@ -47,6 +47,7 @@ class _EventCardState extends State<EventCard> {
                     eventType: widget.event.eventType,
                     imageUrl: widget.event.adminImageUrl,
                     username: widget.event.adminUsername,
+                    eventName: widget.event.eventName,
                     numberOfPeople: widget.event.numberOfPeople,
                   ),
                 ),

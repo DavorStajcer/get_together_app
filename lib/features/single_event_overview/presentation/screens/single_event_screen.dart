@@ -39,7 +39,10 @@ class SingleEventScreen extends StatelessWidget {
               }
 
               if (state is SingleEventScreenFailure)
-                return ServerErrorWidget(state.message);
+                return ServerErrorWidget(
+                  state.message,
+                  onReload: () {},
+                );
 
               return Column(
                 children: [

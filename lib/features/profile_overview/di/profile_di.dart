@@ -7,9 +7,7 @@ import 'package:get_together_app/features/profile_overview/domain/usecases/save_
 import 'package:get_together_app/features/profile_overview/presentation/bloc/profile_screen_cubit/profile_screen_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void initProfileDi() async {
-  final sharedPreferences = await SharedPreferences.getInstance();
-  // getIt.registerSingleton<SharedPreferences>(sharedPreferences);
+void initProfileDi() {
   getIt.registerSingleton<UserProfileRepository>(
       UserProfileRepositoryImpl(networkInfo: getIt()));
   getIt.registerSingleton(GetUserProfileData(userProfileRepository: getIt()));

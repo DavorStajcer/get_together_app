@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/core/widgets/get_together_title.dart';
 import 'package:get_together_app/core/widgets/event_card/event_card.dart';
-import 'package:get_together_app/features/events_overview/domain/entities/event.dart';
-import 'package:get_together_app/features/make_event/presentation/blocs/event_card_order_cubit/event_card_order_cubit.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:get_together_app/core/widgets/network_error.dart';
+import 'package:get_together_app/core/widgets/server_error.dart';
+import 'package:get_together_app/features/authentication/di/authentication_di.dart';
+import 'package:get_together_app/features/user_events_overview/presentation/bloc/cubit/user_events_cubit.dart';
+import 'package:get_together_app/features/user_events_overview/presentation/widgets/no_user_events.dart';
 
 class UserEventsScreen extends StatelessWidget {
   static const route = "/user_events_screen";
@@ -14,50 +17,63 @@ class UserEventsScreen extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              height: screenSize.height * 0.2,
-              alignment: Alignment.topCenter,
-              child: GetTogetherTitle(
-                textColor: Theme.of(context).primaryColor,
-              ),
-            ),
-            Expanded(
-              child: Container(
-                padding:
-                    EdgeInsets.symmetric(horizontal: screenSize.width * 0.15),
-                child: ListView.builder(
-                  itemCount: 15,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      height: screenSize.width * 0.7,
-                      child: EventCard(
-                        event: Event(
-                          eventId: "eventId",
-                          eventType: EventType.food,
-                          dateString: "1.1.1111",
-                          timeString: "11:11",
-                          location: LatLng(37, 36),
-                          adminId: "someId",
-                          adminUsername: "Black",
-                          adminImageUrl:
-                              "https://api.time.com/wp-content/uploads/2017/12/terry-crews-person-of-year-2017-time-magazine-facebook-1.jpg?quality=85",
-                          adminRating: -1,
-                          numberOfPeople: 2,
-                          description: "some event i dunno",
-                          eventName: "Some black event",
-                          peopleImageUrls: {},
+        child: BlocProvider<UserEventsCubit>(
+          create: (_) => getIt<UserEventsCubit>(),
+          child: Builder(
+              builder: (context) => Column(
+                    children: [
+                      Container(
+                        height: screenSize.height * 0.1,
+                        alignment: Alignment.topCenter,
+                        child: GetTogetherTitle(
+                          textColor: Theme.of(context).primaryColor,
                         ),
-                        color: Colors.white,
-                        elevation: 1,
                       ),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
+                      Expanded(
+                          child: BlocBuilder<UserEventsCubit, UserEventsState>(
+                        builder: (context, state) {
+                          if (state is UserEventsInitial) {
+                            BlocProvider.of<UserEventsCubit>(context)
+                                .fetchEvents();
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          if (state is UserEventsNetworkFailure)
+                            return NetworkErrorWidget(state.message,
+                                onReload: () =>
+                                    BlocProvider.of<UserEventsCubit>(context)
+                                        .fetchEvents());
+                          if (state is UserEventsServerFailure)
+                            return ServerErrorWidget(state.message,
+                                onReload: () =>
+                                    BlocProvider.of<UserEventsCubit>(context)
+                                        .fetchEvents());
+                          return Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: screenSize.width * 0.15),
+                            child: (state as UserEventsLoaded)
+                                  .userAdminEvents
+                                  .length == 0 ? NoUserEvents() : ListView.builder(
+                              itemCount: state
+                                  .userAdminEvents
+                                  .length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  height: screenSize.width * 0.7,
+                                  child: EventCard(
+                                    event: state.userAdminEvents[index],
+                                    color: Colors.white,
+                                    elevation: 1,
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      )),
+                    ],
+                  )),
         ),
       ),
     );

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -70,9 +68,15 @@ class _ChatMessagesState extends State<ChatMessages> {
       },
       builder: (context, state) {
         if (state is ChatMessagesNetworkFailure)
-          return NetworkErrorWidget(state.message);
+          return NetworkErrorWidget(
+            state.message,
+            onReload: () {},
+          );
         if (state is ChatMessagesServerFailure)
-          return ServerErrorWidget(state.message);
+          return ServerErrorWidget(
+            state.message,
+            onReload: () {},
+          );
         if (state is ChatMessagesLoading)
           return Center(
             child: CircularProgressIndicator(),

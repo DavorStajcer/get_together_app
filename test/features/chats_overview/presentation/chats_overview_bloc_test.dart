@@ -4,11 +4,11 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_together_app/core/error/failure.dart';
 import 'package:get_together_app/core/usecases/usecase.dart';
-import 'package:get_together_app/features/chats_overview/domain/usecases/get_all_user_events.dart';
+import 'package:get_together_app/features/chats_overview/domain/usecases/get_all_user_event_ids.dart';
 import 'package:get_together_app/features/chats_overview/presentation/bloc/chats_overivew/chats_overview_cubit.dart';
 import 'package:mockito/mockito.dart';
 
-class GetAllUserEventsMock extends Mock implements GetAllUserEvents {}
+class GetAllUserEventsMock extends Mock implements GetAllUserEventIds {}
 
 void main() {
   GetAllUserEventsMock getAllUserEventsMock;

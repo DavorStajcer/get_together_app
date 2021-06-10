@@ -14,14 +14,17 @@ class NoParameters extends Equatable {
 class SendMessagePrameters extends Equatable {
   final String eventId;
   final String message;
+  final String eventCity;
   SendMessagePrameters({
     required this.eventId,
     required this.message,
+    required this.eventCity,
   });
 
   @override
   List<Object?> get props => [
         eventId,
         message,
+        eventCity,
       ];
 }

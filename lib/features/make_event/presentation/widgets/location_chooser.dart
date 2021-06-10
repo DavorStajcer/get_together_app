@@ -1,4 +1,4 @@
-import 'dart:developer';
+/* import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,9 +25,10 @@ class LocationChooser extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         }
-        if (state is MapsLocationFailure)
+        if (state is MapsLocationFailure) {
+          shouldGoToCurrentLocaction = true;
           return _buildErrorWidget(context, state);
-
+        }
         if (shouldGoToCurrentLocaction) {
           final Position currentPosition =
               (state as MapsLocationLoaded).currentPosition;
@@ -60,3 +61,4 @@ class LocationChooser extends StatelessWidget {
         ),
       );
 }
+ */

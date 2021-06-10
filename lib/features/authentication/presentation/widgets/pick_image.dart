@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_together_app/features/authentication/presentation/util/circle_image_clipper.dart';
 import '../bloc/form_bloc/form_bloc.dart';
 import '../bloc/form_bloc/from_state.dart';
 import '../bloc/form_bloc/form_event.dart';
@@ -21,19 +22,31 @@ class PickImage extends StatelessWidget {
                   backgroundColor: Theme.of(context).primaryColor,
                   child: (state as SignUpForm).image != null
                       ? Container(
+                          width: double.infinity,
+                          height: double.infinity,
+                          padding: EdgeInsets.all(3),
+                          child: ClipPath(
+                            clipper: CircleImageClipper(),
+                            child: Image.file(
+                              state.image!,
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                        )
+                      /* Container(
                           margin: EdgeInsets.all(2),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage(state.image!.path),
+                              image: Image.file(state.image!),
                             ),
                             color: Colors.grey,
                             border: Border.all(
                                 width: 0.2,
                                 color: Theme.of(context).primaryColor),
                           ),
-                        )
+                        ) */
                       : Container(
                           decoration: BoxDecoration(
                               color: Theme.of(context).primaryColor,

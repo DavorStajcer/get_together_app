@@ -7,11 +7,13 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_together_app/core/error/failure.dart';
+import 'package:get_together_app/core/usecases/usecase.dart';
 import 'package:get_together_app/core/util/date_formater.dart';
 import 'package:get_together_app/features/chats_overview/domain/enitites/message.dart';
 import 'package:get_together_app/features/chats_overview/domain/usecases/listen_to_messages.dart';
 import 'package:get_together_app/features/chats_overview/domain/usecases/load_initial_messages.dart';
 import 'package:get_together_app/features/chats_overview/domain/usecases/load_new_page.dart';
+import 'package:get_together_app/features/chats_overview/domain/usecases/reset_unread_chat_messages.dart';
 import 'package:get_together_app/features/chats_overview/presentation/widgets/chat_messages.dart';
 import 'package:get_together_app/features/chats_overview/presentation/widgets/message_bubble_left.dart';
 import 'package:get_together_app/features/chats_overview/presentation/widgets/message_bubble_right.dart';
@@ -23,10 +25,12 @@ class ChatMessagesBloc extends Bloc<ChatMessagesEvent, ChatMessagesState> {
   final ListenToMessages listenToMessages;
   final LoadNewPage loadNewPage;
   final LoadInitalMessages loadInitalMessages;
+  final ResetUnreadChatMessages resetUnreadChatMessages;
   bool _canLoadMorePages = true;
   ChatMessagesBloc({
     required this.listenToMessages,
     required this.loadNewPage,
+    required this.resetUnreadChatMessages,
     required this.loadInitalMessages,
   }) : super(ChatMessagesLoading());
 
@@ -39,7 +43,10 @@ class ChatMessagesBloc extends Bloc<ChatMessagesEvent, ChatMessagesState> {
       final response = await loadInitalMessages(event.eventId);
       yield _onScreenInitializedToState(response, event.eventId);
     }
-    if (event is LeavingChatScreen) await listenToMessages.stop();
+    if (event is LeavingChatScreen) {
+      await listenToMessages.stop();
+      await resetUnreadChatMessages(NoParameters());
+    }
     if (event is MessagesScrolledToTop) {
       if (_canLoadMorePages) {
         final response = await loadNewPage(event.eventId);

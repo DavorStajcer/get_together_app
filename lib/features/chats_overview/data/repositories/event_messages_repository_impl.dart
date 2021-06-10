@@ -114,7 +114,7 @@ class EventMessageRepositoryImpl extends EventMessagesRepository {
 
   @override
   Future<Either<Failure, Success>> addMessage(
-      String eventId, String message) async {
+      String eventId, String eventCity, String message) async {
     final isConnected = await networkInfo.isConnected;
     if (isConnected == false) return Left(NetworkFailure());
     final currentUser = firebaseAuth.currentUser;
@@ -134,19 +134,18 @@ class EventMessageRepositoryImpl extends EventMessagesRepository {
       if (userData == null) return Left(ServerFailure());
       final String userImageUrl = userData["imageUrl"];
       final String username = userData["username"];
+      final MessageModel messageModel = MessageModel(
+          username: username,
+          userImageUrl: userImageUrl,
+          content: message,
+          sender: Sender.currentUser);
       await firebaseFirestore
           .collection("chats")
           .doc(eventId)
           .collection("messages")
           .doc("page$lastPageNum")
           .collection("page_messages")
-          .add({
-        "senderId": currentUid,
-        "username": username,
-        "userImageUrl": userImageUrl,
-        "content": message,
-        "timestamp": FieldValue.serverTimestamp(),
-      });
+          .add(messageModel.toJsonMap(currentUid, eventCity));
       return Right(Success());
     } catch (e) {
       return Left(ServerFailure());

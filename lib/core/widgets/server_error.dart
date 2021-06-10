@@ -3,11 +3,11 @@ import 'package:get_together_app/features/make_event/presentation/widgets/event_
 
 class ServerErrorWidget extends StatelessWidget {
   final String message;
-  //final Function onReload;
+  final Function() onReload;
   const ServerErrorWidget(
     this.message, {
     Key? key,
-    //required this.onReload
+    required this.onReload,
   }) : super(key: key);
 
   @override
@@ -26,7 +26,7 @@ class ServerErrorWidget extends StatelessWidget {
           ),
           Flexible(
               flex: 1,
-              child: EventButton(text: "Refresh page", navigate: () {})),
+              child: EventButton(text: "Refresh page", navigate: onReload)),
         ],
       ),
     );

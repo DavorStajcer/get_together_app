@@ -10,6 +10,7 @@ import 'package:get_together_app/features/profile_overview/di/profile_di.dart';
 import 'package:get_together_app/features/profile_overview/presentation/bloc/profile_screen_cubit/profile_screen_cubit.dart';
 import 'package:get_together_app/features/single_event_overview/di/single_event_overview_di.dart';
 import 'package:get_together_app/features/single_event_overview/presentation/screens/single_event_screen.dart';
+import 'package:get_together_app/features/user_events_overview/di/user_events_di.dart';
 import 'package:get_together_app/features/user_events_overview/presentation/screens/user_events_screen.dart';
 import 'features/authentication/di/authentication_di.dart';
 import 'features/authentication/presentation/bloc/auth_bloc/auth_bloc.dart';
@@ -30,6 +31,7 @@ Future<void> main(List<String> args) async {
   initNotificationsDi();
   initSingleEventDi();
   initChatDi();
+  initUserEventsDi();
   runApp(GetTogetherApp());
 }
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/core/util/background_drawing.dart';
@@ -25,6 +27,8 @@ class EventHomeScreen extends StatefulWidget {
 
 class _EventHomeScreenState extends State<EventHomeScreen> {
   late final PageController _pc;
+  late final EventCubit eventCubit;
+  late final MapsLocationCubit mapsLocationCubit;
 
   @override
   void initState() {
@@ -40,6 +44,17 @@ class _EventHomeScreenState extends State<EventHomeScreen> {
 
   void _goFoward() {
     _pc.nextPage(duration: Duration(milliseconds: 500), curve: Curves.easeOut);
+  }
+
+  void _onLocationError() {
+    mapsLocationCubit.resetOnError();
+    _pc.jumpToPage(_pc.initialPage);
+  }
+
+  void _onEventCreatingError() {
+    _pc.jumpToPage(_pc.initialPage);
+    mapsLocationCubit.resetOnError();
+    eventCubit.resetOnError();
   }
 
   void _goBack() {
@@ -84,18 +99,30 @@ class _EventHomeScreenState extends State<EventHomeScreen> {
                     height: double.infinity,
                     width: double.infinity,
                     color: Colors.transparent,
-                    child: Builder(
-                      builder: (context) =>
+                    child: Builder(builder: (context) {
+                      eventCubit = BlocProvider.of<EventCubit>(context);
+                      mapsLocationCubit =
+                          BlocProvider.of<MapsLocationCubit>(context);
+                      //  eventCubit.makeEventScreenInitialized();
+                      return MultiBlocListener(
+                        listeners: [
                           BlocListener<EventCubit, EventState>(
-                        listenWhen: (previousState, currentState) =>
-                            currentState is EventStateCreated,
-                        listener: (previousState, currentState) {
-                          if (currentState is EventStateCreated)
-                            BlocProvider.of<NavBarCubit>(context)
-                                .changeScreen(HomeScreen.events_overview);
-                          BlocProvider.of<NavBarStyleCubit>(context)
-                              .changeNavStyle(HomeScreen.events_overview);
-                        },
+                              listener: (previousState, currentState) {
+                            if (currentState is EventStateCreated) {
+                              BlocProvider.of<NavBarCubit>(context)
+                                  .changeScreen(HomeScreen.events_overview);
+                              BlocProvider.of<NavBarStyleCubit>(context)
+                                  .changeNavStyle(HomeScreen.events_overview);
+                            }
+                          }),
+                          BlocListener<MapsLocationCubit, MapsLocationState>(
+                              listener: (previouseState, currentState) {
+                            log("CURRENT STATE MAPS LOCATION -> $currentState");
+                            if (currentState is MapsLocationFailure)
+                              BlocProvider.of<EventCubit>(context)
+                                  .resetOnError();
+                          }),
+                        ],
                         child: PageView(
                           physics: NeverScrollableScrollPhysics(),
                           controller: _pc,
@@ -103,14 +130,20 @@ class _EventHomeScreenState extends State<EventHomeScreen> {
                             ChooseEventTypeScreen(
                                 goFowards: _goFoward, goBack: _goBack),
                             ChooseLocationScreen(
-                                goFowards: _goFoward, goBack: _goBack),
+                              goFowards: _goFoward,
+                              goBack: _goBack,
+                              onError: _onLocationError,
+                            ),
                             EventDetailsScreen(
-                                createEvent: _finishEventMaking,
-                                goBack: _goBack)
+                              createEvent: _finishEventMaking,
+                              goBack: _goBack,
+                              onError: _onEventCreatingError,
+                            )
                           ],
                         ),
-                      ),
-                    ),
+                      );
+                    } /*  */
+                        ),
                   ),
                 ),
                 Flexible(

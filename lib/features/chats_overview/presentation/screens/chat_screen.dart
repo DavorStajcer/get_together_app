@@ -46,7 +46,11 @@ class ChatScreen extends StatelessWidget {
                 height: 50,
                 width: double.infinity,
                 padding: EdgeInsets.only(left: 15),
-                child: SendMessage(chatSnippet.eventId),
+                child: SendMessage(
+                  eventId: chatSnippet.eventId,
+                  eventCity: chatSnippet.eventCity,
+                  eventName: chatSnippet.eventName,
+                ),
               ),
               SizedBox(
                 height: 10,

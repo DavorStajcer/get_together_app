@@ -2,12 +2,15 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_cubit/event_cubit.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_cubit/event_state.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class EventMaps extends StatefulWidget {
-  const EventMaps({Key? key}) : super(key: key);
+  // final LatLng currentLocation;
+  final EventCubit eventCubit;
+  const EventMaps(this.eventCubit, {Key? key}) : super(key: key);
 
   @override
   _EventMapsState createState() => _EventMapsState();
@@ -15,6 +18,23 @@ class EventMaps extends StatefulWidget {
 
 class _EventMapsState extends State<EventMaps> {
   GoogleMapController? _controller;
+  LatLng currentLocation = LatLng(0, 0);
+
+  @override
+  void initState() {
+    super.initState();
+    widget.eventCubit.makeEventScreenInitialized();
+    /*   Geolocator.getPositionStream().listen((position) {
+      currentLocation = LatLng(position.latitude, position.longitude);
+     widget.eventCubit.userLocationChanged(currentLocation);
+    }); */
+  }
+
+  @override
+  void dispose() {
+    widget.eventCubit.stopListeningToLocationChnages();
+    super.dispose();
+  }
 
   Marker _generateEventMarker(LatLng eventLocation, EventCubit eventCubit) =>
       Marker(
@@ -30,16 +50,24 @@ class _EventMapsState extends State<EventMaps> {
     eventCubit.evenLocationChanged(newLocation);
   }
 
-  Circle _generateEventCircle(LatLng eventLocation) => Circle(
+  Color _mapLocationStateToCircleColor(EventState eventState) {
+    if (eventState is EventStateLocationOutOfRange)
+      return Color.fromRGBO(255, 43, 28, 0.2);
+    return Color.fromRGBO(97, 136, 255, 0.2);
+  }
+
+  Circle _generateEventCreationCircle(
+          LatLng curretnUserLocation, Color circleColor) =>
+      Circle(
         circleId: CircleId(DateTime.now().toString()),
         radius: 5000,
-        center: eventLocation,
+        center: curretnUserLocation,
         consumeTapEvents: false,
         strokeColor: Color.fromRGBO(97, 136, 255, 1),
         visible: true,
         zIndex: 1,
         strokeWidth: 1,
-        fillColor: Color.fromRGBO(97, 136, 255, 0.2),
+        fillColor: circleColor,
       );
 
   void _onMapsCreated(GoogleMapController controller) {
@@ -51,9 +79,6 @@ class _EventMapsState extends State<EventMaps> {
     return BlocBuilder<EventCubit, EventState>(
       builder: (context, state) {
         log("MAPS : STATE -> $state");
-        if (state is EventStateUnfinished) {
-          log("EVENT TYPE ->${state.createEventData.type}");
-        }
         if (state is EventStateNetworkFailure)
           return Center(
             child: Text(state.message),
@@ -67,11 +92,17 @@ class _EventMapsState extends State<EventMaps> {
             child: CircularProgressIndicator(),
           );
 
-        final _eventLocation =
+        LatLng _eventLocation =
             (state as EventStateUnfinished).createEventData.location;
-        final cricle = _generateEventCircle(_eventLocation);
-        final marker = _generateEventMarker(
-            _eventLocation, BlocProvider.of<EventCubit>(context));
+        final circleColor = _mapLocationStateToCircleColor(state);
+        final cricle = _generateEventCreationCircle(
+            state.createEventData.currentUserPosition, circleColor);
+        if (_eventLocation.latitude == 0 && _eventLocation.longitude == 0)
+          _eventLocation = currentLocation;
+        final marker = _eventLocation == LatLng(0, 0)
+            ? null
+            : _generateEventMarker(
+                _eventLocation, BlocProvider.of<EventCubit>(context));
         log("MAPS : LOCATION -> $_eventLocation");
         if (_controller != null) {
           _controller!.animateCamera(CameraUpdate.newLatLng(_eventLocation));
@@ -83,8 +114,8 @@ class _EventMapsState extends State<EventMaps> {
             zoom: 12,
           ),
           myLocationEnabled: true,
-          markers: {marker},
-          circles: {cricle},
+          markers: marker == null ? {} : {marker},
+          circles: marker == null ? {} : {cricle},
         );
       },
     );

@@ -3,14 +3,17 @@ import 'package:get_together_app/features/make_event/presentation/widgets/event_
 
 class EventButtonWithBackIcon extends StatelessWidget {
   final String text;
+  final bool isOn;
   final Function() goBack;
   final Function() goFowards;
   const EventButtonWithBackIcon(
       {Key? key,
       required this.text,
+      bool? isOn,
       required this.goBack,
       required this.goFowards})
-      : super(key: key);
+      : isOn = isOn ?? true,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +35,9 @@ class EventButtonWithBackIcon extends StatelessWidget {
               child: EventButton(
                 text: text,
                 navigate: goFowards,
+                textColor: isOn ? null : Colors.black45,
+                buttonColor: isOn ? null : Colors.grey,
+                isOn: isOn,
               ),
             ),
           ),

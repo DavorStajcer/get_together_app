@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_together_app/core/usecases/usecase.dart';
 import 'package:get_together_app/features/chats_overview/presentation/bloc/chat_messages_bloc/chat_messages_bloc.dart';
 import 'package:get_together_app/features/chats_overview/presentation/bloc/send_message_cubit/send_message_cubit.dart';
 
 class SendMessage extends StatefulWidget {
   final String eventId;
-  const SendMessage(this.eventId, {Key? key}) : super(key: key);
+  final String eventName;
+  final String eventCity;
+  const SendMessage({
+    required this.eventId,
+    required this.eventCity,
+    required this.eventName,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _SendMessageState createState() => _SendMessageState();
@@ -60,10 +68,12 @@ class _SendMessageState extends State<SendMessage> {
                     color: Theme.of(context).primaryColor,
                     icon: Icon(Icons.send),
                     onPressed: () {
-                      BlocProvider.of<SendMessageCubit>(context).sendNewMessage(
-                        widget.eventId,
-                        _messageController.text,
-                      );
+                      BlocProvider.of<SendMessageCubit>(context)
+                          .sendNewMessage(SendMessagePrameters(
+                        eventId: widget.eventId,
+                        eventCity: widget.eventCity,
+                        message: _messageController.value.text,
+                      ));
                       _messageController.text = "";
                     },
                   ),

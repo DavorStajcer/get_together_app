@@ -9,6 +9,7 @@ import 'package:get_together_app/features/events_overview/domain/entities/event.
 import 'package:get_together_app/features/events_overview/presentation/bloc/event_pick_cubit/event_pick_cubit_cubit.dart';
 
 import 'package:get_together_app/features/events_overview/presentation/bloc/load_events_bloc/events_overview_bloc.dart';
+import 'package:get_together_app/features/events_overview/presentation/widgets/no_city_events.dart';
 
 class EventsList extends StatelessWidget {
   const EventsList({Key? key}) : super(key: key);
@@ -24,27 +25,36 @@ class EventsList extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         if (state is EventsOverviewNetworkFailure)
-          return NetworkErrorWidget(state.message);
+          return NetworkErrorWidget(
+            state.message,
+            onReload: () {},
+          );
         if (state is EventsOverviewServerFailure)
-          return ServerErrorWidget(state.message);
-        return ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: (state as EventsOverviewLoaded).events.length,
-          itemBuilder: (context, index) {
-            return BlocBuilder<EventPickCubit, PickedEventState>(
-              builder: (context, pickedState) {
-                final Event event = state.events[index];
-                return EventCard(
-                  event: event,
-                  color: event.eventId == pickedState.pickedEventId
-                      ? Color.fromRGBO(255, 203, 181, 1)
-                      : Colors.white,
-                  elevation: event.eventId == pickedState.pickedEventId ? 4 : 1,
-                );
-              },
-            );
-          },
-        );
+          return ServerErrorWidget(
+            state.message,
+            onReload: () {},
+          );
+        return (state as EventsOverviewLoaded).events.length == 0
+            ? NoCityEvents()
+            : ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: state.events.length,
+                itemBuilder: (context, index) {
+                  return BlocBuilder<EventPickCubit, PickedEventState>(
+                    builder: (context, pickedState) {
+                      final Event event = state.events[index];
+                      return EventCard(
+                        event: event,
+                        color: event.eventId == pickedState.pickedEventId
+                            ? Color.fromRGBO(255, 203, 181, 1)
+                            : Colors.white,
+                        elevation:
+                            event.eventId == pickedState.pickedEventId ? 4 : 1,
+                      );
+                    },
+                  );
+                },
+              );
       },
     );
   }

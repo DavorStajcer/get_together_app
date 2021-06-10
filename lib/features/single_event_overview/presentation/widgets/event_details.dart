@@ -67,6 +67,7 @@ class EventDetails extends StatelessWidget {
               eventType: event.eventType,
               adminImageUrl: event.adminImageUrl,
               adminUsername: event.adminUsername,
+              eventName: event.eventName,
               numberOfPeople: event.numberOfPeople,
             ),
           ),

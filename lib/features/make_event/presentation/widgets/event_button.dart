@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class EventButton extends StatelessWidget {
   final String text;
+  final bool isOn;
   final Function() navigate;
   final Color? buttonColor;
   final Color? textColor;
@@ -9,9 +10,11 @@ class EventButton extends StatelessWidget {
     Key? key,
     required this.text,
     required this.navigate,
+    bool? isOn,
     this.buttonColor,
     this.textColor,
-  }) : super(key: key);
+  })  : isOn = isOn ?? true,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +42,11 @@ class EventButton extends StatelessWidget {
           },
         ),
       ),
-      onPressed: () {
-        navigate();
-      },
+      onPressed: isOn == false
+          ? null
+          : () {
+              navigate();
+            },
     );
   }
 }

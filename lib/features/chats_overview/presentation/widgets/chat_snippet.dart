@@ -21,9 +21,15 @@ class ChatSnippet extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         if (state is ChatSnippetNetworkFailure)
-          return NetworkErrorWidget(state.message);
+          return NetworkErrorWidget(
+            state.message,
+            onReload: () {},
+          );
         if (state is ChatSnippetServerFailure)
-          return ServerErrorWidget(state.message);
+          return ServerErrorWidget(
+            state.message,
+            onReload: () {},
+          );
 
         return GestureDetector(
           onTap: () => Navigator.of(context).pushNamed(

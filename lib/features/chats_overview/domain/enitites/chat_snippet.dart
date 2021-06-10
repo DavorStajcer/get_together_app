@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 class ChatSnippet extends Equatable {
   final String eventId;
   final String eventName;
+  final String eventCity;
   final String adminImageUrl;
   @protected
   final DateTime? lastMessageDate;
@@ -30,6 +31,7 @@ class ChatSnippet extends Equatable {
     required this.eventId,
     required this.eventName,
     required this.adminImageUrl,
+    required this.eventCity,
     required DateTime? lastMessageDate,
     required this.lastMessageSnippet,
   }) : lastMessageDate = lastMessageDate;
@@ -41,5 +43,6 @@ class ChatSnippet extends Equatable {
         adminImageUrl,
         lastMessageDate,
         lastMessageSnippet,
+        eventCity,
       ];
 }

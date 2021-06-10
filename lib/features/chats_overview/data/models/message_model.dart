@@ -8,7 +8,7 @@ class MessageModel extends Message {
     required String username,
     required String userImageUrl,
     required String content,
-    required DateTime? date,
+    DateTime? date,
     required Sender sender,
   }) : super(
           // userId: userId,
@@ -35,9 +35,11 @@ class MessageModel extends Message {
         sender: sender,
       );
 
-  Map<String, dynamic> toJsonMap() => {
+  Map<String, dynamic> toJsonMap(String senderId, String eventCity) => {
+        "senderId": senderId,
         "username": username,
         "userImageUrl": userImageUrl,
+        "eventCity": eventCity,
         "content": content,
         "timestamp": FieldValue.serverTimestamp(),
       };

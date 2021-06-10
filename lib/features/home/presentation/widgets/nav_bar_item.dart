@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_together_app/features/authentication/presentation/util/circle_image_clipper.dart';
 import 'package:get_together_app/features/home/presentation/widgets/custom_nav_bar.dart';
+import 'package:get_together_app/features/home/presentation/widgets/new_chats_widget.dart';
+import 'package:get_together_app/features/home/presentation/widgets/new_notifications_widgets.dart';
 import '../bloc/nav_bar_cubit/nav_bar_cubit.dart';
 
 import '../bloc/nav_bar_style_cubit/nav_bar_style_cubit.dart';
@@ -19,11 +22,7 @@ class NavBarItem extends StatelessWidget {
             child: Container(
               width: double.infinity,
               height: double.infinity,
-              child: Icon(
-                _mapScreenToNavBarIcon(screen),
-                size: state.itemsStyle[screen]!.iconSize,
-                color: state.itemsStyle[screen]!.color,
-              ),
+              child: _mapScreenToWidget(context, screen, state),
             ),
             onTap: () {
               BlocProvider.of<NavBarStyleCubit>(context).changeNavStyle(screen);
@@ -64,6 +63,29 @@ class NavBarMiddleItem extends StatelessWidget {
       },
     );
   }
+}
+
+Widget _mapScreenToWidget(
+    BuildContext context, HomeScreen screen, NavBarStyleState state) {
+  if (screen == HomeScreen.notifications_overview &&
+      !(state.itemsStyle[screen] is NavItemPressed))
+    return NewNotifications(
+      mapScreenToNavBarIcon: _mapScreenToNavBarIcon,
+      iconColor: state.itemsStyle[screen]!.color,
+      iconSize: state.itemsStyle[screen]!.iconSize,
+    );
+  if (screen == HomeScreen.chats_overview &&
+      !(state.itemsStyle[screen] is NavItemPressed))
+    return NewChats(
+      mapScreenToNavBarIcon: _mapScreenToNavBarIcon,
+      iconColor: state.itemsStyle[screen]!.color,
+      iconSize: state.itemsStyle[screen]!.iconSize,
+    );
+  return Icon(
+    _mapScreenToNavBarIcon(screen),
+    size: state.itemsStyle[screen]!.iconSize,
+    color: state.itemsStyle[screen]!.color,
+  );
 }
 
 IconData _mapScreenToNavBarIcon(HomeScreen screen) {

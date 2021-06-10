@@ -6,6 +6,7 @@ import 'package:get_together_app/features/authentication/di/authentication_di.da
 import 'package:get_together_app/features/chats_overview/presentation/bloc/chats_overivew/chats_overview_cubit.dart';
 import 'package:get_together_app/features/chats_overview/presentation/bloc/message_snippet_bloc/chat_snippet_bloc.dart';
 import 'package:get_together_app/features/chats_overview/presentation/widgets/chat_snippet.dart';
+import 'package:get_together_app/features/chats_overview/presentation/widgets/no_chats.dart';
 
 class ChatsOverviewScreen extends StatefulWidget {
   const ChatsOverviewScreen({Key? key}) : super(key: key);
@@ -49,18 +50,26 @@ class _ChatsOverviewScreenState extends State<ChatsOverviewScreen> {
                     child: CircularProgressIndicator(),
                   );
                 if (state is ChatsOverviewNetworkFailure)
-                  return NetworkErrorWidget(state.message);
+                  return NetworkErrorWidget(
+                    state.message,
+                    onReload: () {},
+                  );
                 if (state is ChatsOverviewServerFailure)
-                  return ServerErrorWidget(state.message);
-                return ListView.builder(
-                  itemCount: (state as ChatsOverviewLoaded).userEvents.length,
-                  itemBuilder: (context, index) {
-                    return BlocProvider.value(
-                      value: getIt<ChatSnippetBloc>(),
-                      child: ChatSnippet(state.userEvents[index]),
-                    );
-                  },
-                );
+                  return ServerErrorWidget(
+                    state.message,
+                    onReload: () {},
+                  );
+                return (state as ChatsOverviewLoaded).userEvents.length == 0
+                    ? NoChats()
+                    : ListView.builder(
+                        itemCount: state.userEvents.length,
+                        itemBuilder: (context, index) {
+                          return BlocProvider.value(
+                            value: getIt<ChatSnippetBloc>(),
+                            child: ChatSnippet(state.userEvents[index]),
+                          );
+                        },
+                      );
               },
             )),
           ],

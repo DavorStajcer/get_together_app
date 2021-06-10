@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/features/chats_overview/presentation/bloc/chats_overivew/chats_overview_cubit.dart';
 import 'package:get_together_app/features/events_overview/presentation/bloc/load_events_bloc/events_overview_bloc.dart';
+import 'package:get_together_app/features/home/presentation/bloc/new_chats_bloc/new_chats_bloc.dart';
+import 'package:get_together_app/features/home/presentation/bloc/new_notifications_bloc/new_notifications_bloc.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/maps_location_cubit/maps_location_cubit.dart';
 import 'package:get_together_app/features/notifications_overview/presentation/bloc/event_answer_cubit/event_answer_cubit.dart';
 import 'package:get_together_app/features/notifications_overview/presentation/bloc/notifications_bloc/notifications_bloc.dart';
+import 'package:get_together_app/features/user_events_overview/presentation/bloc/cubit/user_events_cubit.dart';
 import '../../../authentication/di/authentication_di.dart';
 import '../../../authentication/presentation/bloc/auth_bloc/auth_bloc.dart';
 
@@ -58,6 +61,12 @@ class HomeScreenWidget extends StatelessWidget {
             ),
             BlocProvider<EventAnswerCubit>(
               create: (_) => getIt<EventAnswerCubit>(),
+            ),
+            BlocProvider<NewNotificationsBloc>(
+              create: (_) => getIt<NewNotificationsBloc>(),
+            ),
+            BlocProvider<NewChatsBloc>(
+              create: (_) => getIt<NewChatsBloc>(),
             ),
           ],
           child: SingleChildScrollView(

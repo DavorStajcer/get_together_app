@@ -12,6 +12,7 @@ class SendMessage extends Usecase<Success, SendMessagePrameters> {
   Future<Either<Failure, Success>> call(SendMessagePrameters param) async {
     return await eventMessagesRepository.addMessage(
       param.eventId,
+      param.eventCity,
       param.message,
     );
   }

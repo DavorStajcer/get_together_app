@@ -149,23 +149,3 @@ class DateTimePickerButton extends StatelessWidget {
     );
   }
 }
-
-/* 
-Theme(
-    data: Theme.of(context).copyWith(
-          primaryColor: Colors.amber,
-        ),
-    child: new Builder(
-      builder: (context) => new IconButton(
-                        icon: Icon(
-                          Icons.replay_outlined,
-                          color: Colors.white,
-                        ),
-                        onPressed: () => pickerType == Picker.time
-                            ? _selectEventTime(context, TimeOfDay.now())
-                            : _selectEventDate(context, DateTime.now()),
-                      ),
-          ),
-    ),
-  )
- */

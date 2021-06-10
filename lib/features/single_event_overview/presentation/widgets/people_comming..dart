@@ -33,25 +33,33 @@ class PoepleComming extends StatelessWidget {
               ),
               Flexible(
                 flex: 13,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: peopleImageUrls.length,
-                  itemBuilder: (ctx, index) => Container(
-                    height: double.infinity,
-                    width: 35,
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: NetworkImage(
-                              peopleImageUrls.values.toList()[index]),
-                        ),
-                        color: Colors.grey,
-                      ),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: peopleImageUrls.length == 0
+                          ? Text(
+                              "Currently admin is the only person in the event.")
+                          : ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: peopleImageUrls.length,
+                              itemBuilder: (ctx, index) => Container(
+                                width: 35,
+                                height: double.infinity,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: NetworkImage(
+                                        peopleImageUrls.values.toList()[index]),
+                                  ),
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
                     ),
-                  ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                  ],
                 ),
               ),
             ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/core/widgets/get_together_title.dart';
 import 'package:get_together_app/core/widgets/server_error.dart';
+import 'package:get_together_app/features/home/presentation/bloc/new_notifications_bloc/new_notifications_bloc.dart';
 import 'package:get_together_app/features/notifications_overview/data/models/notification_model.dart';
 import 'package:get_together_app/features/notifications_overview/domain/entities/notification.dart';
 import 'package:get_together_app/features/notifications_overview/presentation/bloc/notifications_bloc/notifications_bloc.dart';
@@ -10,6 +11,7 @@ import 'package:get_together_app/features/notifications_overview/presentation/bl
 import 'package:get_together_app/features/notifications_overview/presentation/widgets/event_info.dart';
 import 'package:get_together_app/features/notifications_overview/presentation/widgets/join_request.dart';
 import 'package:get_together_app/features/notifications_overview/presentation/widgets/leave_event_info.dart';
+import 'package:get_together_app/features/notifications_overview/presentation/widgets/no_notifications.dart';
 
 class NotificationsOverviewScreen extends StatefulWidget {
   const NotificationsOverviewScreen({Key? key}) : super(key: key);
@@ -55,27 +57,34 @@ class _NotificationsOverviewScreenState
                 child: CircularProgressIndicator(),
               );
             if (state is NotificationsServerFailure)
-              return ServerErrorWidget(state.message);
+              return ServerErrorWidget(
+                state.message,
+                onReload: () {},
+              );
             if (state is NotificationsNetworkFailure)
-              return ServerErrorWidget(state.message);
+              return ServerErrorWidget(
+                state.message,
+                onReload: () {},
+              );
             else
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: ListView.builder(
-                  itemCount:
-                      (state as NotificationsLoaded).notifications.length,
-                  itemBuilder: (context, index) {
-                    final notification = state.notifications[index];
-                    if (notification is JoinEventNotification)
-                      return JoinRequestWidget(
-                          notification as JoinEventNotificationModel);
-                    else if (notification is LeaveEventInfoNotification)
-                      return LeaveEventInfoWidget(
-                          notification as LeaveEventInfoNotificationModel);
-                    else
-                      return EventInfoWidget(notification);
-                  },
-                ),
+                child: (state as NotificationsLoaded).notifications.length == 0
+                    ? NoNotifications()
+                    : ListView.builder(
+                        itemCount: state.notifications.length,
+                        itemBuilder: (context, index) {
+                          final notification = state.notifications[index];
+                          if (notification is JoinEventNotification)
+                            return JoinRequestWidget(
+                                notification as JoinEventNotificationModel);
+                          else if (notification is LeaveEventInfoNotification)
+                            return LeaveEventInfoWidget(notification
+                                as LeaveEventInfoNotificationModel);
+                          else
+                            return EventInfoWidget(notification);
+                        },
+                      ),
               );
           },
         )),

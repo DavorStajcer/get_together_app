@@ -9,6 +9,7 @@ class CreateEventData extends Equatable {
   final String description;
   final String? dateString;
   final String? timeString;
+  final LatLng currentUserPosition;
 
   CreateEventData({
     required this.type,
@@ -16,6 +17,7 @@ class CreateEventData extends Equatable {
     required this.eventName,
     required this.description,
     required this.dateString,
+    required this.currentUserPosition,
     required this.timeString,
   });
 
@@ -26,6 +28,7 @@ class CreateEventData extends Equatable {
     String? description,
     String? dateString,
     String? timeString,
+    LatLng? currentUserPosition,
   }) =>
       CreateEventData(
         type: type ?? this.type,
@@ -34,6 +37,7 @@ class CreateEventData extends Equatable {
         description: description ?? this.description,
         dateString: dateString ?? this.dateString,
         timeString: timeString ?? this.timeString,
+        currentUserPosition: currentUserPosition ?? this.currentUserPosition,
       );
 
   @override
@@ -41,6 +45,8 @@ class CreateEventData extends Equatable {
         type,
         location.latitude,
         location.longitude,
+        currentUserPosition.latitude,
+        currentUserPosition.longitude,
         description,
         eventName,
         dateString,

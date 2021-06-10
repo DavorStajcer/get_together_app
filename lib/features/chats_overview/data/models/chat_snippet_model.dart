@@ -7,12 +7,14 @@ class ChatSnippetModel extends ChatSnippet {
     required String eventId,
     required String eventName,
     required String adminImageUrl,
+    required String eventCity,
     @protected required DateTime? lastMessageDate,
     required final String? lastMessageSnippet,
   }) : super(
             eventId: eventId,
             eventName: eventName,
             adminImageUrl: adminImageUrl,
+            eventCity: eventCity,
             lastMessageDate: lastMessageDate,
             lastMessageSnippet: lastMessageSnippet);
 
@@ -21,6 +23,7 @@ class ChatSnippetModel extends ChatSnippet {
       ChatSnippetModel(
         eventId: eventId,
         eventName: json["eventName"],
+        eventCity: json["eventCity"],
         adminImageUrl: json["adminImageUrl"],
         lastMessageDate: json["lastMessageDate"] != null
             ? (json["lastMessageDate"] as Timestamp).toDate()
@@ -30,6 +33,7 @@ class ChatSnippetModel extends ChatSnippet {
 
   Map<String, dynamic> toJsonMap() => {
         "eventName": this.eventName,
+        "eventCity": this.eventCity,
         "adminImageUrl": this.adminImageUrl,
         "lastMessageDate": lastMessageDate,
         "lastMessageSnippet": this.lastMessageSnippet,

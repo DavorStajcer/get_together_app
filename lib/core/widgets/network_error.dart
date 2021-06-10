@@ -3,7 +3,12 @@ import 'package:get_together_app/features/make_event/presentation/widgets/event_
 
 class NetworkErrorWidget extends StatelessWidget {
   final String message;
-  const NetworkErrorWidget(this.message, {Key? key}) : super(key: key);
+  final Function() onReload;
+  const NetworkErrorWidget(
+    this.message, {
+    required this.onReload,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +26,7 @@ class NetworkErrorWidget extends StatelessWidget {
           ),
           Flexible(
               flex: 1,
-              child: EventButton(text: "Refresh page", navigate: () {})),
+              child: EventButton(text: "Refresh page", navigate: onReload)),
         ],
       ),
     );

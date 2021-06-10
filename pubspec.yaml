@@ -69,11 +69,12 @@ flutter:
     - lib/assets/images/coffe.png
     - lib/assets/images/food.png
     - lib/assets/images/game.png
-    - lib/assets/images/make_event.png
     - lib/assets/images/events_overview.png
     - lib/assets/images/notifications_overview.png
     - lib/assets/images/chats_overview.png
     - lib/assets/images/profile_overview.png
+    - lib/assets/images/no_events.png
+    - lib/assets/images/first_event.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

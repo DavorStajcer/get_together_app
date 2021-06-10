@@ -6,7 +6,6 @@ import 'package:get_together_app/features/make_event/domain/entities/create_even
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 abstract class EventsRepository {
-  Future<Either<Failure, Event>> getEvent(String eventId);
   Future<Either<Failure, List<Event>>> getAllEvents(LatLng currentLocation);
   Future<Either<Failure, Success>> createEvent(CreateEventData event);
 }

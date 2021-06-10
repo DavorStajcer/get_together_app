@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_together_app/features/authentication/domain/entities/user_data.dart';
+import 'package:get_together_app/features/profile_overview/presentation/widgets/decription_with_friends_and_rating.dart';
 import 'package:get_together_app/features/profile_overview/presentation/widgets/edit_and_settings.dart';
 import 'package:get_together_app/features/profile_overview/presentation/widgets/friends_and_rating.dart';
 import 'package:get_together_app/features/profile_overview/presentation/util/profile_card_clipper.dart';
@@ -52,28 +53,21 @@ class ProfileCardView extends StatelessWidget {
                 ),
                 Divider(),
                 Expanded(
-                  child: Column(
-                    children: [
-                      Flexible(
-                        flex: 2,
-                        child: Container(
-                          height: double.infinity,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 5),
-                          child: SingleChildScrollView(
-                            child: Text(currentUserData.description),
-                          ),
-                        ),
+                  child: Container(
+                    height: double.infinity,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
+                    child: SingleChildScrollView(
+                      child: Text(
+                        currentUserData.description,
+                        textAlign: TextAlign.center,
                       ),
-                      Flexible(
-                        flex: 1,
-                        child: FriendsAndRating(
-                          rating: currentUserData.rating,
-                          friendsNum: currentUserData.friendsCount,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ), /* DescriptionWithFriendsAndRating(
+                    description: currentUserData.description,
+                    friendsNum: currentUserData.friendsCount,
+                    rating: currentUserData.rating,
+                  ), */
                 ),
               ],
             ),

@@ -10,6 +10,7 @@ class MapsLocationCubit extends Cubit<MapsLocationState> {
       : super(MapsLocationNotLoaded());
 
   void requestLocation() async {
+    emit(MapsLocationNotLoaded());
     final response = await locationService.getLocation();
     response.fold(
         (
@@ -24,5 +25,9 @@ class MapsLocationCubit extends Cubit<MapsLocationState> {
         MapsLocationLoaded(currentPosition: position),
       );
     });
+  }
+
+  void resetOnError() {
+    emit(MapsLocationNotLoaded());
   }
 }

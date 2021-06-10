@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -18,7 +20,7 @@ class MapsView extends StatefulWidget {
 class _MapsViewState extends State<MapsView> {
   late GoogleMapController _controller;
   late LatLng _userLocation;
-  final Set<Marker> _markers = {};
+  Set<Marker> _markers = {};
   late Circle eventCircle;
 
   void _onMapCreated(GoogleMapController _cntlr) {
@@ -45,19 +47,21 @@ class _MapsViewState extends State<MapsView> {
     });
   }
 
-/*   void _setEventCircle() {
-    eventCircle = Circle(
-      circleId: CircleId(DateTime.now().toString()),
-      radius: 5000,
-      center: _userLocation,
-      consumeTapEvents: false,
-      strokeColor: Color.fromRGBO(97, 136, 255, 1),
-      visible: true,
-      zIndex: 1,
-      strokeWidth: 1,
-      fillColor: Color.fromRGBO(97, 136, 255, 0.2),
-    );
-  } */
+  void _onEventPicked(LatLng? pickedEventPosition) {
+    if (pickedEventPosition == null) return;
+    final Set<Marker> _newMarkers = {};
+    _markers.forEach((marker) {
+      if (marker.position != pickedEventPosition)
+        _newMarkers.add(marker.copyWith(
+            iconParam: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueOrange)));
+      else
+        _newMarkers.add(marker.copyWith(
+            iconParam: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueBlue)));
+      _markers = _newMarkers;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,28 +87,37 @@ class _MapsViewState extends State<MapsView> {
         return BlocBuilder<EventsOverviewBloc, EventsOverviewState>(
           builder: (context, state) {
             if (state is EventsOverviewNetworkFailure)
-              return NetworkErrorWidget(state.message);
+              return NetworkErrorWidget(
+                state.message,
+                onReload: () {},
+              );
             if (state is EventsOverviewServerFailure)
-              return NetworkErrorWidget(state.message);
+              return NetworkErrorWidget(
+                state.message,
+                onReload: () {},
+              );
             if (state is EventsOverviewLoading)
               return Center(
                 child: CircularProgressIndicator(),
               );
             _setEventMarkers((state as EventsOverviewLoaded).events);
-            return BlocListener<EventPickCubit, PickedEventState>(
+            return BlocConsumer<EventPickCubit, PickedEventState>(
               listener: (context, state) {
                 _controller
                     .animateCamera(CameraUpdate.newLatLng(state.location!));
               },
-              child: GoogleMap(
-                onMapCreated: _onMapCreated,
-                initialCameraPosition: CameraPosition(
-                  target: _userLocation,
-                  zoom: 12,
-                ),
-                myLocationEnabled: true,
-                markers: _markers,
-              ),
+              builder: (context, state) {
+                _onEventPicked(state.location);
+                return GoogleMap(
+                  onMapCreated: _onMapCreated,
+                  initialCameraPosition: CameraPosition(
+                    target: _userLocation,
+                    zoom: 12,
+                  ),
+                  myLocationEnabled: true,
+                  markers: _markers,
+                );
+              },
             );
           },
         );

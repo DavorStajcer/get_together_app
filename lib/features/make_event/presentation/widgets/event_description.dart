@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_together_app/core/widgets/network_error.dart';
+import 'package:get_together_app/core/widgets/server_error.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_cubit/event_cubit.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_cubit/event_state.dart';
 
 class EventNameAndDescription extends StatefulWidget {
-  EventNameAndDescription({Key? key}) : super(key: key);
+  final Function() onError;
+  EventNameAndDescription({
+    required this.onError,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _EventDescriptionState createState() => _EventDescriptionState();
@@ -19,12 +25,14 @@ class _EventDescriptionState extends State<EventNameAndDescription> {
       child: BlocBuilder<EventCubit, EventState>(
         builder: (context, state) {
           if (state is EventStateNetworkFailure)
-            return Center(
-              child: Text(state.message),
+            return NetworkErrorWidget(
+              state.message,
+              onReload: widget.onError,
             );
           if (state is EventStateServerFailure)
-            return Center(
-              child: Text(state.message),
+            return ServerErrorWidget(
+              state.message,
+              onReload: widget.onError,
             );
           if (state is EventStateLoading || state is EventStateCreated)
             return Center(

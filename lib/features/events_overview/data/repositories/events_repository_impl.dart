@@ -62,12 +62,6 @@ class EventsRepositoryImpl extends EventsRepository {
   }
 
   @override
-  Future<Either<Failure, Event>> getEvent(String eventId) async {
-//TODO:implement
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Either<Failure, Success>> createEvent(
       CreateEventData createEventData) async {
     final isConnected = await networkInfo.isConnected;
@@ -125,7 +119,7 @@ class EventsRepositoryImpl extends EventsRepository {
         adminUsername: adminUsername,
         adminImageUrl: adminImageUrl,
         adminRating: adminRating,
-        numberOfPeople: 0,
+        numberOfPeople: 1,
         eventName: createEventData.eventName,
         description: createEventData.description,
         peopleImageUrls: {});

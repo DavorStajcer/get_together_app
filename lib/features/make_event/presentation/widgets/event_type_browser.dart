@@ -25,12 +25,6 @@ class EvenTypeBrowser extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<EventCardOrderCubit, EventCardOrderState>(
       builder: (context, state) {
-        log(state.eventTypeOrder
-            .map((eventType) =>
-                (_eventTypeCard[eventType]! as EventTypeCard).eventType)
-            .toList()
-            .toString());
-        log("NULTO MIJESTO -> ${state.eventTypeOrder[0]}");
         BlocProvider.of<EventCubit>(context)
             .eventTypeChanged(state.eventTypeOrder[0]);
         return Stack(

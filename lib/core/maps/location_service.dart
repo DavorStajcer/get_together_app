@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:geolocator/geolocator.dart';
@@ -11,6 +12,7 @@ abstract class LocationService {
   final NetworkInfo networkInfo;
   Future<Either<Failure, Position>> getLocation();
   Future<String?> mapLocationToCity(LatLng location);
+  Stream<Position> userLocationStream();
   LocationService({required this.networkInfo});
 }
 
@@ -25,27 +27,34 @@ class LocationServiceImpl extends LocationService {
     bool serviceEnabled;
     LocationPermission permission;
 
+    log("CHECKING IS LOCATION ENABLED");
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    log("checked -> $serviceEnabled");
     if (!serviceEnabled) {
       return Left(LocationFailure(message: 'Location services are disabled.'));
     }
 
     permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
+    try {
       if (permission == LocationPermission.denied) {
-        return Left(
-            LocationFailure(message: 'Location permissions are denied'));
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          return Left(
+              LocationFailure(message: 'Location permissions are denied'));
+        }
       }
-    }
 
-    if (permission == LocationPermission.deniedForever) {
+      if (permission == LocationPermission.deniedForever) {
+        return Left(LocationFailure(
+            message:
+                'Location permissions are permanently denied, we cannot request permissions.'));
+      }
+      final position = await Geolocator.getCurrentPosition();
+      return Right(position);
+    } catch (e) {
       return Left(LocationFailure(
-          message:
-              'Location permissions are permanently denied, we cannot request permissions.'));
+          message: "Location problem. Check is your location turned on."));
     }
-    final position = await Geolocator.getCurrentPosition();
-    return Right(position);
   }
 
   Future<String?> mapLocationToCity(LatLng location) async {
@@ -73,4 +82,6 @@ class LocationServiceImpl extends LocationService {
 
     return city;
   }
+
+  Stream<Position> userLocationStream() => Geolocator.getPositionStream();
 }

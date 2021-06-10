@@ -60,9 +60,15 @@ class _ProfileOverviewScreenState extends State<ProfileOverviewScreen> {
     required Size screenSize,
   }) {
     if (state is ProfileScreenServerError)
-      return ServerErrorWidget(state.message);
+      return ServerErrorWidget(
+        state.message,
+        onReload: () {},
+      );
     if (state is ProfileScreennNetworkError)
-      return NetworkErrorWidget(state.message);
+      return NetworkErrorWidget(
+        state.message,
+        onReload: () {},
+      );
     else
       return Column(
         children: [
