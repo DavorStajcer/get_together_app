@@ -31,7 +31,7 @@ class _ChatMessagesState extends State<ChatMessages> {
 
   @override
   void dispose() {
-    _chatMessagesBloc.add(LeavingChatScreen());
+    _chatMessagesBloc.add(LeavingChatScreen(widget.eventId));
     super.dispose();
   }
 

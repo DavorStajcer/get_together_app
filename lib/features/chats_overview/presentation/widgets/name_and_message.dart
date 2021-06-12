@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 class NameAndMessage extends StatelessWidget {
   final String name;
   final String messageSnippet;
+  final bool isUnread;
   const NameAndMessage({
     required this.name,
     required this.messageSnippet,
+    required this.isUnread,
     Key? key,
   }) : super(key: key);
 
@@ -22,9 +24,9 @@ class NameAndMessage extends StatelessWidget {
               child: Text(
                 name,
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.black,
+                  fontWeight: isUnread ? FontWeight.bold : FontWeight.normal,
+                  fontSize: isUnread ? 16 : 15,
+                  color: isUnread ? Colors.black : Colors.black38,
                 ),
               ),
             ),
@@ -40,6 +42,8 @@ class NameAndMessage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Color.fromRGBO(161, 160, 160, 1),
+                    fontWeight: isUnread ? FontWeight.bold : FontWeight.normal,
+                    fontSize: isUnread ? 15 : 13,
                   ),
                   textAlign: TextAlign.left,
                 ),

@@ -8,12 +8,14 @@ abstract class ChatSnippetEvent extends Equatable {
 }
 
 class ChatsScreenInitialized extends ChatSnippetEvent {
-  final String eventId;
-  ChatsScreenInitialized(this.eventId);
+  final List<String> chatIds;
+  ChatsScreenInitialized(this.chatIds);
 }
 
+class ChatsScreenClosing extends ChatSnippetEvent {}
+
 class ChatSnippetChnaged extends ChatSnippetEvent {
-  final Either<Failure, ChatSnippet> chatSnippet;
+  final ChatSnippet chatSnippet;
   ChatSnippetChnaged(this.chatSnippet);
 
   @override

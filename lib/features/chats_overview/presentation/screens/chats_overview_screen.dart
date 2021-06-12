@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/core/widgets/network_error.dart';
 import 'package:get_together_app/core/widgets/server_error.dart';
 import 'package:get_together_app/features/authentication/di/authentication_di.dart';
-import 'package:get_together_app/features/chats_overview/presentation/bloc/chats_overivew/chats_overview_cubit.dart';
-import 'package:get_together_app/features/chats_overview/presentation/bloc/message_snippet_bloc/chat_snippet_bloc.dart';
-import 'package:get_together_app/features/chats_overview/presentation/widgets/chat_snippet.dart';
+import 'package:get_together_app/features/chats_overview/presentation/bloc/chat_snippets_bloc/chat_snippet_bloc.dart';
+import 'package:get_together_app/features/chats_overview/presentation/bloc/chats_overivew_cubit/chats_overview_cubit.dart';
+
+import 'package:get_together_app/features/chats_overview/presentation/widgets/chat_snippet_widget.dart';
 import 'package:get_together_app/features/chats_overview/presentation/widgets/no_chats.dart';
+import 'package:get_together_app/features/chats_overview/presentation/widgets/user_chat_snippets.dart';
 
 class ChatsOverviewScreen extends StatefulWidget {
   const ChatsOverviewScreen({Key? key}) : super(key: key);
@@ -59,16 +61,13 @@ class _ChatsOverviewScreenState extends State<ChatsOverviewScreen> {
                     state.message,
                     onReload: () {},
                   );
-                return (state as ChatsOverviewLoaded).userEvents.length == 0
+                return (state as ChatsOverviewLoaded).userChatIds.length == 0
                     ? NoChats()
-                    : ListView.builder(
-                        itemCount: state.userEvents.length,
-                        itemBuilder: (context, index) {
-                          return BlocProvider.value(
-                            value: getIt<ChatSnippetBloc>(),
-                            child: ChatSnippet(state.userEvents[index]),
-                          );
-                        },
+                    : BlocProvider<ChatSnippetsBloc>(
+                        create: (context) => getIt<ChatSnippetsBloc>(),
+                        child: UserChatSnippets(
+                          state.userChatIds,
+                        ),
                       );
               },
             )),

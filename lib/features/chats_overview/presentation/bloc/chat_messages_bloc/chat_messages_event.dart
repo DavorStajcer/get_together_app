@@ -12,7 +12,10 @@ class ChatMessagesScreenInitialized extends ChatMessagesEvent {
   ChatMessagesScreenInitialized(this.eventId);
 }
 
-class LeavingChatScreen extends ChatMessagesEvent {}
+class LeavingChatScreen extends ChatMessagesEvent {
+  final String eventId;
+  LeavingChatScreen(this.eventId);
+}
 
 class MessagesAdded extends ChatMessagesEvent {
   final Either<Failure, List<Message>> response;

@@ -91,6 +91,7 @@ class LiveNotificationsAndMessagesRepositoryImpl
           .doc("chats")
           .update({
         "newlyMessagedChats": FieldValue.delete(),
+        "number": 0,
       });
       return Right(Success());
     } catch (e) {

@@ -33,13 +33,6 @@ class EventMessageRepositoryImpl extends EventMessagesRepository {
         firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   @override
-  Stream<DocumentSnapshot> listenToMessageSnippetChanges(
-    String eventId,
-  ) {
-    return firebaseFirestore.collection("chats").doc(eventId).snapshots();
-  }
-
-  @override
   Stream<Either<Failure, List<Message>>> listenToChatMessages(String eventId) {
     _messageStreamController = StreamController();
     _listenToPage(eventId);

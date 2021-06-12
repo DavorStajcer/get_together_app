@@ -116,7 +116,6 @@ class UserNotificationsRepositoryImpl extends UserNotificationsRepository {
     final List<EventInfoNotification> notifications = [];
     querySnapshot.docs.forEach((doc) {
       final docData = doc.data();
-      final notificationDocId = doc.id;
       final notificationType = _mapNotificationIndexToType(docData["type"]);
       late EventInfoNotification notification;
       if (notificationType == null) throw ServerException();

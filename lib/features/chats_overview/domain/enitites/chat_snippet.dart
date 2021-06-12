@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 
 class ChatSnippet extends Equatable {
   final String eventId;
   final String eventName;
   final String eventCity;
   final String adminImageUrl;
-  @protected
+  final bool isUnread;
   final DateTime? lastMessageDate;
+  final DateTime? chatCreation;
   final String? lastMessageSnippet;
   String get sentBeforeString {
     if (lastMessageDate == null) {
@@ -20,10 +20,10 @@ class ChatSnippet extends Equatable {
     final minutes = fakeMinutes % 60;
     final seconds = secondsFormLastMessage % 60;
 
-    return hours != 0
+    return hours >= 1
         ? "${hours.toStringAsFixed(0)}h ${minutes.toStringAsFixed(0)}m ${seconds}s"
-        : minutes != 0
-            ? "${minutes}m ${seconds}s"
+        : minutes >= 1
+            ? "${minutes.toStringAsFixed(0)}m"
             : "${seconds}s";
   }
 
@@ -32,9 +32,11 @@ class ChatSnippet extends Equatable {
     required this.eventName,
     required this.adminImageUrl,
     required this.eventCity,
-    required DateTime? lastMessageDate,
+    required this.isUnread,
+    this.lastMessageDate,
+    this.chatCreation,
     required this.lastMessageSnippet,
-  }) : lastMessageDate = lastMessageDate;
+  });
 
   @override
   List<Object?> get props => [
@@ -43,6 +45,8 @@ class ChatSnippet extends Equatable {
         adminImageUrl,
         lastMessageDate,
         lastMessageSnippet,
+        chatCreation,
+        isUnread,
         eventCity,
       ];
 }

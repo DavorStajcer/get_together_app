@@ -19,8 +19,8 @@ class UserModelPublic extends UserDataPublic implements UserDataModel {
           userId: userId,
           username: username,
           imageUrl: imageUrl,
-          city: city ?? "Unknown",
-          country: country ?? "Unknown",
+          city: city ?? "SomeCity",
+          country: country ?? "SomeCity",
           description: description ??
               "New to GeTogether app. Lets get together i guess.. :)",
           friendsCount: friendsCount ?? 0,

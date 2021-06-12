@@ -26,9 +26,9 @@ class ChatsOverviewServerFailure extends ChatsOverviewFailure {
 }
 
 class ChatsOverviewLoaded extends ChatsOverviewState {
-  final List<String> userEvents;
-  ChatsOverviewLoaded(this.userEvents);
+  final List<String> userChatIds;
+  ChatsOverviewLoaded(this.userChatIds);
 
   @override
-  List<Object> get props => [userEvents];
+  List<Object> get props => [userChatIds];
 }

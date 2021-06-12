@@ -1,10 +1,10 @@
-//@dart=2.6
+/* //@dart=2.6
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_together_app/core/error/failure.dart';
 import 'package:get_together_app/features/chats_overview/domain/enitites/chat_snippet.dart';
-import 'package:get_together_app/features/chats_overview/domain/usecases/listen_to_last_message_snippet.dart';
+import 'package:get_together_app/features/chats_overview/domain/usecases/listen_to_chat_snippets_change.dart';
 import 'package:get_together_app/features/chats_overview/presentation/bloc/message_snippet_bloc/chat_snippet_bloc.dart';
 import 'package:mockito/mockito.dart';
 
@@ -101,3 +101,4 @@ void main() {
     );
   });
 }
+ */

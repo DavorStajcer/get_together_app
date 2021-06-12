@@ -13,6 +13,7 @@ import 'package:get_together_app/features/chats_overview/domain/enitites/message
 import 'package:get_together_app/features/chats_overview/domain/usecases/listen_to_messages.dart';
 import 'package:get_together_app/features/chats_overview/domain/usecases/load_initial_messages.dart';
 import 'package:get_together_app/features/chats_overview/domain/usecases/load_new_page.dart';
+import 'package:get_together_app/features/chats_overview/domain/usecases/mark_chat_snippet_read.dart';
 import 'package:get_together_app/features/chats_overview/domain/usecases/reset_unread_chat_messages.dart';
 import 'package:get_together_app/features/chats_overview/presentation/widgets/chat_messages.dart';
 import 'package:get_together_app/features/chats_overview/presentation/widgets/message_bubble_left.dart';
@@ -26,12 +27,14 @@ class ChatMessagesBloc extends Bloc<ChatMessagesEvent, ChatMessagesState> {
   final LoadNewPage loadNewPage;
   final LoadInitalMessages loadInitalMessages;
   final ResetUnreadChatMessages resetUnreadChatMessages;
+  final MarkChatSnippetRead markChatSnippetRead;
   bool _canLoadMorePages = true;
   ChatMessagesBloc({
     required this.listenToMessages,
     required this.loadNewPage,
     required this.resetUnreadChatMessages,
     required this.loadInitalMessages,
+    required this.markChatSnippetRead,
   }) : super(ChatMessagesLoading());
 
   @override
@@ -45,6 +48,7 @@ class ChatMessagesBloc extends Bloc<ChatMessagesEvent, ChatMessagesState> {
     }
     if (event is LeavingChatScreen) {
       await listenToMessages.stop();
+      await markChatSnippetRead(event.eventId);
       await resetUnreadChatMessages(NoParameters());
     }
     if (event is MessagesScrolledToTop) {

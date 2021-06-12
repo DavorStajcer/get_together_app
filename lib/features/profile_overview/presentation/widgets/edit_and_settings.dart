@@ -39,13 +39,14 @@ class EditAndSettings extends StatelessWidget {
             flex: 1,
             child: Container(
               height: picHeight,
-              padding:
+              //TODO: SETTINGS IS NOT YET IMPLEMENTED IN THE APPLICATION
+              /*        padding:
                   EdgeInsets.only(top: picHeight * 0.6, left: picHeight * 0.2),
               alignment: Alignment.center,
               child: Icon(
                 Icons.settings,
                 color: Color.fromRGBO(40, 53, 147, 1),
-              ),
+              ), */
             ),
           ),
         ],
