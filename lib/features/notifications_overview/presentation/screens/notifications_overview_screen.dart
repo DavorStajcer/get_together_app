@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_together_app/core/widgets/get_together_title.dart';
+import 'package:get_together_app/core/widgets/network_error.dart';
 import 'package:get_together_app/core/widgets/server_error.dart';
 import 'package:get_together_app/features/home/presentation/bloc/new_notifications_bloc/new_notifications_bloc.dart';
 import 'package:get_together_app/features/notifications_overview/data/models/notification_model.dart';
@@ -62,7 +63,7 @@ class _NotificationsOverviewScreenState
                 onReload: () {},
               );
             if (state is NotificationsNetworkFailure)
-              return ServerErrorWidget(
+              return NetworkErrorWidget(
                 state.message,
                 onReload: () {},
               );

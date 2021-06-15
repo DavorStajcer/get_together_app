@@ -19,9 +19,12 @@ import 'features/authentication/presentation/screens/authentication_screen.dart'
 import 'features/home/di/home_di.dart';
 import 'features/home/presentation/screens/home_screen.dart';
 import 'features/authentication/presentation/screens/splash_screen.dart';
+import 'package:flutter/services.dart';
 
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await Firebase.initializeApp();
   init(); //init getIt
   initHomeDi();
@@ -49,7 +52,7 @@ class _GetTogetherAppState extends State<GetTogetherApp> {
   void initState() {
     super.initState();
     bloc = getIt<AuthenticationCheckBloc>();
-    bloc?.add(ApplicationStarted());
+    if (bloc != null) bloc!.add(ApplicationStarted());
   }
 
   @override

@@ -21,7 +21,7 @@ class ChatSnippet extends Equatable {
     final seconds = secondsFormLastMessage % 60;
 
     return hours >= 1
-        ? "${hours.toStringAsFixed(0)}h ${minutes.toStringAsFixed(0)}m ${seconds}s"
+        ? "${hours.toStringAsFixed(0)}h"
         : minutes >= 1
             ? "${minutes.toStringAsFixed(0)}m"
             : "${seconds}s";

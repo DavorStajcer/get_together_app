@@ -32,8 +32,8 @@ class ChatSnippetModel extends ChatSnippet {
         eventCity: json["eventCity"],
         //  isUnread: json["isUnread"] == null ? false : json["isUnread"],
         isUnread: isUnread,
-        chatCreation: json["chatCreation"] != null
-            ? (json["lastMessageDate"] as Timestamp).toDate()
+        chatCreation: json["createDate"] != null
+            ? (json["createDate"] as Timestamp).toDate()
             : null,
         adminImageUrl: json["adminImageUrl"],
         lastMessageDate: json["lastMessageDate"] != null

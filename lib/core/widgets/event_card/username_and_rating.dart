@@ -6,12 +6,14 @@ class UsernameAndRating extends StatelessWidget {
   final int rating;
   final int numberOfPeople;
   final String adminUsername;
+  final String eventName;
 
   const UsernameAndRating({
     Key? key,
     required this.rating,
     required this.adminUsername,
     required this.numberOfPeople,
+    required this.eventName,
   }) : super(key: key);
 
   @override
@@ -35,15 +37,42 @@ class UsernameAndRating extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.fitWidth,
             child: Text(
-              adminUsername,
+              eventName,
               style: TextStyle(
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 fontSize: 20,
               ),
             ),
           ),
         ),
-        UserStarRating(rating: 5),
+        Container(
+          width: double.infinity,
+          alignment: Alignment.center,
+          height: 20,
+          child: FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Row(
+              children: [
+                Text(
+                  "admin:",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 12,
+                  ),
+                ),
+                Text(
+                  adminUsername,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        //UserStarRating(rating: 5),
       ],
     );
   }

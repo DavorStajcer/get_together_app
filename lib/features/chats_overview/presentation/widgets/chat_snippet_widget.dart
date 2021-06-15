@@ -14,6 +14,7 @@ class ChatSnippetWidget extends StatelessWidget {
         ChatScreen.route,
         arguments: chatSnippet,
       ),
+      behavior: HitTestBehavior.opaque,
       child: Container(
         height: 100,
         padding: EdgeInsets.symmetric(horizontal: 25),

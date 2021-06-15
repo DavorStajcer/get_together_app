@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -40,6 +38,10 @@ class _MapsViewState extends State<MapsView> {
           markerId: MarkerId(DateTime.now().toString()),
           position: event.location,
           draggable: false,
+          onTap: () => BlocProvider.of<EventPickCubit>(context).eventPicked(
+            event.eventId,
+            event.location,
+          ),
           icon:
               BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
         ),

@@ -10,11 +10,13 @@ class EventCard extends StatefulWidget {
   final Event event;
   final double elevation;
   final Color color;
+  final double width;
   const EventCard({
     Key? key,
     required this.event,
     required this.elevation,
     required this.color,
+    required this.width,
   }) : super(key: key);
 
   @override
@@ -29,7 +31,7 @@ class _EventCardState extends State<EventCard> {
           .eventPicked(widget.event.eventId, widget.event.location),
       child: AnimatedContainer(
         duration: Duration(milliseconds: 200),
-        width: 240,
+        width: widget.width,
         child: Card(
           elevation: widget.elevation,
           shape: RoundedRectangleBorder(

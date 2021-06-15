@@ -17,16 +17,33 @@ class NetworkErrorWidget extends StatelessWidget {
         children: [
           Flexible(
             flex: 5,
-            child: Center(
-              child: Icon(
-                Icons.wifi_off,
-                color: Theme.of(context).primaryColor,
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.wifi_off,
+                  color: Theme.of(context).primaryColor,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  message,
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ],
             ),
           ),
           Flexible(
-              flex: 1,
-              child: EventButton(text: "Refresh page", navigate: onReload)),
+            flex: 1,
+            child: EventButton(text: "Refresh page", navigate: onReload),
+          ),
+          Flexible(
+            flex: 1,
+            child: SizedBox(),
+          ),
         ],
       ),
     );

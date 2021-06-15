@@ -53,22 +53,24 @@ class UserEventsScreen extends StatelessWidget {
                             padding: EdgeInsets.symmetric(
                                 horizontal: screenSize.width * 0.15),
                             child: (state as UserEventsLoaded)
-                                  .userAdminEvents
-                                  .length == 0 ? NoUserEvents() : ListView.builder(
-                              itemCount: state
-                                  .userAdminEvents
-                                  .length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  height: screenSize.width * 0.7,
-                                  child: EventCard(
-                                    event: state.userAdminEvents[index],
-                                    color: Colors.white,
-                                    elevation: 1,
+                                        .userAdminEvents
+                                        .length ==
+                                    0
+                                ? NoUserEvents()
+                                : ListView.builder(
+                                    itemCount: state.userAdminEvents.length,
+                                    itemBuilder: (context, index) {
+                                      return Container(
+                                        height: screenSize.width * 0.7,
+                                        child: EventCard(
+                                          event: state.userAdminEvents[index],
+                                          width: screenSize.width * 0.6,
+                                          color: Colors.white,
+                                          elevation: 1,
+                                        ),
+                                      );
+                                    },
                                   ),
-                                );
-                              },
-                            ),
                           );
                         },
                       )),

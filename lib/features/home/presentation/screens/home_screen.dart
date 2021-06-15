@@ -32,7 +32,6 @@ class HomeScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseFirestore.instance.collection("users").get().then((value) => null);
     final homeScreenSize = MediaQuery.of(context).size;
     return Scaffold(
       body: MultiBlocProvider(

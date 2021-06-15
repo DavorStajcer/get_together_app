@@ -1,8 +1,6 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get_together_app/core/widgets/event_card/admin_pic_and_icon.dart';
 import 'package:get_together_app/core/widgets/event_card/username_and_rating.dart';
-import 'package:get_together_app/core/widgets/user_star_rating.dart';
 import 'package:get_together_app/features/make_event/presentation/blocs/event_card_order_cubit/event_card_order_cubit.dart';
 
 class EventAdmin extends StatelessWidget {
@@ -34,6 +32,7 @@ class EventAdmin extends StatelessWidget {
           child: UsernameAndRating(
               rating: 5,
               adminUsername: username,
+              eventName: eventName,
               numberOfPeople: numberOfPeople),
         ),
       ],
