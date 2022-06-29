@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,11 +16,12 @@ class DateTimePickerButton extends StatelessWidget {
 
   Future<DateTime?> _selectEventDate(
       BuildContext context, DateTime? currentlySelectedDate) async {
+    log("smthDebug: selecting event date, currentlySelected $currentlySelectedDate");
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: currentlySelectedDate ?? DateTime.now(),
       firstDate: DateTime.now(),
-      lastDate: DateTime(2022),
+      lastDate: DateTime.now().add(const Duration(days: 430)),
       helpText: "Change event date",
       initialEntryMode: DatePickerEntryMode.input,
     );

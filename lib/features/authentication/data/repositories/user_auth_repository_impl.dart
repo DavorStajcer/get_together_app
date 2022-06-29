@@ -26,7 +26,7 @@ class UserAuthRepositoryImpl extends UserAuthRepository {
     FirebaseStorage? firebaseStorage,
     FirebaseFirestore? firebaseFirestore,
     required this.networkInfo,
-  })   : firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
+  })  : firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
         firebaseStorage = firebaseStorage ?? FirebaseStorage.instance;
 
@@ -39,9 +39,10 @@ class UserAuthRepositoryImpl extends UserAuthRepository {
   Future<Either<Failure, Success>> logIn(LogInParameters parameters) async {
     if (await networkInfo.isConnected) {
       try {
-        print("authenticating");
         await firebaseAuth.signInWithEmailAndPassword(
-            email: parameters.email, password: parameters.password);
+          email: parameters.email,
+          password: parameters.password,
+        );
 
         return Right(Success());
       } on FirebaseAuthException catch (e) {
@@ -61,7 +62,9 @@ class UserAuthRepositoryImpl extends UserAuthRepository {
     if (await networkInfo.isConnected) {
       try {
         await firebaseAuth.createUserWithEmailAndPassword(
-            email: parameters.email, password: parameters.password);
+          email: parameters.email,
+          password: parameters.password,
+        );
         await _saveUserInfo(parameters);
         return Right(Success());
       } on FirebaseAuthException catch (e) {
